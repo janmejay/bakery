@@ -1,0 +1,10 @@
+#!/usr/bin/env ruby
+# User: janmejay.singh
+# Time: 16 Jun, 2008 8:20:18 PM
+
+require File.dirname(__FILE__) + '/src/init'
+
+require 'bakery'
+
+window = GameWindow.new
+window.show
