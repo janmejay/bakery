@@ -1,7 +1,5 @@
 # User: janmejay.singh
 # Time: 19 Jun, 2008 12:06:58 AM
-require 'zorder'
-
 class Cursor
   def initialize(window)
     @window = window

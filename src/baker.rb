@@ -25,7 +25,7 @@ class Baker
   end
 
   def draw
-    @body.draw_rot(@x, @y, ZOrder::BAKER, @angle)
+    @body.draw_rot(@x, @y, ZOrder::BAKER, 0)
   end
 
   private
