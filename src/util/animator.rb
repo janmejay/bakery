@@ -15,10 +15,8 @@ class Util::Animator
   end
 
   def slide
-    puts "Serving slide : #{@current_tile_index}"
     slide = @slides[@current_tile_index]
     update_state if @running
-    puts "Slide index: #{@current_tile_index}, forward: #{@forward}, running: #{@running}"
     slide
   end
 
