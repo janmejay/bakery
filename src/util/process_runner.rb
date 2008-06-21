@@ -4,7 +4,7 @@ require File.join(File.dirname(__FILE__), 'animator')
 
 class Util::ProcessRunner
   def initialize window, process_chunk_slice_width, at_x, at_y, &callback_on_completion
-    @animation = Util::Animator.new(window, 'completion', 50, 50, false, process_chunk_slice_width) do
+    @animation = Util::Animator.new(window, 'media/completion.png', 50, 50, false, process_chunk_slice_width) do
       @running = false
       callback_on_completion
     end

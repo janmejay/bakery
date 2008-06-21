@@ -6,7 +6,7 @@ require 'util/animator'
 class Oven
   def initialize window
     @window = window
-    @oven_animator = Util::Animator.new(@window, 'oven_with_cake_plate', 200, 200, true)
+    @oven_animator = Util::Animator.new(@window, 'media/oven_with_cake_plate.png', 200, 200, true)
     update_oven_view
   end
 

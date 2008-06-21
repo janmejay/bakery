@@ -9,3 +9,8 @@ unless defined?(BAKERY_CONFIGURATION_DEFINED)
 end
 
 $LOAD_PATH << File.dirname(__FILE__)
+
+
+require 'gosu'
+require File.join('util', 'util')
+require 'bakery'

@@ -4,9 +4,5 @@
 
 require File.join(File.dirname(__FILE__), 'src', 'init')
 
-require 'gosu'
-require File.join('util', 'util')
-require 'bakery'
-
 window = GameWindow.new
 window.show
