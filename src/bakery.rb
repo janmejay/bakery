@@ -1,9 +1,9 @@
-require 'gosu'
 require 'cursor'
 require 'baker'
 require 'table'
 require 'oven'
 require 'zorder'
+require 'util/process_runner'
 
 class GameWindow < Gosu::Window
   def initialize
@@ -18,6 +18,9 @@ class GameWindow < Gosu::Window
     @oven = Oven.new(self)
 
     @font = Gosu::Font.new(self, Gosu::default_font_name, 20)
+    @process = Util::ProcessRunner.new(self, 20, 540, 0) do
+      puts "Done.........."
+    end
   end
 
   def update
@@ -26,6 +29,7 @@ class GameWindow < Gosu::Window
     end
     @baker.update_view
     @oven.update_oven_view
+    @process.update
   end
 
   def draw
@@ -34,12 +38,14 @@ class GameWindow < Gosu::Window
     @baker.draw
     @table.draw
     @oven.draw
+    @process.draw
     @font.draw("Score: #{mouse_x} X #{mouse_y}", 10, 10, ZOrder::MESSAGES, 1.0, 1.0, 0xffffff00)
   end
 
   def trigger_click
     @baker.pointed_to(mouse_x, mouse_y)
     @oven.play_animation
+    @process.run_animation
   end
 
   def button_down(id)

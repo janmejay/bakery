@@ -2,8 +2,10 @@
 # User: janmejay.singh
 # Time: 16 Jun, 2008 8:20:18 PM
 
-require File.dirname(__FILE__) + '/src/init'
+require File.join(File.dirname(__FILE__), 'src', 'init')
 
+require 'gosu'
+require File.join('util', 'util')
 require 'bakery'
 
 window = GameWindow.new

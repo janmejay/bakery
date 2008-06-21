@@ -7,4 +7,5 @@ unless defined?(BAKERY_CONFIGURATION_DEFINED)
   $LOAD_PATH << File.dirname(__FILE__) + '/../lib/x86_64-linux' if RUBY_PLATFORM =~ /86_64-linux/
   $LOAD_PATH << File.dirname(__FILE__)
 end
-require 'util/util'
+
+$LOAD_PATH << File.dirname(__FILE__)
