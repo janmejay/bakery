@@ -1,30 +1,53 @@
 # User: janmejay.singh
 # Time: 20 Jun, 2008 7:44:35 PM
 class Util::Animator
-  def initialize window, strip_name, tile_width, tile_heights
+  def initialize window, strip_name, tile_width, tile_heights, play_both_ways = false, chunk_slice_width = 1, &callback_on_completion
     @slides = Gosu::Image::load_tiles(window, "media/#{strip_name}.png", tile_width, tile_heights, true)
-    @current_tile_index = 0
-    @forward = true
-    @running = false
+    @forward, @running = true, false
+    @play_both_ways = play_both_ways
+    @callback_on_completion = callback_on_completion || proc {}
+    @chunk_slice_width = chunk_slice_width
+    @slices_done_for_this_chunk, @chunks_finished = 0, 0
   end
 
-  def run_animation
+  def start
     @forward = true
-    @current_tile_index = 0
+    @chunks_finished = 0
     @running = true
   end
 
   def slide
-    slide = @slides[@current_tile_index]
+    do_slice_calculation if @running
+    @slide = @slides[@chunks_finished]
     update_state if @running
-    slide
+    @slide
   end
 
   private
 
   def update_state
-    @forward = @forward && (@current_tile_index + 1 < @slides.length)
-    @current_tile_index += (@forward ? 1 : -1)
-    @running = (@current_tile_index != 0)
+    @play_both_ways ? update_state_two_way : update_state_one_way
+    @running = (@chunks_finished != 0)
+  end
+
+  def update_state_two_way
+    @forward = @forward && (@chunks_finished + 1 < @slides.length)
+    @chunks_finished += (@forward ? 1 : -1)
+  end
+
+  def update_state_one_way
+    @chunks_finished = (@chunks_finished + 1 < @slides.length) ? @chunks_finished + 1 : 0
+  end
+
+  def do_slice_calculation
+    if @slices_done_for_this_chunk < @chunk_slice_width
+      @slices_done_for_this_chunk += 1
+    elsif (@chunks_finished += 1) < @slides.length
+      @slices_done_for_this_chunk = 0
+      @slide = @slides[@chunks_finished]
+    else
+      @slices_done_for_this_chunk = 0
+      @chunks_finished = 0
+    end
   end
 end

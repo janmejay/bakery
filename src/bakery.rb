@@ -45,7 +45,7 @@ class GameWindow < Gosu::Window
   def trigger_click
     @baker.pointed_to(mouse_x, mouse_y)
     @oven.play_animation
-    @process.run_animation
+    @process.start
   end
 
   def button_down(id)
