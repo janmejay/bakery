@@ -14,25 +14,16 @@ class Util::AnimatorTest < Test::Unit::TestCase
     end
 
     context "when created" do
-      should "have @running set to false" do
-        assert !@one_way_anim.instance_variable_get('@running')
-      end
-
       should "have slides loaded" do
         assert_equal 3, @one_way_anim.instance_variable_get('@slides').length
-      end
-
-      should "have run mode forward" do
-        assert @one_way_anim.instance_variable_get('@forward')
       end
 
       should "have set @play_both_ways to false(for one way anim)" do
         assert !@one_way_anim.instance_variable_get('@play_both_ways')
       end
 
-      should "have @chunks_finished and @slices_done_for_this_chunk set correctly" do
-        assert_equal 0, @one_way_anim.instance_variable_get('@chunks_finished')
-        assert_equal 0, @one_way_anim.instance_variable_get('@slices_done_for_this_chunk')
+      should "have @animated_sequence built" do
+        assert_equal @one_way_anim.instance_variable_get('@slides'), @one_way_anim.instance_variable_get('@animated_sequence')
       end
     end
 
@@ -43,16 +34,9 @@ class Util::AnimatorTest < Test::Unit::TestCase
       assert_equal :foo, @one_way_anim.slide
     end
 
-    should "set @running, @chunks_finished and @forward when started" do
-      @one_way_anim.start
-      assert @one_way_anim.instance_variable_get('@running')
-      assert_equal 0, @one_way_anim.instance_variable_get('@chunks_finished') 
-      assert @one_way_anim.instance_variable_get('@forward') 
-    end
-
     context "when played one way" do
 
-      should "state cycling should not happen" do
+      should "not cycle unless started" do
         assert !@one_way_anim.instance_variable_get('@running')
         slides = @one_way_anim.instance_variable_get('@slides')
         assert_equal slides[0], @one_way_anim.slide
@@ -68,15 +52,10 @@ class Util::AnimatorTest < Test::Unit::TestCase
 
         should "cycle through all the slides" do
           slides = @one_way_anim.instance_variable_get('@slides')
-          assert @one_way_anim.instance_variable_get('@running')
           assert_equal slides[0], @one_way_anim.slide
-          assert @one_way_anim.instance_variable_get('@running')
           assert_equal slides[1], @one_way_anim.slide
-          assert @one_way_anim.instance_variable_get('@running')
           assert_equal slides[2], @one_way_anim.slide
-          assert !@one_way_anim.instance_variable_get('@running')
           assert_equal slides[0], @one_way_anim.slide
-          assert !@one_way_anim.instance_variable_get('@running')
           assert_equal slides[0], @one_way_anim.slide
         end
       end
@@ -87,39 +66,76 @@ class Util::AnimatorTest < Test::Unit::TestCase
         @two_way_anim = Util::Animator.new(@window, ANIM_FILE_NAME, 30, 30, true, 1)
       end
 
-      should "state cycling should not happen" do
-        assert !@one_way_anim.instance_variable_get('@running')
-        slides = @one_way_anim.instance_variable_get('@slides')
-        assert_equal slides[0], @one_way_anim.slide
-        assert_equal slides[0], @one_way_anim.slide
-        assert_equal slides[0], @one_way_anim.slide
-        assert_equal slides[0], @one_way_anim.slide
+      should "not cycle unless started" do
+        slides = @two_way_anim.instance_variable_get('@slides')
+        assert_equal slides[0], @two_way_anim.slide
+        assert_equal slides[0], @two_way_anim.slide
+        assert_equal slides[0], @two_way_anim.slide
+        assert_equal slides[0], @two_way_anim.slide
       end
 
-#      context "while running" do
-#        setup do
-#          @one_way_anim.start
-#        end
-#
-#        should "cycle through all the slides" do
-#          slides = @one_way_anim.instance_variable_get('@slides')
-#          assert @one_way_anim.instance_variable_get('@running')
-#          assert_equal slides[0], @one_way_anim.slide
-#          assert @one_way_anim.instance_variable_get('@running')
-#          assert_equal slides[1], @one_way_anim.slide
-#          assert @one_way_anim.instance_variable_get('@running')
-#          assert_equal slides[2], @one_way_anim.slide
-#          assert !@one_way_anim.instance_variable_get('@running')
-#          assert_equal slides[0], @one_way_anim.slide
-#          assert !@one_way_anim.instance_variable_get('@running')
-#          assert_equal slides[0], @one_way_anim.slide
-#        end
-#      end
+      context "while running" do
+        setup do
+          @two_way_anim.start
+        end
+
+        should "cycle through all the slides" do
+          slides = @two_way_anim.instance_variable_get('@slides')
+          assert_equal slides[0], @two_way_anim.slide
+          assert_equal slides[1], @two_way_anim.slide
+          assert_equal slides[2], @two_way_anim.slide
+          assert_equal slides[1], @two_way_anim.slide
+          assert_equal slides[0], @two_way_anim.slide
+          assert_equal slides[0], @two_way_anim.slide
+          assert_equal slides[0], @two_way_anim.slide
+        end
+      end
     end
 
     context "when played with custom time slice width" do
+      ANIM_SLICE_WIDTH = 10
+
       setup do
-        @custom_slice_width_anim = Util::Animator.new(@window, ANIM_FILE_NAME, 30, 30, false, 10)
+        @custom_slice_width_anim = Util::Animator.new(@window, ANIM_FILE_NAME, 30, 30, false, ANIM_SLICE_WIDTH)
+      end
+
+      should "not cycle unless started" do
+        slides = @custom_slice_width_anim.instance_variable_get('@slides')
+        assert_equal slides[0], @custom_slice_width_anim.slide
+        assert_equal slides[0], @custom_slice_width_anim.slide
+        assert_equal slides[0], @custom_slice_width_anim.slide
+        assert_equal slides[0], @custom_slice_width_anim.slide
+      end
+
+      context "while playing the anim" do
+
+        setup do
+          @custom_slice_width_anim.start
+        end
+
+        should "return same slide #{ANIM_SLICE_WIDTH} times" do
+          slides = @custom_slice_width_anim.instance_variable_get('@slides')
+          10.times { assert_equal slides[0], @custom_slice_width_anim.slide }
+          10.times { assert_equal slides[1], @custom_slice_width_anim.slide }
+          10.times { assert_equal slides[2], @custom_slice_width_anim.slide }
+          20.times { assert_equal slides[0], @custom_slice_width_anim.slide }
+        end
+
+        context "both sides" do
+          setup do
+            @custom_width_slice_bysided_anim = Util::Animator.new(@window, ANIM_FILE_NAME, 30, 30, true, ANIM_SLICE_WIDTH)
+            @custom_width_slice_bysided_anim.start
+          end
+
+          should "return same slide #{ANIM_SLICE_WIDTH} times" do
+            slides = @custom_width_slice_bysided_anim.instance_variable_get('@slides')
+            10.times { assert_equal slides[0], @custom_width_slice_bysided_anim.slide }
+            10.times { assert_equal slides[1], @custom_width_slice_bysided_anim.slide }
+            10.times { assert_equal slides[2], @custom_width_slice_bysided_anim.slide }
+            10.times { assert_equal slides[1], @custom_width_slice_bysided_anim.slide }
+            20.times { assert_equal slides[0], @custom_width_slice_bysided_anim.slide }
+          end
+        end
       end
     end
 
