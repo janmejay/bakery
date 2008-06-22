@@ -22,29 +22,32 @@ class Baker
   VELOCITY = 2
 
   def initialize window
-    @body = Gosu::Image.new(window, "media/baker.png", false)
+    @walking_anim = Util::Animator.new(window, 'media/walking_baker.png', 105, 80, false, 2, true)
     @window = window
     @x, @y, @target_x, @target_y, @angle = 0, 0, 0, 0, 0, 0, 0
     @sane_walking_area = LimitingRectangle.new(384, 178, 835, 550)
   end
 
   def pointed_to x_cord, y_cord
-    @target_x = x_cord
-    @target_y = y_cord
+    @target_x, @target_y = @sane_walking_area.sanatize x_cord, y_cord
+    @walking_anim.start
   end
 
   def update_view
-    @angle = 0 and return if almost_there
+    if almost_there
+    @angle = 0
+    @walking_anim.stop
+    return
+    end
     @angle = Gosu::angle(@x, @y, @target_x, @target_y)
     dx = Gosu::offset_x(@angle, VELOCITY)
     dy = Gosu::offset_y(@angle, VELOCITY)
     @x += dx
     @y += dy
-    @x, @y = @sane_walking_area.sanatize @x, @y
   end
 
   def draw
-    @body.draw_rot(@x, @y, ZOrder::BAKER, 0)
+    @walking_anim.slide.draw_rot(@x, @y, ZOrder::BAKER, @angle)
   end
 
   private
