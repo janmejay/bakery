@@ -35,15 +35,11 @@ class Baker
 
   def update_view
     if almost_there
-    @angle = 0
-    @walking_anim.stop
-    return
-    end
+      @walking_anim.stop
+    end and return
     @angle = Gosu::angle(@x, @y, @target_x, @target_y)
-    dx = Gosu::offset_x(@angle, VELOCITY)
-    dy = Gosu::offset_y(@angle, VELOCITY)
-    @x += dx
-    @y += dy
+    @x += Gosu::offset_x(@angle, VELOCITY)
+    @y += Gosu::offset_y(@angle, VELOCITY)
   end
 
   def draw

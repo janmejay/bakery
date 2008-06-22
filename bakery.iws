@@ -66,7 +66,7 @@
       <file leaf-file-name="init.rb" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/init.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="15" column="0" selection-start="462" selection-end="462" vertical-scroll-proportion="0.33382788">
+            <state line="15" column="0" selection-start="462" selection-end="462" vertical-scroll-proportion="0.03448276">
               <folding />
             </state>
           </provider>
@@ -75,7 +75,7 @@
       <file leaf-file-name="process_runner.rb" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/util/process_runner.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="20" column="29" selection-start="560" selection-end="560" vertical-scroll-proportion="0.24332345">
+            <state line="20" column="29" selection-start="560" selection-end="560" vertical-scroll-proportion="0.03448276">
               <folding />
             </state>
           </provider>
@@ -84,7 +84,7 @@
       <file leaf-file-name="animator.rb" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/util/animator.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="22" column="62" selection-start="781" selection-end="781" vertical-scroll-proportion="0.42284867">
+            <state line="22" column="62" selection-start="781" selection-end="781" vertical-scroll-proportion="0.03448276">
               <folding />
             </state>
           </provider>
@@ -93,7 +93,7 @@
       <file leaf-file-name="baker.rb" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/baker.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="46" column="5" selection-start="1163" selection-end="1163" vertical-scroll-proportion="0.75667655">
+            <state line="45" column="62" selection-start="1201" selection-end="1201" vertical-scroll-proportion="0.82758623">
               <folding />
             </state>
           </provider>
@@ -102,7 +102,7 @@
       <file leaf-file-name="oven.rb" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/oven.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="11" column="0" selection-start="263" selection-end="263" vertical-scroll-proportion="0.087537095">
+            <state line="11" column="0" selection-start="263" selection-end="263" vertical-scroll-proportion="0.03448276">
               <folding />
             </state>
           </provider>
@@ -111,7 +111,7 @@
       <file leaf-file-name="animator_test.rb" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/test/util/animator_test.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="168" column="0" selection-start="6598" selection-end="6598" vertical-scroll-proportion="0.022255193">
+            <state line="168" column="0" selection-start="6598" selection-end="6598" vertical-scroll-proportion="0.03448276">
               <folding />
             </state>
           </provider>
@@ -120,7 +120,7 @@
       <file leaf-file-name="bakery" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/bakery">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="7" column="0" selection-start="158" selection-end="158" vertical-scroll-proportion="0.15578635">
+            <state line="7" column="0" selection-start="158" selection-end="158" vertical-scroll-proportion="0.03448276">
               <folding />
             </state>
           </provider>
@@ -129,7 +129,7 @@
       <file leaf-file-name="bakery.rb" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/bakery.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="9" column="27" selection-start="165" selection-end="188" vertical-scroll-proportion="0.022255193">
+            <state line="9" column="27" selection-start="165" selection-end="188" vertical-scroll-proportion="0.03448276">
               <folding />
             </state>
           </provider>
@@ -138,7 +138,7 @@
       <file leaf-file-name="zorder.rb" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/zorder.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="3" column="77" selection-start="147" selection-end="147" vertical-scroll-proportion="0.06676558">
+            <state line="3" column="77" selection-start="147" selection-end="147" vertical-scroll-proportion="0.03448276">
               <folding />
             </state>
           </provider>
@@ -147,7 +147,7 @@
       <file leaf-file-name="cursor.rb" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/cursor.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="2" column="0" selection-start="56" selection-end="56" vertical-scroll-proportion="0.044510387">
+            <state line="2" column="0" selection-start="56" selection-end="56" vertical-scroll-proportion="0.03448276">
               <folding />
             </state>
           </provider>
@@ -446,7 +446,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-4" y="25" width="1449" height="854" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="3" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="0" />
@@ -468,7 +468,7 @@
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" order="2" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" order="5" />
       <window_info id="Duplicates" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="10" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32907802" order="2" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32907802" order="2" />
       <window_info id="RDoc" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="11" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" order="14" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="12" />
@@ -518,72 +518,72 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/oven.rb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="0" selection-start="263" selection-end="263" vertical-scroll-proportion="0.087537095">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/bakery.rb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="27" selection-start="165" selection-end="188" vertical-scroll-proportion="0.022255193">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/zorder.rb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="3" column="77" selection-start="147" selection-end="147" vertical-scroll-proportion="0.06676558">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/cursor.rb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="0" selection-start="56" selection-end="56" vertical-scroll-proportion="0.044510387">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/init.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="15" column="0" selection-start="462" selection-end="462" vertical-scroll-proportion="0.33382788">
+        <state line="15" column="0" selection-start="462" selection-end="462" vertical-scroll-proportion="0.03448276">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/util/process_runner.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="20" column="29" selection-start="560" selection-end="560" vertical-scroll-proportion="0.24332345">
+        <state line="20" column="29" selection-start="560" selection-end="560" vertical-scroll-proportion="0.03448276">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/util/animator.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="22" column="62" selection-start="781" selection-end="781" vertical-scroll-proportion="0.42284867">
+        <state line="22" column="62" selection-start="781" selection-end="781" vertical-scroll-proportion="0.03448276">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/bakery">
+    <entry file="file://$PROJECT_DIR$/src/oven.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="7" column="0" selection-start="158" selection-end="158" vertical-scroll-proportion="0.15578635">
+        <state line="11" column="0" selection-start="263" selection-end="263" vertical-scroll-proportion="0.03448276">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/test/util/animator_test.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="168" column="0" selection-start="6598" selection-end="6598" vertical-scroll-proportion="0.022255193">
+        <state line="168" column="0" selection-start="6598" selection-end="6598" vertical-scroll-proportion="0.03448276">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bakery">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="7" column="0" selection-start="158" selection-end="158" vertical-scroll-proportion="0.03448276">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/bakery.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="9" column="27" selection-start="165" selection-end="188" vertical-scroll-proportion="0.03448276">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/zorder.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="3" column="77" selection-start="147" selection-end="147" vertical-scroll-proportion="0.03448276">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/cursor.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="2" column="0" selection-start="56" selection-end="56" vertical-scroll-proportion="0.03448276">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/baker.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="46" column="5" selection-start="1163" selection-end="1163" vertical-scroll-proportion="0.75667655">
+        <state line="45" column="62" selection-start="1201" selection-end="1201" vertical-scroll-proportion="0.82758623">
           <folding />
         </state>
       </provider>
