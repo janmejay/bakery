@@ -3,6 +3,6 @@
 require "test/unit"
 require "rubygems"
 require "mocha"
-require "shoulda"
 
+require File.join(File.dirname(__FILE__), 'shoulda', 'shoulda')
 require File.join(File.dirname(__FILE__), '..', 'src', 'init')
