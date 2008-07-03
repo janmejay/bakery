@@ -1,6 +1,7 @@
 require 'cursor'
 require 'baker'
 require 'table'
+require 'dustbin'
 require 'oven'
 require 'zorder'
 require 'util/process_runner'
@@ -16,6 +17,7 @@ class GameWindow < Gosu::Window
     @baker = Baker.new(self)
     @table = Table.new(self)
     @oven = Oven.new(self)
+    @dustbin = Dustbin.new(self)
 
     @font = Gosu::Font.new(self, Gosu::default_font_name, 20)
     @process = Util::ProcessRunner.new(self, 20, 540, 0) do
@@ -29,6 +31,7 @@ class GameWindow < Gosu::Window
     end
     @baker.update_view
     @oven.update_oven_view
+    @dustbin.update_view
     @process.update
   end
 
@@ -38,6 +41,7 @@ class GameWindow < Gosu::Window
     @baker.draw
     @table.draw
     @oven.draw
+    @dustbin.draw
     @process.draw
     @font.draw("Score: #{mouse_x} X #{mouse_y}", 10, 10, ZOrder::MESSAGES, 1.0, 1.0, 0xffffff00)
   end
@@ -46,6 +50,7 @@ class GameWindow < Gosu::Window
     @baker.pointed_to(mouse_x, mouse_y)
     @oven.play_animation
     @process.start
+    @dustbin.open
   end
 
   def button_down(id)
