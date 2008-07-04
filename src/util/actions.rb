@@ -72,7 +72,11 @@ module Actions
     
     private
     def can_consume?(event)
-      event.propagatable && Range.new(*active_x).member?(event.x) && Range.new(*active_y).member?(event.y)
+      event.propagatable && within_active_area?(event)
+    end
+    
+    def within_active_area?(event)
+      Range.new(*active_x).member?(event.x) && Range.new(*active_y).member?(event.y)
     end
   end
 end

@@ -24,6 +24,7 @@ class GameWindow < Gosu::Window
     @table = Table.new(self)
     register self
     register Oven.new(self)
+    register Dustbin.new(self)
     @font = Gosu::Font.new(self, Gosu::default_font_name, 20)
   end
 
