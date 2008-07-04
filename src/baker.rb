@@ -33,7 +33,7 @@ class Baker
     @walking_anim.start
   end
 
-  def update_view
+  def update
     if almost_there
       @walking_anim.stop
     end and return

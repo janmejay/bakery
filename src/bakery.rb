@@ -4,9 +4,15 @@ require 'table'
 require 'dustbin'
 require 'oven'
 require 'zorder'
+require 'util/actions'
 require 'util/process_runner'
 
 class GameWindow < Gosu::Window
+  attr_reader :baker
+  include Actions
+  include Publisher
+  include Subscriber
+  
   def initialize
     super(1024, 768, false)
     self.caption = "Bakery"
@@ -16,46 +22,48 @@ class GameWindow < Gosu::Window
     @cursor = Cursor.new(self)
     @baker = Baker.new(self)
     @table = Table.new(self)
-    @oven = Oven.new(self)
-    @dustbin = Dustbin.new(self)
-
+    register self
+    register Oven.new(self)
     @font = Gosu::Font.new(self, Gosu::default_font_name, 20)
-    @process = Util::ProcessRunner.new(self, 20, 540, 0) do
-      puts "Done.........."
-    end
   end
 
   def update
     if button_down? Gosu::Button::MsLeft
-      trigger_click
+      publish(Event.new(:left_click, mouse_x, mouse_y))
+    elsif button_down? Gosu::Button::MsRight
+      publish(Event.new(:right_click, mouse_x, mouse_y))
     end
-    @baker.update_view
-    @oven.update_oven_view
-    @dustbin.update_view
-    @process.update
+    @baker.update
+    for_each_subscriber {|subscriber| subscriber.perform_updates}
   end
 
   def draw
-    @background_image.draw(0, 0, ZOrder::BACKGROUND)
-    @cursor.redraw
+    @cursor.draw
     @baker.draw
     @table.draw
-    @oven.draw
-    @dustbin.draw
-    @process.draw
+    for_each_subscriber { |subscriber| subscriber.render}
     @font.draw("Score: #{mouse_x} X #{mouse_y}", 10, 10, ZOrder::MESSAGES, 1.0, 1.0, 0xffffff00)
   end
-
-  def trigger_click
-    @baker.pointed_to(mouse_x, mouse_y)
-    @oven.play_animation
-    @process.start
-    @dustbin.open
+  
+  def render
+    @background_image.draw(0, 0, zindex)
+  end
+  
+  def can_consume?(event)
+    event.propagatable
+  end
+  
+  def handle(e)
+    @baker.pointed_to e.x, e.y
   end
 
   def button_down(id)
     if id == Gosu::Button::KbEscape then
       close
     end
+  end
+  
+  def zindex
+    ZOrder::BACKGROUND
   end
 end
