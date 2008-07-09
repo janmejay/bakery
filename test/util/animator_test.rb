@@ -69,6 +69,33 @@ class Util::AnimatorTest < Test::Unit::TestCase
         end
       end
     end
+    
+    context "callback handler" do
+      setup do
+        @callback_anim = Util::Animator.new(@window, ANIM_FILE_NAME, 30, 30) do
+          callback_method
+        end
+        @callback_anim.start
+      end
+      
+      context "when running the animation" do
+        setup do
+          @callback_anim.slide
+          @callback_anim.slide
+        end
+
+        should "not execute the callback before the end" do
+          self.expects(:callback_method).never
+        end
+        
+        context "@ the end of anim" do
+          should "execute the callback" do
+            self.expects(:callback_method).once
+            @callback_anim.slide
+          end
+        end
+      end
+    end
 
     context "when played both ways" do
       setup do

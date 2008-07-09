@@ -6,7 +6,7 @@ class Util::ProcessRunner
   def initialize window, process_chunk_slice_width, at_x, at_y, &callback_on_completion
     @animation = Util::Animator.new(window, 'media/completion.png', 50, 50, false, process_chunk_slice_width) do
       @running = false
-      callback_on_completion
+      callback_on_completion.call
     end
     @x, @y = at_x, at_y
     @image = @animation.slide
@@ -16,12 +16,16 @@ class Util::ProcessRunner
     @animation.start
     @running = true
   end
+  
+  def running?
+    @running
+  end
 
   def update
     @image = @animation.slide
   end
 
-  def draw
+  def render
     @image.draw(@x, @y, ZOrder::PROCESSING) if @running
   end
 end

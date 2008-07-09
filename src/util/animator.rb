@@ -1,10 +1,10 @@
 # User: janmejay.singh
 # Time: 20 Jun, 2008 7:44:35 PM
 class Util::Animator
-  def initialize window, strip_file_name, tile_width, tile_heights, play_both_ways = false, chunk_slice_width = 1, run_indefinitly = false, &callback_on_completion
+  def initialize window, strip_file_name, tile_width, tile_heights, play_both_ways = false, chunk_slice_width = 1, run_indefinitly = false, &block
     @slides = Gosu::Image::load_tiles(window, strip_file_name, tile_width, tile_heights, true)
     @play_both_ways = play_both_ways
-    @callback_on_completion = callback_on_completion || proc {}
+    @callback_on_completion = block_given? ? block : proc {}
     @chunk_slice_width = chunk_slice_width
     @run_indefinitly = run_indefinitly
     create_animated_sequence
@@ -41,7 +41,11 @@ class Util::Animator
 
   def current_slide
     current_slide = @current_anim_sequence.shift
-    @current_anim_sequence.push(current_slide) if @run_indefinitly
+    if @run_indefinitly
+      @current_anim_sequence.push(current_slide) 
+    elsif @current_anim_sequence.empty? 
+      @callback_on_completion.call
+    end
     current_slide
   end
 end

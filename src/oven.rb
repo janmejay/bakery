@@ -3,27 +3,13 @@
 
 require 'util/animator'
 require 'util/actions'
+require 'util/process_runner'
 
 class Oven
   include Actions::ActiveRectangleSubscriber
   class Cake
     def initialize(oven, image_name)
-      @cake_view = Gosu::Image.new(oven.window, image_name, true)
-    end
-    
-    def update_position_wrt(plate)
-      @x = plate.x
-      @y = plate.y
-    end
-    
-    def render
-      @cake_view.draw(@x, @y, ZOrder::CAKE) 
-    end
-  end
-  
-  class Plate
-    def initialize(oven)
-      @plate_view = Gosu::Image.new(oven.window, 'media/plate.png', true)
+      @cake_view = Gosu::Image.new(oven.window, image_name)
     end
     
     def update_position(x, y)
@@ -32,12 +18,32 @@ class Oven
     end
     
     def render
+      @cake_view.draw(@x, @y, ZOrder::CAKE) 
+    end
+  end
+  
+  class Plate
+    def initialize(oven, cake)
+      @plate_view = Gosu::Image.new(oven.window, 'media/plate.png')
+      @cake = cake
+    end
+    
+    def update_position(x, y)
+      @x = x
+      @y = y
+      @cake.update_position(x, y)
+    end
+    
+    def render
       @plate_view.draw(@x, @y, ZOrder::PLATE)
+      @cake.render
     end
   end
 
   class Button
     FIRST, SECOND, THIRD, FOURTH = {:x_off => 27, :y_off => 40}, {:x_off => 60, :y_off => 64}, {:x_off => 106, :y_off => 64}, {:x_off => 138, :y_off => 40}
+    
+    ACTIVE_RECT_SPAN = 35
     
     include Actions::ActiveRectangleSubscriber
     def initialize(oven, base_x, base_y, name_identifier, place = FIRST)
@@ -62,20 +68,24 @@ class Oven
 
     protected
     def active_x
-      return @x, @x + 35
+      return @x, @x + ACTIVE_RECT_SPAN
     end
 
     def active_y
-      return @y, @y + 35
+      return @y, @y + ACTIVE_RECT_SPAN
     end
   end
   
   attr_reader :window
   
+  PROCESS_RUNNER_OFFSET = {:x => 75, :y => 15}
+  BAKED_CAKE_PLATE_OFFSET = {:x => 50, :y => 90}
+  
   def initialize window
     @window = window
     @cake_holder_animator = Util::Animator.new(@window, 'media/oven_cake_holder.png', 200, 200, true)
     @oven_machine_view = Gosu::Image.new(@window, 'media/oven_machine.png', true)
+    @baking_process = Util::ProcessRunner.new(@window, 10, 530 + PROCESS_RUNNER_OFFSET[:x], 0 + PROCESS_RUNNER_OFFSET[:y]) { eject_baked_cake }
     window.register Button.new(self, 530, 0, :circular_cake)
     window.register Button.new(self, 530, 0, :rect_cake, Button::SECOND)
     window.register Button.new(self, 530, 0, :triangular_cake, Button::THIRD)
@@ -85,6 +95,7 @@ class Oven
 
   def perform_updates
     @cake_holder = @cake_holder_animator.slide
+    @baking_process.update
   end
   
   def handle(event)
@@ -94,6 +105,8 @@ class Oven
   def render
     @cake_holder.draw(530, 0, ZOrder::OVEN_CAKE_HOLDER)
     @oven_machine_view.draw(530, 0, zindex)
+    @baking_process.render
+    @plate && @plate.render
   end
   
   def zindex
@@ -101,11 +114,17 @@ class Oven
   end
   
   def bake(cake)
-    puts "Got Bake Request for #{cake.inspect}"
+    @cake = cake
+    @baking_process.start unless baking?
   end
   
   def baking?
-    false
+    @baking_process.running?
+  end
+  
+  def eject_baked_cake
+    @plate = Plate.new(self, @cake)
+    @plate.update_position(530 + BAKED_CAKE_PLATE_OFFSET[:x], 0 + BAKED_CAKE_PLATE_OFFSET[:y])
   end
   
   protected
