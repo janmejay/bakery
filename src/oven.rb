@@ -7,7 +7,7 @@ require 'util/actions'
 class Oven
   include Actions::ActiveRectangleSubscriber
   class Button
-    FIRST, SECOND, THIRD, FOURTH = {:x_off => 25, :y_off => 40}, {:x_off => 60, :y_off => 64}, {:x_off => 106, :y_off => 64}, {:x_off => 141, :y_off => 40}
+    FIRST, SECOND, THIRD, FOURTH = {:x_off => 27, :y_off => 40}, {:x_off => 60, :y_off => 64}, {:x_off => 106, :y_off => 64}, {:x_off => 138, :y_off => 40}
     
     include Actions::ActiveRectangleSubscriber
     def initialize(oven, base_x, base_y, path, place = FIRST)
