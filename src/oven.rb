@@ -6,18 +6,50 @@ require 'util/actions'
 
 class Oven
   include Actions::ActiveRectangleSubscriber
+  class Cake
+    def initialize(oven, image_name)
+      @cake_view = Gosu::Image.new(oven.window, image_name, true)
+    end
+    
+    def update_position_wrt(plate)
+      @x = plate.x
+      @y = plate.y
+    end
+    
+    def render
+      @cake_view.draw(@x, @y, ZOrder::CAKE) 
+    end
+  end
+  
+  class Plate
+    def initialize(oven)
+      @plate_view = Gosu::Image.new(oven.window, 'media/plate.png', true)
+    end
+    
+    def update_position(x, y)
+      @x = x
+      @y = y
+    end
+    
+    def render
+      @plate_view.draw(@x, @y, ZOrder::PLATE)
+    end
+  end
+
   class Button
     FIRST, SECOND, THIRD, FOURTH = {:x_off => 27, :y_off => 40}, {:x_off => 60, :y_off => 64}, {:x_off => 106, :y_off => 64}, {:x_off => 138, :y_off => 40}
     
     include Actions::ActiveRectangleSubscriber
-    def initialize(oven, base_x, base_y, path, place = FIRST)
+    def initialize(oven, base_x, base_y, name_identifier, place = FIRST)
       @x = base_x + place[:x_off]
       @y = base_y + place[:y_off]
-      @body = Gosu::Image.new(oven.window, path, true)
+      @oven = oven
+      @cake_image_name = "media/#{name_identifier}.png"
+      @body = Gosu::Image.new(@oven.window, "media/#{name_identifier}_button.png", true)
     end
     
     def handle(event)
-      puts "I received..... Damn...."
+      @oven.bake(Cake.new(@oven, @cake_image_name)) unless @oven.baking?
     end
 
     def render
@@ -42,16 +74,17 @@ class Oven
   
   def initialize window
     @window = window
-    @oven_animator = Util::Animator.new(@window, 'media/oven_with_cake_plate.png', 200, 200, true)
-    window.register Button.new(self, 530, 0, 'media/circular_cake_button.png')
-    window.register Button.new(self, 530, 0, 'media/rect_cake_button.png', Button::SECOND)
-    window.register Button.new(self, 530, 0, 'media/trianglar_cake_button.png', Button::THIRD)
-    window.register Button.new(self, 530, 0, 'media/heart_cake_button.png', Button::FOURTH)
+    @cake_holder_animator = Util::Animator.new(@window, 'media/oven_cake_holder.png', 200, 200, true)
+    @oven_machine_view = Gosu::Image.new(@window, 'media/oven_machine.png', true)
+    window.register Button.new(self, 530, 0, :circular_cake)
+    window.register Button.new(self, 530, 0, :rect_cake, Button::SECOND)
+    window.register Button.new(self, 530, 0, :triangular_cake, Button::THIRD)
+    window.register Button.new(self, 530, 0, :heart_cake, Button::FOURTH)
     perform_updates
   end
 
   def perform_updates
-    @oven = @oven_animator.slide
+    @cake_holder = @cake_holder_animator.slide
   end
   
   def handle(event)
@@ -59,11 +92,20 @@ class Oven
   end
 
   def render
-    @oven.draw(530, 0, zindex)
+    @cake_holder.draw(530, 0, ZOrder::OVEN_CAKE_HOLDER)
+    @oven_machine_view.draw(530, 0, zindex)
   end
   
   def zindex
-    ZOrder::EQUIPMENTS
+    ZOrder::OVEN
+  end
+  
+  def bake(cake)
+    puts "Got Bake Request for #{cake.inspect}"
+  end
+  
+  def baking?
+    false
   end
   
   protected
@@ -77,6 +119,6 @@ class Oven
   
   private
   def play_animation
-    @oven_animator.start
+    @cake_holder_animator.start
   end
 end
