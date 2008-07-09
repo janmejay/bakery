@@ -79,7 +79,7 @@ class Oven
   attr_reader :window
   
   PROCESS_RUNNER_OFFSET = {:x => 75, :y => 15}
-  BAKED_CAKE_PLATE_OFFSET = {:x => 50, :y => 90}
+  BAKED_CAKE_PLATE_OFFSET = {:x => 70, :y => 110}
   
   def initialize window
     @window = window
