@@ -2,6 +2,7 @@
 # Time: 20 Jun, 2008 3:54:15 PM
 
 require 'util/animator'
+require 'util/position_animation'
 require 'util/actions'
 require 'util/process_runner'
 
@@ -83,8 +84,10 @@ class Oven
   
   def initialize window
     @window = window
-    @cake_holder_animator = Util::Animator.new(@window, 'media/oven_cake_holder.png', 200, 200, true)
+    @cake_holder = Gosu::Image.new(@window, 'media/oven_cake_holder.png', true)
+    @trash_can = Gosu::Image.new(@window, 'media/oven_dustbin.png', true)
     @oven_machine_view = Gosu::Image.new(@window, 'media/oven_machine.png', true)
+    @cake_plate_pos_anim = Util::PositionAnimation.new({:x => 530, :y => 0}, {:x => 530, :y => -100}, 40, true, {0.49 => lambda { put_baked_cake}})
     @baking_process = Util::ProcessRunner.new(@window, 10, 530 + PROCESS_RUNNER_OFFSET[:x], 0 + PROCESS_RUNNER_OFFSET[:y]) { eject_baked_cake }
     window.register Button.new(self, 530, 0, :circular_cake)
     window.register Button.new(self, 530, 0, :rect_cake, Button::SECOND)
@@ -94,8 +97,9 @@ class Oven
   end
 
   def perform_updates
-    @cake_holder = @cake_holder_animator.slide
     @baking_process.update
+    @cake_tray_x, @cake_tray_y = @cake_plate_pos_anim.hop
+    @plate && @plate.update_position(@cake_tray_x + BAKED_CAKE_PLATE_OFFSET[:x], @cake_tray_y + BAKED_CAKE_PLATE_OFFSET[:y])
   end
   
   def handle(event)
@@ -103,10 +107,10 @@ class Oven
   end
 
   def render
-    @cake_holder.draw(530, 0, ZOrder::OVEN_CAKE_HOLDER)
     @oven_machine_view.draw(530, 0, zindex)
+    @trash_can.draw(530, 0, ZOrder::OVEN_TRASH_CAN)
     @baking_process.render
-    @plate && @plate.render
+    render_cake_holder
   end
   
   def zindex
@@ -123,8 +127,11 @@ class Oven
   end
   
   def eject_baked_cake
+    @cake_plate_pos_anim.reset
+  end
+  
+  def put_baked_cake
     @plate = Plate.new(self, @cake)
-    @plate.update_position(530 + BAKED_CAKE_PLATE_OFFSET[:x], 0 + BAKED_CAKE_PLATE_OFFSET[:y])
   end
   
   protected
@@ -137,7 +144,9 @@ class Oven
   end
   
   private
-  def play_animation
-    @cake_holder_animator.start
+  def render_cake_holder
+    args = @cake_plate_pos_anim.hop
+    @cake_holder.draw(@cake_tray_x, @cake_tray_y, ZOrder::OVEN_CAKE_HOLDER)
+    @plate && @plate.render
   end
 end

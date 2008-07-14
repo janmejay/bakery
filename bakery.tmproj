@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>test/util/animator_test.rb</string>
+	<string>src/oven.rb</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -47,7 +47,7 @@
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>0</integer>
+			<integer>11</integer>
 		</dict>
 		<key>src/bakery.rb</key>
 		<dict>
@@ -61,7 +61,7 @@
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>0</integer>
+			<integer>26</integer>
 		</dict>
 		<key>src/cursor.rb</key>
 		<dict>
@@ -110,14 +110,14 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>47</integer>
+				<integer>57</integer>
 				<key>line</key>
-				<integer>81</integer>
+				<integer>55</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>67</integer>
+			<integer>27</integer>
 		</dict>
 		<key>src/util/actions.rb</key>
 		<dict>
@@ -147,12 +147,26 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
+		<key>src/util/position_animation.rb</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>5</integer>
+				<key>line</key>
+				<integer>23</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
 		<key>src/zorder.rb</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>116</integer>
+				<integer>158</integer>
 				<key>line</key>
 				<integer>3</integer>
 			</dict>
@@ -180,9 +194,9 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>3</integer>
+				<integer>2</integer>
 				<key>line</key>
-				<integer>145</integer>
+				<integer>5</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
@@ -194,9 +208,9 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>50</integer>
+				<integer>22</integer>
 				<key>line</key>
-				<integer>29</integer>
+				<integer>15</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
@@ -215,6 +229,7 @@
 		<string>src/init.rb</string>
 		<string>test/util/animator_test.rb</string>
 		<string>src/oven.rb</string>
+		<string>src/util/position_animation.rb</string>
 		<string>src/zorder.rb</string>
 		<string>src/dustbin.rb</string>
 		<string>test/util/actions_test.rb</string>
@@ -223,6 +238,6 @@
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{210, 51}, {1230, 827}}</string>
+	<string>{{210, 50}, {1230, 828}}</string>
 </dict>
 </plist>
