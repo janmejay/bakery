@@ -5,8 +5,8 @@ class Util::PositionAnimation
     @both_ways = both_ways
     @total_hops_allowed = within
     @anim_length = @total_hops_allowed/(@both_ways ? 2 : 1)
-    @x_hop = (to[:x] - from[:x])/@anim_length
-    @y_hop = (to[:y] - from[:y])/@anim_length
+    @x_hop = (to[:x] - from[:x]).to_f/@anim_length
+    @y_hop = (to[:y] - from[:y]).to_f/@anim_length
     @hop_cords = [{:x => @x, :y => @y}]
     @handled_callbacks = {}
     @upcoming_callbacks = callback_map || {}
