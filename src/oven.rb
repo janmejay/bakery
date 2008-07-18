@@ -160,7 +160,7 @@ class Oven
   end
   
   def eject_baked_cake
-    @cake_plate_pos_anim.reset
+    @cake_plate_pos_anim.start
   end
   
   def put_baked_cake

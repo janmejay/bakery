@@ -12,7 +12,7 @@ class Util::PositionAnimation
     @upcoming_callbacks = callback_map || {}
   end
   
-  def reset 
+  def start 
     reset_callbacks
     @x = @initial_x
     @y = @initial_y

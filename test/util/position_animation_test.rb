@@ -10,7 +10,7 @@ class Util::PositionAnimationTest < Test::Unit::TestCase
       setup do
         @callbacks = {}
         @animation = Util::PositionAnimation.new({:x => @initial_x, :y => @initial_y}, {:x => 40, :y => 60}, 20, false, @callbacks)
-        @animation.reset
+        @animation.start
       end
       
       context "with no callbacks" do
@@ -55,7 +55,7 @@ class Util::PositionAnimationTest < Test::Unit::TestCase
         @initial_x, @initial_y = 20, 20
         @final_x, @final_y = 30, 30
         @animation = Util::PositionAnimation.new({:x => @initial_x, :y => @initial_y}, {:x => @final_x, :y => @final_y}, 20)
-        @animation.reset
+        @animation.start
       end
       
       should "work" do
@@ -72,7 +72,7 @@ class Util::PositionAnimationTest < Test::Unit::TestCase
         @final_x, @final_y = 40, 60
         @callbacks = {}
         @animation = Util::PositionAnimation.new({:x => @initial_x, :y => @initial_y}, {:x => @final_x, :y => @final_y}, 40, true, @callbacks)
-        @animation.reset
+        @animation.start
       end
       
       context "with no callbacks" do
