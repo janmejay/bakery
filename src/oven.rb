@@ -56,7 +56,9 @@ class Oven
     end
     
     def handle(event)
-      @oven.bake(Cake.new(@oven, @cake_image_name)) unless @oven.baking?
+      @oven.window.baker.walk_down_and_trigger(event.x, event.y) do
+        @oven.bake(Cake.new(@oven, @cake_image_name)) unless @oven.baking?
+      end
     end
 
     def render

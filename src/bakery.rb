@@ -55,7 +55,7 @@ class GameWindow < Gosu::Window
   end
   
   def handle(e)
-    @baker.pointed_to e.x, e.y
+    @baker.walk_down_and_trigger e.x, e.y
   end
 
   def button_down(id)
