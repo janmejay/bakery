@@ -1,6 +1,9 @@
 # User: janmejay.singh
 # Time: 19 Jun, 2008 6:03:53 PM
 class Baker
+  
+  PLATE_HOLDING_OFFSET_ANGLE = 150
+  PLATE_HOLDING_OFFSET = 15
 
   class LimitingRectangle
     def initialize top_left_x, top_left_y, bottom_right_x, bottom_right_y
@@ -33,12 +36,19 @@ class Baker
     @walking_anim.start
     @trigger_when_reached = trigger
   end
+  
+  def pick_up_plate(plate)
+    @plate = plate
+  end
 
   def update
     return if almost_there
     @angle = Gosu::angle(@x, @y, @target_x, @target_y)
     @x += Gosu::offset_x(@angle, VELOCITY)
     @y += Gosu::offset_y(@angle, VELOCITY)
+    plate_x = Gosu::offset_x(PLATE_HOLDING_OFFSET_ANGLE, @x + PLATE_HOLDING_OFFSET)
+    plate_y = Gosu::offset_y(PLATE_HOLDING_OFFSET_ANGLE, @y + PLATE_HOLDING_OFFSET)
+    @plate && @plate.update_position(plate_x, plate_y)
     if (almost_there)
       @walking_anim.stop
       @trigger_when_reached && @trigger_when_reached.call(self)
@@ -47,6 +57,7 @@ class Baker
 
   def draw
     @walking_anim.slide.draw_rot(@x, @y, ZOrder::BAKER, @angle)
+    @plate && @plate.render
   end
 
   private

@@ -13,6 +13,7 @@ module Actions
   module Publisher
     def register(*listener)
       @subscribers = (@subscribers || []).concat(listener.flatten)
+      @subscribers.uniq!
       @subscribers.sort!
     end
     

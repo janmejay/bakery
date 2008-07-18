@@ -3,9 +3,10 @@ class Util::PositionAnimation
     @initial_x, @initial_y = from[:x], from[:y]
     @x, @y = @initial_x, @initial_y
     @both_ways = both_ways
-    @anim_length = within/(@both_ways ? 2 : 1)
-    @x_hop = (to[:x] - from[:x])/within
-    @y_hop = (to[:y] - from[:y])/within
+    @total_hops_allowed = within
+    @anim_length = @total_hops_allowed/(@both_ways ? 2 : 1)
+    @x_hop = (to[:x] - from[:x])/@anim_length
+    @y_hop = (to[:y] - from[:y])/@anim_length
     @hop_cords = [{:x => @x, :y => @y}]
     @handled_callbacks = {}
     @upcoming_callbacks = callback_map || {}
@@ -20,7 +21,7 @@ class Util::PositionAnimation
     end
     return unless @both_ways
     one_way_counts = @hop_cords.length
-    @hop_cords.reverse.each do |retracing_coord|
+    @hop_cords.reverse[1..-1].each do |retracing_coord|
       @hop_cords << retracing_coord
     end
   end
@@ -29,13 +30,8 @@ class Util::PositionAnimation
     if @hop_cords.length > 1
       coord_map = @hop_cords.shift
       anim_left = @hop_cords.length
-      @upcoming_callbacks.each_pair do |key, value|
-        if anim_left < key*@anim_length
-          value.call 
-          @handled_callbacks[key] = value
-          @upcoming_callbacks.delete key
-        end
-      end
+      execute_callbacks
+      execute_callbacks if @hop_cords.length == 1 #executing the corner case.... the last one....
     else
       coord_map = @hop_cords[0]
     end
@@ -48,5 +44,15 @@ class Util::PositionAnimation
       @upcoming_callbacks[key] = value
     end
     @handled_callbacks = {}
+  end
+  
+  def execute_callbacks
+    @upcoming_callbacks.each_pair do |key, value|
+      if (@hop_cords.length*100)/@total_hops_allowed < (100 - key)
+        value.call 
+        @handled_callbacks[key] = value
+      end
+      @upcoming_callbacks.reject! {|key, value| @handled_callbacks.keys.include?(key)}
+    end
   end
 end

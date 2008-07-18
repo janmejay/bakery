@@ -24,8 +24,15 @@ class Oven
   end
   
   class Plate
+    
+    include Actions::ActiveRectangleSubscriber
+    
+    PLATE_LENGTH_AND_WIDTH = 60
+    
     def initialize(oven, cake)
-      @plate_view = Gosu::Image.new(oven.window, 'media/plate.png')
+      @oven = oven
+      window = @oven.window
+      @plate_view = Gosu::Image.new(window, 'media/plate.png')
       @cake = cake
     end
     
@@ -36,8 +43,27 @@ class Oven
     end
     
     def render
-      @plate_view.draw(@x, @y, ZOrder::PLATE)
+      @plate_view.draw(@x, @y, zindex)
       @cake.render
+    end
+    
+    def handle event
+      @window.baker.walk_down_and_trigger(event.x, event.y) do |baker|
+        @oven.give_plate_to(baker)
+      end
+    end
+
+    def zindex
+      ZOrder::PLATE
+    end
+    
+    protected
+    def active_x
+      return @x, @x + PLATE_LENGTH_AND_WIDTH
+    end
+
+    def active_y
+      return @y, @y + PLATE_LENGTH_AND_WIDTH
     end
   end
 
@@ -89,7 +115,7 @@ class Oven
     @cake_holder = Gosu::Image.new(@window, 'media/oven_cake_holder.png', true)
     @trash_can = Gosu::Image.new(@window, 'media/oven_dustbin.png', true)
     @oven_machine_view = Gosu::Image.new(@window, 'media/oven_machine.png', true)
-    @cake_plate_pos_anim = Util::PositionAnimation.new({:x => 530, :y => 0}, {:x => 530, :y => -100}, 40, true, {0.49 => lambda { put_baked_cake}})
+    @cake_plate_pos_anim = Util::PositionAnimation.new({:x => 530, :y => 0}, {:x => 530, :y => -100}, 40, true, {49 => lambda { put_baked_cake}})
     @baking_process = Util::ProcessRunner.new(@window, 10, 530 + PROCESS_RUNNER_OFFSET[:x], 0 + PROCESS_RUNNER_OFFSET[:y]) { eject_baked_cake }
     window.register Button.new(self, 530, 0, :circular_cake)
     window.register Button.new(self, 530, 0, :rect_cake, Button::SECOND)
@@ -106,6 +132,11 @@ class Oven
   
   def handle(event)
     play_animation
+  end
+  
+  def give_plate_to(baker)
+    baker.pick_up_plate(@plate)
+    @plate = nil
   end
 
   def render
