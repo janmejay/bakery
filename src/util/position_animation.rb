@@ -1,13 +1,13 @@
 class Util::PositionAnimation
   def initialize from, to, within, both_ways = false, callback_map = {}
-    @initial_x, @initial_y = from[:x], from[:y]
+    @initial_x, @initial_y, @final_x, @final_y = from[:x], from[:y], to[:x], to[:y]
     @x, @y = @initial_x, @initial_y
     @both_ways = both_ways
     @total_hops_allowed = within
     @anim_length = @total_hops_allowed/(@both_ways ? 2 : 1)
-    @x_hop = (to[:x] - from[:x]).to_f/@anim_length
-    @y_hop = (to[:y] - from[:y]).to_f/@anim_length
-    @hop_cords = [{:x => @x, :y => @y}]
+    @x_hop = (@final_x - @initial_x).to_f/@anim_length
+    @y_hop = (@final_y - @initial_y).to_f/@anim_length
+    @hop_cords = []
     @handled_callbacks = {}
     @upcoming_callbacks = callback_map || {}
   end
@@ -16,26 +16,18 @@ class Util::PositionAnimation
     reset_callbacks
     @x = @initial_x
     @y = @initial_y
-    @anim_length.times do
-      @hop_cords << {:x => @x += @x_hop, :y => @y += @y_hop}
-    end
+    insert_hop_cords(@x, @y)
+    @anim_length.times { insert_hop_cords(@x += @x_hop, @y += @y_hop)}
     return unless @both_ways
-    one_way_counts = @hop_cords.length
-    @hop_cords.reverse[1..-1].each do |retracing_coord|
-      @hop_cords << retracing_coord
-    end
+    @hop_cords += @hop_cords.reverse[1..-1]
   end
   
   def hop
-    if @hop_cords.length > 1
-      coord_map = @hop_cords.shift
-      anim_left = @hop_cords.length
-      execute_callbacks
-      execute_callbacks if @hop_cords.length == 1 #executing the corner case.... the last one....
-    else
-      coord_map = @hop_cords[0]
-    end
-    return coord_map[:x], coord_map[:y]
+    return @both_ways ? [@initial_x, @initial_y] : [@final_x, @final_y] if @hop_cords.empty?
+    coord_map = @hop_cords.shift
+    anim_left = @hop_cords.length
+    execute_callbacks(x = coord_map[:x], y = coord_map[:y])
+    return x, y
   end
   
   private 
@@ -46,10 +38,14 @@ class Util::PositionAnimation
     @handled_callbacks = {}
   end
   
-  def execute_callbacks
+  def insert_hop_cords x, y
+    @hop_cords << {:x => @x, :y => @y}
+  end
+  
+  def execute_callbacks(x, y)
     @upcoming_callbacks.each_pair do |key, value|
       if (@hop_cords.length*100)/@total_hops_allowed < (100 - key)
-        value.call 
+        value.call(x, y)
         @handled_callbacks[key] = value
       end
       @upcoming_callbacks.reject! {|key, value| @handled_callbacks.keys.include?(key)}
