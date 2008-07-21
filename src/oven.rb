@@ -18,8 +18,8 @@ class Oven
       @y = y
     end
     
-    def render
-      @cake_view.draw(@x, @y, ZOrder::CAKE) 
+    def render(z_index = ZOrder::CAKE)
+      @cake_view.draw(@x, @y, z_index) 
     end
   end
   
@@ -42,9 +42,9 @@ class Oven
       @cake.update_position(x, y)
     end
     
-    def render
-      @plate_view.draw(@x, @y, zindex)
-      @cake.render
+    def render(z_index = zindex)
+      @plate_view.draw(@x, @y, z_index)
+      @cake.render(z_index + 1)
     end
     
     def handle event
