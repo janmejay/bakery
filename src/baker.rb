@@ -45,6 +45,7 @@ class Baker
   
   def pick_up_plate(plate)
     @plate = plate
+    @window.unregister(@plate)
   end
 
   def update

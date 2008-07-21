@@ -33,6 +33,14 @@ class ActionsTest < Test::Unit::TestCase
       @publisher.publish(@event)
     end
     
+    should "not post to unregistered subscribers" do
+      @publisher.register(@subscriber_3, @subscriber_2, @subscriber_1)
+      @publisher.unregister(@subscriber_1, @subscriber_2)
+      @subscriber_3.expects(:consume).with(@event)
+      [@subscriber_1, @subscriber_2].each { |subscriber| subscriber.expects(:consume).never}
+      @publisher.publish(@event)
+    end
+    
     should "keep subsribers sorted on zindex" do
       @publisher.register(@subscriber_4, @subscriber_2, @subscriber_1)
       @publisher.register(@subscriber_5, @subscriber_3)

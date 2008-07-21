@@ -50,6 +50,7 @@ class Oven
     def handle event
       @window.baker.walk_down_and_trigger(event.x, event.y) do |baker|
         @oven.give_plate_to(baker)
+        @oven = nil
       end
     end
 

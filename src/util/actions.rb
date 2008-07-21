@@ -11,10 +11,16 @@ module Actions
   end
   
   module Publisher
-    def register(*listener)
-      @subscribers = (@subscribers || []).concat(listener.flatten)
+    def register(*listeners)
+      @subscribers = (@subscribers || []).concat(listeners.flatten)
       @subscribers.uniq!
       @subscribers.sort!
+    end
+    
+    def unregister(*listeners)
+      listeners.flatten.each do |listener|
+        @subscribers.delete(listener)
+      end
     end
     
     def publish(event)
