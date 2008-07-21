@@ -32,7 +32,7 @@ class Oven
     def initialize(oven, cake)
       @oven = oven
       @window = @oven.window
-      @plate_view = Gosu::Image.new(@window, 'media/plate.png')
+      @plate_view = Gosu::Image.new(@window, 'media/plate.png', false)
       @cake = cake
     end
     
