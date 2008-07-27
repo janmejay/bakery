@@ -33,7 +33,7 @@ class Baker
     @walking_anim = Util::Animator.new(window, 'media/walking_baker.png', 105, 80, false, 2, true)
     @hat = Gosu::Image.new(window, 'media/baker_hat.png', false)
     @window = window
-    @x, @y, @target_x, @target_y, @angle = 0, 0, 0, 0, 0, 0, 0
+    @x, @y, @target_x, @target_y, @angle = 600, 400, 600, 400, 180
     @sane_walking_area = LimitingRectangle.new(384, 200, 835, 550)
   end
   
