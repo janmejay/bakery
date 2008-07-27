@@ -4,7 +4,7 @@
 class Table
   def initialize window
     @window = window
-    @table = Gosu::Image.new(window, "media/table.png", true)
+    @table = Gosu::Image.new(@window, "media/table.png", true)
   end
 
   def draw
