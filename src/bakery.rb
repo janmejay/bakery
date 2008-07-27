@@ -18,13 +18,14 @@ class GameWindow < Gosu::Window
     self.caption = "Bakery"
     
     @background_image = Gosu::Image.new(self, "media/floor.png", true)
-    
-    @cursor = Cursor.new(self)
-    @baker = Baker.new(self)
-    @table = Table.new(self)
     register self
-    register Oven.new(self)
     register Dustbin.new(self)
+    @dead_entities = []
+    @dead_entities << Cursor.new(self)
+    @dead_entities << Table.new(self)
+    @alive_entities = []
+    @alive_entities << Oven.new(self)
+    @alive_entities << @baker = Baker.new(self)
     @font = Gosu::Font.new(self, Gosu::default_font_name, 20)
   end
 
@@ -34,14 +35,13 @@ class GameWindow < Gosu::Window
     elsif button_down? Gosu::Button::MsRight
       publish(Event.new(:right_click, mouse_x, mouse_y))
     end
-    @baker.update
+    @alive_entities.each {|entity| entity.update}
     for_each_subscriber {|subscriber| subscriber.perform_updates}
   end
 
   def draw
-    @cursor.draw
-    @baker.draw
-    @table.draw
+    @dead_entities.each {|entity| entity.draw}
+    @alive_entities.each {|entity| entity.draw}
     for_each_subscriber { |subscriber| subscriber.render}
     @font.draw("Score: #{mouse_x} X #{mouse_y}", 10, 10, ZOrder::MESSAGES, 1.0, 1.0, 0xffffff00)
   end

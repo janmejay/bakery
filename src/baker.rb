@@ -47,6 +47,17 @@ class Baker
     @plate = plate
     @window.unregister(@plate)
   end
+  
+  def return_plate regiser_before_giving = true
+    plate = @plate
+    @plate = nil
+    regiser_before_giving && @window.register(plate)
+    plate
+  end
+  
+  def has_plate?
+    not @plate.nil?
+  end
 
   def update
     return if almost_there

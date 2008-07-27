@@ -1,29 +1,36 @@
 # User: janmejay.singh
 # Time: 20 Jun, 2008 3:54:15 PM
 
-require 'util/animator'
+require 'util/position_animation'
 require 'util/actions'
 
 class Dustbin
   include Actions::ActiveRectangleSubscriber
   
-  HEIGHT = 150
+  HEIGHT = 120
+  
   def initialize window
     @window = window
-    @dustbin_animator = Util::Animator.new(@window, 'media/opening_dustbin.png', 150, 120, true)
+    @image = Gosu::Image.new(@window, 'media/dustbin.png', true)
+    @throwing_anim = Util::PositionAnimation.new({:x => 865, :y => 166}, {:x => 790, :y => 166}, 40, true, {50 => lambda {accept_waste_cake}, 99 => lambda {discard_the_cake}})
     perform_updates
   end
 
   def perform_updates
-    @dustbin = @dustbin_animator.slide
+    @x, @y = @throwing_anim.hop
+    @cake && @cake.update_position(@x + 30, @y + 60, @cake_throwing_angle)
   end
   
   def render
-    @dustbin.draw(790, HEIGHT, zindex)
+    @image.draw(@x, @y, zindex)
+    @cake && @cake.render(ZOrder::CAKE_IN_DUSTBIN)
   end
   
   def handle(event)
-    open
+    baker = @window.baker
+    baker.walk_down_and_trigger(event.x, event.y) do
+      baker.has_plate? && open
+    end
   end
   
   def zindex
@@ -42,6 +49,16 @@ class Dustbin
   private
 
   def open
-    @dustbin_animator.start
+    @throwing_anim.start
+  end
+  
+  def accept_waste_cake
+    plate = @window.baker.return_plate(false)
+    @cake = plate.cake
+    @cake_throwing_angle = rand(360)
+  end
+  
+  def discard_the_cake
+    @cake = nil
   end
 end

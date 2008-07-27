@@ -7,19 +7,19 @@ require 'util/actions'
 require 'util/process_runner'
 
 class Oven
-  include Actions::ActiveRectangleSubscriber
   class Cake
     def initialize(oven, image_name)
       @cake_view = Gosu::Image.new(oven.window, image_name)
     end
     
-    def update_position(x, y)
+    def update_position(x, y, angle = nil)
       @x = x
       @y = y
+      @angle = angle
     end
     
     def render(z_index = ZOrder::CAKE)
-      @cake_view.draw(@x, @y, z_index) 
+      @angle ? @cake_view.draw_rot(@x, @y, z_index, @angle) : @cake_view.draw(@x, @y, z_index)
     end
   end
   
@@ -52,6 +52,10 @@ class Oven
         @oven.give_plate_to(baker)
         @oven = nil
       end
+    end
+    
+    def cake
+      @cake
     end
 
     def zindex
@@ -122,17 +126,13 @@ class Oven
     @window.register Button.new(self, 530, 0, :rect_cake, Button::SECOND)
     @window.register Button.new(self, 530, 0, :triangular_cake, Button::THIRD)
     @window.register Button.new(self, 530, 0, :heart_cake, Button::FOURTH)
-    perform_updates
+    update
   end
 
-  def perform_updates
+  def update
     @baking_process.update
     @cake_tray_x, @cake_tray_y = @cake_plate_pos_anim.hop
     @plate && @plate.update_position(@cake_tray_x + BAKED_CAKE_PLATE_OFFSET[:x], @cake_tray_y + BAKED_CAKE_PLATE_OFFSET[:y])
-  end
-  
-  def handle(event)
-    play_animation
   end
   
   def give_plate_to(baker)
@@ -140,15 +140,11 @@ class Oven
     @plate = nil
   end
 
-  def render
-    @oven_machine_view.draw(530, 0, zindex)
+  def draw
+    @oven_machine_view.draw(530, 0, ZOrder::OVEN)
     @trash_can.draw(530, 0, ZOrder::OVEN_TRASH_CAN)
     @baking_process.render
     render_cake_holder
-  end
-  
-  def zindex
-    ZOrder::OVEN
   end
   
   def bake(cake)
@@ -170,15 +166,6 @@ class Oven
   
   def make_plate_pickable
     @window.register @plate
-  end
-  
-  protected
-  def active_x
-    return 550, 715
-  end
-  
-  def active_y
-    return 60, 119
   end
   
   private
