@@ -21,9 +21,7 @@ class Button
   end
   
   def handle(event)
-    puts "First... i was called...."
     @owner.window.baker.walk_down_and_trigger(event.x, event.y) do
-      puts "Invoked.... "
       @owner.send(@callback_name)
     end
   end

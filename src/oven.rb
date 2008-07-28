@@ -8,8 +8,10 @@ require 'util/process_runner'
 
 class Oven
   class Cake
-    def initialize(oven, image_name)
-      @cake_view = Gosu::Image.new(oven.window, image_name)
+    def initialize(window, cake_name)
+      @window = window
+      @cake_name = cake_name
+      @body = Gosu::Image.new(@window, "media/#{@cake_name}.png")
     end
     
     def update_position(x, y, angle = nil)
@@ -18,20 +20,24 @@ class Oven
       @angle = angle
     end
     
+    def put_icing icing_type
+      @body = Gosu::Image.new(@window, "media/#{icing_type}_#{@cake_name}.png")
+    end
+    
     def render(z_index = ZOrder::CAKE)
-      @angle ? @cake_view.draw_rot(@x, @y, z_index, @angle) : @cake_view.draw(@x, @y, z_index)
+      @angle ? @body.draw_rot(@x, @y, z_index, @angle) : @body.draw(@x, @y, z_index)
     end
   end
   
   class Plate
     
     include Actions::ActiveRectangleSubscriber
+    attr_accessor :holder
     
     PLATE_LENGTH_AND_WIDTH = 60
     
-    def initialize(oven, cake)
-      @oven = oven
-      @window = @oven.window
+    def initialize(window, cake)
+      @window = window
       @plate_view = Gosu::Image.new(@window, 'media/plate.png', false)
       @cake = cake
     end
@@ -49,8 +55,8 @@ class Oven
     
     def handle event
       @window.baker.walk_down_and_trigger(event.x, event.y) do |baker|
-        @oven.give_plate_to(baker)
-        @oven = nil
+        @holder.give_plate_to(baker)
+        @holder = nil
       end
     end
     
@@ -82,13 +88,13 @@ class Oven
       @x = base_x + place[:x_off]
       @y = base_y + place[:y_off]
       @oven = oven
-      @cake_image_name = "media/#{name_identifier}.png"
+      @cake_name = name_identifier
       @body = Gosu::Image.new(@oven.window, "media/#{name_identifier}_button.png", true)
     end
     
     def handle(event)
       @oven.window.baker.walk_down_and_trigger(event.x, event.y) do
-        @oven.bake(Cake.new(@oven, @cake_image_name)) unless @oven.baking?
+        @oven.bake(Cake.new(@oven.window, @cake_name)) unless @oven.baking?
       end
     end
 
@@ -161,7 +167,8 @@ class Oven
   end
   
   def put_baked_cake
-    @plate = Plate.new(self, @cake)
+    @plate = Plate.new(self.window, @cake)
+    @plate.holder = self
   end
   
   def make_plate_pickable
