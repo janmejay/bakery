@@ -7,7 +7,6 @@ class Cursor
   end
 
   def draw
-    @tip.draw_rot(@window.mouse_x, @window.mouse_y, ZOrder::CURSOR, 0)
+    @tip.draw_rot(@window.mouse_x + 3, @window.mouse_y + 14, ZOrder::CURSOR, 0)
   end
 end
-
