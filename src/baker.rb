@@ -60,11 +60,11 @@ class Baker
   end
 
   def update
+    @plate && @plate.update_position(*offset(PLATE_HOLDING_OFFSET_ANGLE, PLATE_HOLDING_OFFSET, Oven::Plate::PLATE_LENGTH_AND_WIDTH, Oven::Plate::PLATE_LENGTH_AND_WIDTH))
     return if almost_there
     @angle = Gosu::angle(@x, @y, @target_x, @target_y)
     @x += Gosu::offset_x(@angle, VELOCITY)
     @y += Gosu::offset_y(@angle, VELOCITY)
-    @plate && @plate.update_position(*offset(PLATE_HOLDING_OFFSET_ANGLE, PLATE_HOLDING_OFFSET, Oven::Plate::PLATE_LENGTH_AND_WIDTH, Oven::Plate::PLATE_LENGTH_AND_WIDTH))
     if (almost_there)
       @walking_anim.stop
       @trigger_when_reached && @trigger_when_reached.call(self)
