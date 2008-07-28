@@ -49,9 +49,9 @@ class Baker
   end
   
   def return_plate regiser_before_giving = true
+    regiser_before_giving && @plate && @window.register(@plate)
     plate = @plate
     @plate = nil
-    regiser_before_giving && @window.register(plate)
     plate
   end
   

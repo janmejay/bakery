@@ -28,7 +28,7 @@ class Froster
   
   def receive_cake
     @plate = @window.baker.return_plate
-    @plate.holder = self
+    @plate && @plate.holder = self
   end
   
   def blackcurrent_frosting
