@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>src/froster.rb</string>
+	<string>bakery</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -28,9 +28,9 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>11</integer>
+				<integer>23</integer>
 				<key>line</key>
-				<integer>7</integer>
+				<integer>6</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
@@ -49,35 +49,51 @@
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>42</integer>
+			<integer>11</integer>
 		</dict>
 		<key>src/bakery.rb</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>17</integer>
+				<integer>53</integer>
 				<key>line</key>
-				<integer>21</integer>
+				<integer>46</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>0</integer>
+			<integer>24</integer>
 		</dict>
 		<key>src/common/button.rb</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>0</integer>
+				<integer>8</integer>
 				<key>line</key>
-				<integer>24</integer>
+				<integer>29</integer>
 			</dict>
+			<key>columnSelection</key>
+			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>1</integer>
+			<integer>0</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>5</integer>
+				<key>line</key>
+				<integer>29</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>9</integer>
+				<key>line</key>
+				<integer>29</integer>
+			</dict>
 		</dict>
 		<key>src/cursor.rb</key>
 		<dict>
@@ -112,23 +128,23 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>56</integer>
+				<integer>35</integer>
 				<key>line</key>
-				<integer>36</integer>
+				<integer>7</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>19</integer>
+			<integer>0</integer>
 		</dict>
 		<key>src/oven.rb</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>15</integer>
+				<integer>26</integer>
 				<key>line</key>
-				<integer>152</integer>
+				<integer>151</integer>
 			</dict>
 			<key>columnSelection</key>
 			<false/>
@@ -139,16 +155,16 @@
 			<key>selectFrom</key>
 			<dict>
 				<key>column</key>
-				<integer>4</integer>
+				<integer>19</integer>
 				<key>line</key>
-				<integer>152</integer>
+				<integer>151</integer>
 			</dict>
 			<key>selectTo</key>
 			<dict>
 				<key>column</key>
-				<integer>22</integer>
+				<integer>26</integer>
 				<key>line</key>
-				<integer>152</integer>
+				<integer>151</integer>
 			</dict>
 		</dict>
 		<key>src/table.rb</key>
@@ -200,7 +216,7 @@
 				<key>column</key>
 				<integer>3</integer>
 				<key>line</key>
-				<integer>5</integer>
+				<integer>4</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
