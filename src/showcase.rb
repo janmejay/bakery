@@ -9,6 +9,7 @@ class Showcase
     @window = window
     @base = Gosu::Image.new(@window, 'media/showcase_base.png', true)
     @cover = Gosu::Image.new(@window, 'media/showcase_cover.png', true)
+    @cant_put_two_cakes_in_there_message = Gosu::Sample.new(@window, 'media/cant_put_two_cakes_in_there.ogg')
   end
   
   def perform_updates
@@ -16,7 +17,7 @@ class Showcase
   end
   
   def receive_cake
-    @plate && return
+    @plate && @cant_put_two_cakes_in_there_message.play && return
     @window.baker.give_plate_to(self)
     return unless @plate && @plate.holder = self
   end
