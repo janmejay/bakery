@@ -12,7 +12,7 @@ class Dustbin
   def initialize window
     @window = window
     @image = Gosu::Image.new(@window, 'media/dustbin.png', true)
-    @throwing_anim = Util::PositionAnimation.new({:x => 865, :y => 166}, {:x => 790, :y => 166}, 40, true, {50 => lambda {accept_waste_cake}, 99 => lambda {discard_the_cake}})
+    @throwing_anim = Util::PositionAnimation.new({:x => 865, :y => 166}, {:x => 790, :y => 166}, 40, true, {50 => lambda {ask_for_waste_cake}, 99 => lambda {discard_the_cake}})
     perform_updates
   end
 
@@ -37,6 +37,11 @@ class Dustbin
     ZOrder::UNDER_TABLE_EQUIPMENTS
   end
   
+  def accept_plate plate
+    @window.unregister(plate)
+    @cake = plate.cake
+  end
+  
   protected
   def active_x
     return 865, 896
@@ -52,9 +57,8 @@ class Dustbin
     @throwing_anim.start
   end
   
-  def accept_waste_cake
-    plate = @window.baker.return_plate(false)
-    @cake = plate.cake
+  def ask_for_waste_cake
+    @window.baker.give_plate_to(self)
     @cake_throwing_angle = rand(360)
   end
   

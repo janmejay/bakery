@@ -30,8 +30,8 @@ class Froster
   end
   
   def receive_cake
-    @plate = @window.baker.return_plate(false)
-    @plate && @plate.holder = self
+    @window.baker.give_plate_to(self)
+    return unless @plate && @plate.holder = self
     @action_anim.start
     @icing_process.start
     @show_animation = true #REFACTOR ME!!!! put me in the animator
@@ -54,8 +54,12 @@ class Froster
   end
   
   def give_plate_to baker
-    baker.pick_up_plate(@plate)
-    @plate = nil
+    baker.accept_plate(@plate) && @plate = nil
+  end
+  
+  def accept_plate plate
+    @window.unregister(plate)
+    @plate = plate
   end
 
   def draw

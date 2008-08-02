@@ -55,8 +55,7 @@ class Oven
     
     def handle event
       @window.baker.walk_down_and_trigger(event.x, event.y) do |baker|
-        @holder.give_plate_to(baker)
-        @holder = nil
+        @holder.give_plate_to(baker) && @holder = nil
       end
     end
     
@@ -142,8 +141,7 @@ class Oven
   end
   
   def give_plate_to(baker)
-    baker.pick_up_plate(@plate)
-    @plate = nil
+    baker.accept_plate(@plate) && @plate = nil
   end
 
   def draw

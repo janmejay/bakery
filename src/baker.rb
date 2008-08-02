@@ -30,9 +30,10 @@ class Baker
   VELOCITY = 2
 
   def initialize window
-    @walking_anim = Util::Animator.new(window, 'media/walking_baker.png', 105, 80, false, 2, true)
-    @hat = Gosu::Image.new(window, 'media/baker_hat.png', false)
     @window = window
+    @walking_anim = Util::Animator.new(@window, 'media/walking_baker.png', 105, 80, false, 2, true)
+    @hat = Gosu::Image.new(@window, 'media/baker_hat.png', false)
+    @cant_pick_two_plates_at_a_time = Gosu::Sample.new(@window, 'media/cant_pick_two_plates_at_a_time.ogg')
     @x, @y, @target_x, @target_y, @angle = 600, 400, 600, 400, 180
     @sane_walking_area = LimitingRectangle.new(384, 200, 835, 550)
   end
@@ -43,16 +44,19 @@ class Baker
     @trigger_when_reached = trigger
   end
   
-  def pick_up_plate(plate)
+  def accept_plate(plate)
+    @plate && @cant_pick_two_plates_at_a_time.play && return
     @plate = plate
     @window.unregister(@plate)
+    @plate #because unless the method returns true, the caller should assume the plate was not accepted
   end
   
-  def return_plate regiser_before_giving = true
-    regiser_before_giving && @plate && @window.register(@plate)
-    plate = @plate
+  def give_plate_to that_thing
+    @plate || return
+    @window.register(@plate)
+    that_thing.accept_plate(@plate)
     @plate = nil
-    plate
+    true
   end
   
   def has_plate?
