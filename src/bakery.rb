@@ -5,6 +5,7 @@ require 'dustbin'
 require 'oven'
 require 'zorder'
 require 'froster'
+require 'showcase'
 require 'util/actions'
 require 'util/process_runner'
 
@@ -21,6 +22,7 @@ class GameWindow < Gosu::Window
     @background_image = Gosu::Image.new(self, "media/floor.png", true)
     register self
     register Dustbin.new(self)
+    register Showcase.new(self)
     @dead_entities = []
     @dead_entities << Cursor.new(self)
     @dead_entities << Table.new(self)
