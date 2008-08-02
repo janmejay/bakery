@@ -20,7 +20,12 @@ class Oven
       @angle = angle
     end
     
+    def iced?
+      not @icing.nil?
+    end
+    
     def put_icing icing_type
+      @icing = icing_type
       @body = Gosu::Image.new(@window, "media/#{icing_type}_#{@cake_name}.png")
     end
     

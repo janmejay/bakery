@@ -28,6 +28,8 @@ class Baker
   end
 
   VELOCITY = 2
+  
+  attr_reader :plate
 
   def initialize window
     @window = window
