@@ -24,6 +24,10 @@ class Oven
       not @icing_type.nil?
     end
     
+    def decorated?
+      not @decoration_type.nil?
+    end
+    
     def put_icing icing_type
       @icing_type = icing_type
       @body = Gosu::Image.new(@window, "media/#{@icing_type}_#{@cake_name}.png")

@@ -10,6 +10,7 @@ class Decorator
     @body = Gosu::Image.new(@window, 'media/decorator.png', true)
     @buttons = []
     @action_anim = Util::Animator.new(window, 'media/cake-action-anim.png', 120, 100, false, 3, true)
+    @this_cake_is_already_decorated_message = Gosu::Sample.new(@window, 'media/this_cake_is_already_decorated.ogg')
     @decoration_process = Util::ProcessRunner.new(@window, 10, X + PROCESS_RUNNER_OFFSET[:x],
                                                                Y + PROCESS_RUNNER_OFFSET[:y]) { make_cake_available_after_decoration }
     @buttons << Button.new(self, {:x => 922, :y => 312, :z => ZOrder::TABLE_MOUNTED_CONTROLS, :dx => 28, :dy => 28}, :tree_decoration)
@@ -27,7 +28,7 @@ class Decorator
   end
 
   def receive_cake
-    # verify_cake_is_not_iced_already || return
+    verify_cake_is_not_decorated_already || return
     @window.baker.give_plate_to(self)
     return unless @plate && @plate.holder = self
     @action_anim.start
@@ -74,10 +75,10 @@ class Decorator
     @show_animation = false
   end
 
-  # def verify_cake_is_not_iced_already
-  #     plate = @plate || @window.baker.plate
-  #     plate && plate.cake.iced? && @this_cake_is_already_iced_message.play && return
-  #     true
-  #   end
+  def verify_cake_is_not_decorated_already
+    plate = @plate || @window.baker.plate
+    plate && plate.cake.decorated? && @this_cake_is_already_decorated_message.play && return
+    true
+  end
 end
 
