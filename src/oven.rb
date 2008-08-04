@@ -21,16 +21,27 @@ class Oven
     end
     
     def iced?
-      not @icing.nil?
+      not @icing_type.nil?
     end
     
     def put_icing icing_type
-      @icing = icing_type
-      @body = Gosu::Image.new(@window, "media/#{icing_type}_#{@cake_name}.png")
+      @icing_type = icing_type
+      @body = Gosu::Image.new(@window, "media/#{@icing_type}_#{@cake_name}.png")
+    end
+    
+    def put_decoration decoration_type
+      @decoration_type = decoration_type
+      @decoration = Gosu::Image.new(@window, "media/#{@decoration_type}_decoration.png")
     end
     
     def render(z_index = ZOrder::CAKE)
-      @angle ? @body.draw_rot(@x, @y, z_index, @angle) : @body.draw(@x, @y, z_index)
+      if @angle
+        @body.draw_rot(@x, @y, z_index, @angle)
+        @decoration && @decoration.draw_rot(@x, @y, z_index, @angle)
+      else
+        @body.draw(@x, @y, z_index)
+        @decoration && @decoration.draw(@x, @y, z_index)
+      end
     end
   end
   

@@ -1,7 +1,6 @@
 class Showcase
   include Actions::ActiveRectangleSubscriber
   
-  attr_reader :window
   CAKE_PLATE_OFFSET = {:x => 10, :y => 10}
   X, Y = 256, 75
   

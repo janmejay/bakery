@@ -14,7 +14,7 @@ class Froster
     @body = Gosu::Image.new(@window, 'media/froster.png', true)
     @buttons = []
     @this_cake_is_already_iced_message = Gosu::Sample.new(@window, 'media/this_cake_is_already_iced.ogg')
-    @action_anim = Util::Animator.new(window, 'media/froster-action-anim.png', 120, 100, false, 3, true)
+    @action_anim = Util::Animator.new(window, 'media/cake-action-anim.png', 120, 100, false, 3, true)
     @icing_process = Util::ProcessRunner.new(@window, 10, X + PROCESS_RUNNER_OFFSET[:x], Y + PROCESS_RUNNER_OFFSET[:y]) { make_cake_available_after_icing }
     @buttons << Button.new(self, {:x => 568, :y => 653, :z => ZOrder::TABLE_MOUNTED_CONTROLS, :dx => 24, :dy => 24}, :blackcurrent_frosting)
     @buttons << Button.new(self, {:x => 568, :y => 695, :z => ZOrder::TABLE_MOUNTED_CONTROLS, :dx => 24, :dy => 24}, :vanilla_frosting)
@@ -66,8 +66,7 @@ class Froster
 
   def draw
     @body.draw(X, Y, ZOrder::TABLE_MOUNTED_EQUIPMENTS)
-    @buttons.each { |button| button.render }
-    @show_animation && @action_anim.slide.draw(X, Y, ZOrder::FROSTER_ACTION_CLOWD)
+    @show_animation && @action_anim.slide.draw(X, Y, ZOrder::ACTION_CLOWD)
     @icing_process.render
     @plate && @plate.render
   end

@@ -6,6 +6,7 @@ require 'oven'
 require 'zorder'
 require 'froster'
 require 'showcase'
+require 'decorator'
 require 'util/actions'
 require 'util/process_runner'
 
@@ -29,6 +30,7 @@ class GameWindow < Gosu::Window
     @alive_entities = []
     @alive_entities << Oven.new(self)
     @alive_entities << Froster.new(self)
+    @alive_entities << Decorator.new(self)
     @alive_entities << @baker = Baker.new(self)
     @font = Gosu::Font.new(self, Gosu::default_font_name, 20)
   end
