@@ -39,8 +39,9 @@ class Baker
     @cant_pick_two_plates_at_a_time = Gosu::Sample.new(@window, 'media/cant_pick_two_plates_at_a_time.ogg')
     @x, @y, @target_x, @target_y, @angle = 600, 400, 600, 400, 180
     @sane_walking_area = LimitingRectangle.new(384, 200, 835, 550)
-    @loss_anim = Util::FontAnimator.new(@window, 120, :x => 400, :y => 400, :z => ZOrder::MESSAGES, :color => 'ff0000')
-    @profit_anim = Util::FontAnimator.new(@window, 120, :x => 400, :y => 400, :z => ZOrder::MESSAGES, :color => '00ff00')
+    transaction_font_path = File.join(File.dirname(__FILE__), '..', 'media', 'number.ttf')
+    @loss_anim = Util::FontAnimator.new(@window, 120, :z => ZOrder::MESSAGES, :color => 'ff0000', :font_name => transaction_font_path)
+    @profit_anim = Util::FontAnimator.new(@window, 120, :z => ZOrder::MESSAGES, :color => '00ff00', :font_name => transaction_font_path)
   end
   
   def walk_down_and_trigger(x_cord, y_cord, &trigger)
