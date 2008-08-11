@@ -2,6 +2,7 @@
 # Time: 19 Jun, 2008 6:03:53 PM
 
 require File.join('util', 'geometry')
+require File.join('util', 'font_animator')
 
 class Baker
   
@@ -38,6 +39,8 @@ class Baker
     @cant_pick_two_plates_at_a_time = Gosu::Sample.new(@window, 'media/cant_pick_two_plates_at_a_time.ogg')
     @x, @y, @target_x, @target_y, @angle = 600, 400, 600, 400, 180
     @sane_walking_area = LimitingRectangle.new(384, 200, 835, 550)
+    @loss_anim = Util::FontAnimator.new(@window, 120, :x => 400, :y => 400, :z => ZOrder::MESSAGES, :color => 'ff0000')
+    @profit_anim = Util::FontAnimator.new(@window, 120, :x => 400, :y => 400, :z => ZOrder::MESSAGES, :color => '00ff00')
   end
   
   def walk_down_and_trigger(x_cord, y_cord, &trigger)
@@ -81,6 +84,14 @@ class Baker
     @walking_anim.slide.draw_rot(@x, @y, ZOrder::BAKER, @angle)
     @hat.draw_rot(@x, @y, ZOrder::BAKER_HAT, @angle)
     @plate && @plate.render(ZOrder::PLATE_WHEN_IN_BAKERS_HAND)
+  end
+  
+  def pay bucks
+    @loss_anim.start_anim bucks.to_s, :x => @x, :y => @y
+  end
+  
+  def accept_payment bucks
+    @profit_anim.start_anim bucks.to_s, :x => @x, :y => @y
   end
 
   private

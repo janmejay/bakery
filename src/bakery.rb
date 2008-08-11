@@ -9,6 +9,7 @@ require 'showcase'
 require 'decorator'
 require 'util/actions'
 require 'util/process_runner'
+require 'set'
 
 class GameWindow < Gosu::Window
   attr_reader :baker
@@ -24,6 +25,7 @@ class GameWindow < Gosu::Window
     register self
     register Dustbin.new(self)
     register Showcase.new(self)
+    @renderables = Set.new
     @dead_entities = []
     @dead_entities << Cursor.new(self)
     @dead_entities << Table.new(self)
@@ -49,7 +51,8 @@ class GameWindow < Gosu::Window
     @dead_entities.each {|entity| entity.draw}
     @alive_entities.each {|entity| entity.draw}
     for_each_subscriber { |subscriber| subscriber.render}
-    @font.draw("Score: #{mouse_x} X #{mouse_y}", 10, 10, ZOrder::MESSAGES, 1.0, 1.0, 0xffffff00)
+    @renderables.each { |renderable| @renderables.delete(renderable) unless renderable.render }
+    @font.draw("Score: #{mouse_x} X #{mouse_y}", 10, 10, ZOrder::MESSAGES, 1.0, 1.0, 0xaaffffff)
   end
   
   def render
@@ -68,6 +71,10 @@ class GameWindow < Gosu::Window
     if id == Gosu::Button::KbEscape then
       close
     end
+  end
+  
+  def keep_rendering_until_returns_nil renderable
+    @renderables << renderable
   end
   
   def zindex
