@@ -13,4 +13,4 @@ $LOAD_PATH << File.dirname(__FILE__)
 require "rubygems"
 require 'gosu'
 require File.join('util', 'util')
-require 'bakery'
+require 'game_wizard'

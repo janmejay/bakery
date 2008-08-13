@@ -3,6 +3,10 @@
 # Time: 16 Jun, 2008 8:20:18 PM
 
 require File.join(File.dirname(__FILE__), 'src', 'init')
+require 'game_loader'
+require 'bakery'
 
-window = GameWindow.new
-window.show
+$wizard = GameWizard.new
+$wizard.add(GameLoader)
+$wizard.add(Bakery)
+$wizard.show

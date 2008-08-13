@@ -11,14 +11,15 @@ require 'util/actions'
 require 'util/process_runner'
 require 'set'
 
-class GameWindow < Gosu::Window
+class Bakery < Gosu::Window
   attr_reader :baker
   include Actions
   include Publisher
   include Subscriber
   
-  def initialize
+  def initialize context
     super(1024, 768, false)
+    @context = context
     self.caption = "Bakery"
     
     @background_image = Gosu::Image.new(self, "media/floor.png", true)
