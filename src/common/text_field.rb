@@ -1,17 +1,17 @@
 class TextField < Gosu::TextInput
   INACTIVE_COLOR  = 0xcc666666
-  ACTIVE_COLOR    = 0xccff6666
+  ACTIVE_COLOR    = 0xccaaaaaa
   SELECTION_COLOR = 0xcc0000ff
   CARET_COLOR     = 0xffffffff
   PADDING = 5
   
   attr_reader :x, :y
   
-  def initialize(window, font, x, y, default_text = 'Some Text', max_length = 15)
+  def initialize(window, font, x, y, default_text = 'Some Text', approx_max_allowed_length = 12)
     super()
     @window, @font, @x, @y = window, font, x, y
     self.text = default_text
-    @max_length = max_length
+    @width = @font.text_width('W'*approx_max_allowed_length)
   end
   
   def draw
@@ -41,11 +41,14 @@ class TextField < Gosu::TextInput
   end
   
   def update
-    text && (self.text = self.text[0..@max_length])
+    loop do
+      (@font.text_width(self.text) < @width) && break
+      self.text = self.text[0..-2]
+    end if text
   end
 
   def width
-    @font.text_width(self.text)
+    @width
   end
   
   def height
