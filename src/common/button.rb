@@ -9,7 +9,7 @@ class Button
     @dx, @dy = view_options[:dx], view_options[:dy]
     @owner = owner
     @callback_name = callback_name
-    @body = Gosu::Image.new(@owner.window, "media/#{@callback_name}_button.png", true)
+    @body = Gosu::Image.new(@owner.window, "media/#{view_options[:image] || @callback_name}_button.png", true)
   end
   
   def activate

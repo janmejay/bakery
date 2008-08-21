@@ -4,9 +4,11 @@
 
 require File.join(File.dirname(__FILE__), 'src', 'init')
 require 'player_loader'
+require 'game_loader'
 require 'bakery'
 
 $wizard = GameWizard.new
 $wizard.add(PlayerLoader)
+$wizard.add(GameLoader)
 $wizard.add(Bakery)
 $wizard.show
