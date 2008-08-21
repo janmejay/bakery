@@ -2,7 +2,7 @@ require 'cursor'
 require 'common/text_field'
 require 'common/title'
 
-class GameLoader < Gosu::Window
+class PlayerLoader < Gosu::Window
   WIDTH, HEIGHT = 420, 320
   TITLE_OFFSET = {:x => 292, :y => 3}
   MESSAGE_OFFSET = {:x => 10, :y => 200}
