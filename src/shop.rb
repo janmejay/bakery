@@ -12,7 +12,7 @@ require 'util/process_runner'
 require File.join(File.dirname(__FILE__), "common", "game_button")
 require 'set'
 
-class Shop < Bakery::Window
+class Shop < BakeryWizard::Window
   attr_reader :baker
   include Actions
   include Publisher
