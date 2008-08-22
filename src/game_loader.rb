@@ -35,6 +35,7 @@ class GameLoader < Gosu::Window
   
   def new_game
     puts "New Game Requested"
+    $wizard.next
   end
   
   def load_game
