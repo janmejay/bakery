@@ -4,7 +4,7 @@ require 'common/text_field'
 require 'common/title'
 require File.join(File.dirname(__FILE__), "common", "text_button")
 
-class GameLoader < Gosu::Window
+class GameLoader < Bakery::Window
   include Actions
   include Publisher
   include Subscriber
@@ -13,13 +13,13 @@ class GameLoader < Gosu::Window
   
   BUTTON_OFFSET = {:x => 36, :y => 40}
   
-  def initialize context
-    super(WIDTH, HEIGHT, false)
+  def initialize context, window
+    super(window)
     @context = context
-    self.caption = "Bakery"
+    
     @cursor = Cursor.new(self)
-    @background = Gosu::Image.new(self, 'media/game_loader_bg.png', false)
-    font = Gosu::Font.new(self, 'media/hand.ttf', 35)
+    @background = Gosu::Image.new(self.window, 'media/game_loader_bg.png', false)
+    font = Gosu::Font.new(self.window, 'media/hand.ttf', 35)
     @buttons = []
     @buttons << TextButton.new(self, {:x => BUTTON_OFFSET[:x], :y => BUTTON_OFFSET[:y], :z => 1, :dx => 348, :dy => 44, :image => :game_loader}, :new_game, font)
     @buttons << TextButton.new(self, {:x => BUTTON_OFFSET[:x], :y => BUTTON_OFFSET[:y] + (44 + 20), :z => 1, :dx => 348, :dy => 44, :image => :game_loader}, :load_game, font)
@@ -27,10 +27,7 @@ class GameLoader < Gosu::Window
     @buttons.each do |button|
       button.activate
     end
-  end
-  
-  def window
-    self
+    show
   end
   
   def new_game

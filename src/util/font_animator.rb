@@ -1,7 +1,7 @@
 class Util::FontAnimator
   class Animation
-    def initialize(window, text, font, color, slide_sequence, z)
-      @window, @text, @font, @slide_sequence, @color, @z = window, text, font, slide_sequence, color, z
+    def initialize(shop_window, text, font, color, slide_sequence, z)
+      @shop_window, @text, @font, @slide_sequence, @color, @z = shop_window, text, font, slide_sequence, color, z
     end
     
     def render
@@ -10,15 +10,15 @@ class Util::FontAnimator
     end
   end
   
-  def initialize(window, length, options = {})
-    @window = window
+  def initialize(shop_window, length, options = {})
+    @shop_window = shop_window
     font_name = options[:font_name] || Gosu::default_font_name
     font_size = options[:font_size] || 19
     @x, @y, @z = options[:x], options[:y], options[:z]
     @color = options[:color]
     @y_displacement = options[:y_displacement] || -60
     @x_as_y = options[:x_as_y] || lambda {|y| 0}
-    @font = Gosu::Font.new(@window, font_name, font_size)
+    @font = Gosu::Font.new(@shop_window.window, font_name, font_size)
     @length = length
   end
   
@@ -27,7 +27,7 @@ class Util::FontAnimator
     y_displacement = get(:y_displacement, options)
     x_as_y = get(:x_as_y, options)
     coordinates = build_slide_details(y_displacement, x_as_y, x, y)
-    @window.keep_rendering_until_returns_nil(Animation.new(@window, text, @font, @color, coordinates, z))
+    @shop_window.keep_rendering_until_returns_nil(Animation.new(@shop_window, text, @font, @color, coordinates, z))
   end
   
   private

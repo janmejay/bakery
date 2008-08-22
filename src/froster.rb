@@ -3,18 +3,17 @@ require 'util/actions'
 require 'util/process_runner'
 
 class Froster
-  attr_reader :window
   PROCESS_RUNNER_OFFSET = {:x => 34, :y => 27}
   CAKE_PLATE_OFFSET = {:x => 30, :y => 21}
   X, Y = 563, 635
   
-  def initialize window
-    @window = window
-    @body = Gosu::Image.new(@window, 'media/froster.png', true)
+  def initialize shop_window
+    @shop_window = shop_window
+    @body = Gosu::Image.new(@shop_window.window, 'media/froster.png', true)
     @buttons = []
-    @this_cake_is_already_iced_message = Gosu::Sample.new(@window, 'media/this_cake_is_already_iced.ogg')
-    @action_anim = Util::Animator.new(window, 'media/cake-action-anim.png', 120, 100, false, 3, true)
-    @icing_process = Util::ProcessRunner.new(@window, 10, X + PROCESS_RUNNER_OFFSET[:x], Y + PROCESS_RUNNER_OFFSET[:y]) { make_cake_available_after_icing }
+    @this_cake_is_already_iced_message = Gosu::Sample.new(@shop_window.window, 'media/this_cake_is_already_iced.ogg')
+    @action_anim = Util::Animator.new(@shop_window.window, 'media/cake-action-anim.png', 120, 100, false, 3, true)
+    @icing_process = Util::ProcessRunner.new(@shop_window.window, 10, X + PROCESS_RUNNER_OFFSET[:x], Y + PROCESS_RUNNER_OFFSET[:y]) { make_cake_available_after_icing }
     @buttons << GameButton.new(self, {:x => 568, :y => 653, :z => ZOrder::TABLE_MOUNTED_CONTROLS, :dx => 24, :dy => 24}, :blackcurrent_frosting)
     @buttons << GameButton.new(self, {:x => 568, :y => 695, :z => ZOrder::TABLE_MOUNTED_CONTROLS, :dx => 24, :dy => 24}, :vanilla_frosting)
     @buttons << GameButton.new(self, {:x => 654, :y => 653, :z => ZOrder::TABLE_MOUNTED_CONTROLS, :dx => 24, :dy => 24}, :mint_frosting)
@@ -22,6 +21,10 @@ class Froster
     @buttons.each do |button|
       button.activate
     end
+  end
+  
+  def window
+    @shop_window
   end
 
   def update
@@ -31,7 +34,7 @@ class Froster
   
   def receive_cake
     verify_cake_is_not_iced_already || return
-    @window.baker.give_plate_to(self)
+    @shop_window.baker.give_plate_to(self)
     return unless @plate && @plate.holder = self
     @action_anim.start
     @icing_process.start
@@ -59,7 +62,7 @@ class Froster
   end
   
   def accept_plate plate
-    @window.unregister(plate)
+    @shop_window.unregister(plate)
     @plate = plate
   end
 
@@ -72,13 +75,13 @@ class Froster
   
   private
   def make_cake_available_after_icing
-    @window.register(@plate)
+    @shop_window.register(@plate)
     @action_anim.stop
     @show_animation = false
   end
   
   def verify_cake_is_not_iced_already
-    plate = @plate || @window.baker.plate
+    plate = @plate || @shop_window.baker.plate
     plate && plate.cake.iced? && @this_cake_is_already_iced_message.play && return
     true
   end

@@ -3,12 +3,48 @@
 # Time: 16 Jun, 2008 8:20:18 PM
 
 require File.join(File.dirname(__FILE__), 'src', 'init')
+
+module Bakery
+  class BaseWindow < Gosu::Window
+    
+    def listner= listner
+      @listner = listner
+    end
+  
+    def draw
+      @listner && @listner.draw
+    end
+    
+    def update
+      @listner && @listner.update
+    end
+    
+  end
+  
+  class Window
+    def initialize(window, caption = 'Bakery')
+      @window, @caption = window, caption
+      @window.caption = caption
+      @window.listner = self
+      $wizard.accept_as_current_screen self
+    end
+    
+    def window
+      @window
+    end
+    
+    def method_missing *args
+      @window.send(*args)
+    end
+  end
+end
+
 require 'player_loader'
 require 'game_loader'
-require 'bakery'
+require 'shop'
 
 $wizard = GameWizard.new
 $wizard.add(PlayerLoader)
 $wizard.add(GameLoader)
-$wizard.add(Bakery)
+$wizard.add(Shop)
 $wizard.show

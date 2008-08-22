@@ -1,17 +1,16 @@
 class Decorator
-  attr_reader :window
   PROCESS_RUNNER_OFFSET = {:x => 25, :y => 45}
   CAKE_PLATE_OFFSET = {:x => 20, :y => 39}
   ACTION_OFFSET = {:x => -10, :y => 20}
   X, Y = 900, 300
 
-  def initialize window
-    @window = window
-    @body = Gosu::Image.new(@window, 'media/decorator.png', true)
+  def initialize shop_window
+    @shop_window = shop_window
+    @body = Gosu::Image.new(@shop_window.window, 'media/decorator.png', true)
     @buttons = []
-    @action_anim = Util::Animator.new(window, 'media/cake-action-anim.png', 120, 100, false, 3, true)
-    @this_cake_is_already_decorated_message = Gosu::Sample.new(@window, 'media/this_cake_is_already_decorated.ogg')
-    @decoration_process = Util::ProcessRunner.new(@window, 10, X + PROCESS_RUNNER_OFFSET[:x],
+    @action_anim = Util::Animator.new(@shop_window.window, 'media/cake-action-anim.png', 120, 100, false, 3, true)
+    @this_cake_is_already_decorated_message = Gosu::Sample.new(@shop_window.window, 'media/this_cake_is_already_decorated.ogg')
+    @decoration_process = Util::ProcessRunner.new(@shop_window.window, 10, X + PROCESS_RUNNER_OFFSET[:x],
                                                                Y + PROCESS_RUNNER_OFFSET[:y]) { make_cake_available_after_decoration }
     @buttons << GameButton.new(self, {:x => 922, :y => 312, :z => ZOrder::TABLE_MOUNTED_CONTROLS, :dx => 28, :dy => 28}, :tree_decoration)
     @buttons << GameButton.new(self, {:x => 950, :y => 312, :z => ZOrder::TABLE_MOUNTED_CONTROLS, :dx => 28, :dy => 28}, :face_decoration)
@@ -21,6 +20,10 @@ class Decorator
       button.activate
     end
   end
+  
+  def window
+    @shop_window
+  end
 
   def update
     @plate && @plate.update_position(X + CAKE_PLATE_OFFSET[:x], Y + CAKE_PLATE_OFFSET[:y])
@@ -29,7 +32,7 @@ class Decorator
 
   def receive_cake
     verify_cake_is_not_decorated_already || return
-    @window.baker.give_plate_to(self)
+    @shop_window.baker.give_plate_to(self)
     return unless @plate && @plate.holder = self
     @action_anim.start
     @decoration_process.start
@@ -57,7 +60,7 @@ class Decorator
   end
 
   def accept_plate plate
-    @window.unregister(plate)
+    @shop_window.unregister(plate)
     @plate = plate
   end
 
@@ -70,13 +73,13 @@ class Decorator
 
   private
   def make_cake_available_after_decoration
-    @window.register(@plate)
+    @shop_window.register(@plate)
     @action_anim.stop
     @show_animation = false
   end
 
   def verify_cake_is_not_decorated_already
-    plate = @plate || @window.baker.plate
+    plate = @plate || @shop_window.baker.plate
     plate && plate.cake.decorated? && @this_cake_is_already_decorated_message.play && return
     true
   end

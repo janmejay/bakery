@@ -32,16 +32,16 @@ class Baker
   
   attr_reader :plate
 
-  def initialize window
-    @window = window
-    @walking_anim = Util::Animator.new(@window, 'media/walking_baker.png', 105, 80, false, 2, true)
-    @hat = Gosu::Image.new(@window, 'media/baker_hat.png', false)
-    @cant_pick_two_plates_at_a_time = Gosu::Sample.new(@window, 'media/cant_pick_two_plates_at_a_time.ogg')
+  def initialize shop_window
+    @shop_window = shop_window
+    @walking_anim = Util::Animator.new(@shop_window.window, 'media/walking_baker.png', 105, 80, false, 2, true)
+    @hat = Gosu::Image.new(@shop_window.window, 'media/baker_hat.png', false)
+    @cant_pick_two_plates_at_a_time = Gosu::Sample.new(@shop_window.window, 'media/cant_pick_two_plates_at_a_time.ogg')
     @x, @y, @target_x, @target_y, @angle = 600, 400, 600, 400, 180
     @sane_walking_area = LimitingRectangle.new(384, 200, 835, 550)
     transaction_font_path = File.join(File.dirname(__FILE__), '..', 'media', 'number.ttf')
-    @loss_anim = Util::FontAnimator.new(@window, 120, :z => ZOrder::MESSAGES, :color => 'ff0000', :font_name => transaction_font_path)
-    @profit_anim = Util::FontAnimator.new(@window, 120, :z => ZOrder::MESSAGES, :color => '00ff00', :font_name => transaction_font_path)
+    @loss_anim = Util::FontAnimator.new(@shop_window, 120, :z => ZOrder::MESSAGES, :color => 'ff0000', :font_name => transaction_font_path)
+    @profit_anim = Util::FontAnimator.new(@shop_window, 120, :z => ZOrder::MESSAGES, :color => '00ff00', :font_name => transaction_font_path)
   end
   
   def walk_down_and_trigger(x_cord, y_cord, &trigger)
@@ -53,13 +53,13 @@ class Baker
   def accept_plate(plate)
     @plate && @cant_pick_two_plates_at_a_time.play && return
     @plate = plate
-    @window.unregister(@plate)
+    @shop_window.unregister(@plate)
     @plate #because unless the method returns true, the caller should assume the plate was not accepted
   end
   
   def give_plate_to that_thing
     @plate || return
-    @window.register(@plate)
+    @shop_window.register(@plate)
     that_thing.accept_plate(@plate)
     @plate = nil
     true

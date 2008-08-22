@@ -2,7 +2,7 @@ require 'cursor'
 require 'common/text_field'
 require 'common/title'
 
-class PlayerLoader < Gosu::Window
+class PlayerLoader < Bakery::Window
   WIDTH, HEIGHT = 420, 320
   TITLE_OFFSET = {:x => 292, :y => 3}
   MESSAGE_OFFSET = {:x => 10, :y => 200}
@@ -11,18 +11,18 @@ class PlayerLoader < Gosu::Window
   BUTTON_OFFSET = {:x => 297, :y => 198}
   BUTTON_MESSAGE_OFFSET = {:x => BUTTON_OFFSET[:x] + 1, :y => BUTTON_OFFSET[:y] + 37}
   MESSAGE_COLOR = 0xff222222
-  def initialize context
+  def initialize context, window
+    super(window)
     @context = context
-    super(WIDTH, HEIGHT, false)
-    self.caption = "Bakery"
-    @cake_image = Gosu::Image.new(self, 'media/loading-cake.png', false)
+    @cake_image = Gosu::Image.new(self.window, 'media/loading-cake.png', false)
     @cursor = Cursor.new(self)
-    @print_font = Gosu::Font.new(self, 'media/hand.ttf', 40)
+    @print_font = Gosu::Font.new(self.window, 'media/hand.ttf', 40)
     @name_field = TextField.new(self, @print_font, TEXT_FIELD_OFFSET[:x], TEXT_FIELD_OFFSET[:y], 'Sweta', 9, 
       :inactive_color  => 0x00ffffff, :active_color => 0x00ffffff, :selection_color => 0x00ffffff, :caret_color => MESSAGE_COLOR)
     @title = Title.new(self, 70, TITLE_OFFSET[:x], TITLE_OFFSET[:y])
     self.text_input = @name_field
-    @get_baking_button = Gosu::Image.new(self, 'media/get_baking_button.png', false)
+    @get_baking_button = Gosu::Image.new(self.window, 'media/get_baking_button.png', false)
+    show
   end
   
   def update

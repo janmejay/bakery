@@ -9,9 +9,9 @@ class Dustbin
   
   HEIGHT = 120
   
-  def initialize window
-    @window = window
-    @image = Gosu::Image.new(@window, 'media/dustbin.png', true)
+  def initialize shop_window
+    @shop_window = shop_window
+    @image = Gosu::Image.new(@shop_window.window, 'media/dustbin.png', true)
     @throwing_anim = Util::PositionAnimation.new({:x => 865, :y => 166}, {:x => 790, :y => 166}, 40, true, {50 => lambda {ask_for_waste_cake}, 99 => lambda {discard_the_cake}})
     perform_updates
   end
@@ -27,7 +27,7 @@ class Dustbin
   end
   
   def handle(event)
-    baker = @window.baker
+    baker = @shop_window.baker
     baker.walk_down_and_trigger(event.x, event.y) do
       baker.has_plate? && open
     end
@@ -38,7 +38,7 @@ class Dustbin
   end
   
   def accept_plate plate
-    @window.unregister(plate)
+    @shop_window.unregister(plate)
     @cake = plate.cake
   end
   
@@ -58,7 +58,7 @@ class Dustbin
   end
   
   def ask_for_waste_cake
-    @window.baker.give_plate_to(self)
+    @shop_window.baker.give_plate_to(self)
     @cake_throwing_angle = rand(360)
   end
   

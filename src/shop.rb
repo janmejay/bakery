@@ -12,18 +12,17 @@ require 'util/process_runner'
 require File.join(File.dirname(__FILE__), "common", "game_button")
 require 'set'
 
-class Bakery < Gosu::Window
+class Shop < Bakery::Window
   attr_reader :baker
   include Actions
   include Publisher
   include Subscriber
   
-  def initialize context
-    super(1024, 768, false)
+  def initialize context, window
+    super(window)
     @context = context
-    self.caption = "Bakery"
-    
-    @background_image = Gosu::Image.new(self, "media/floor.png", true)
+
+    @background_image = Gosu::Image.new(self.window, "media/floor.png", true)
     register self
     register Dustbin.new(self)
     register Showcase.new(self)
@@ -36,7 +35,8 @@ class Bakery < Gosu::Window
     @alive_entities << Froster.new(self)
     @alive_entities << Decorator.new(self)
     @alive_entities << @baker = Baker.new(self)
-    @font = Gosu::Font.new(self, Gosu::default_font_name, 20)
+    @font = Gosu::Font.new(window, Gosu::default_font_name, 20)
+    show
   end
 
   def update

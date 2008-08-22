@@ -8,10 +8,10 @@ require 'util/process_runner'
 
 class Oven
   class Cake
-    def initialize(window, cake_name)
-      @window = window
+    def initialize(shop_window, cake_name)
+      @shop_window = shop_window
       @cake_name = cake_name
-      @body = Gosu::Image.new(@window, "media/#{@cake_name}.png")
+      @body = Gosu::Image.new(@shop_window.window, "media/#{@cake_name}.png")
     end
     
     def update_position(x, y, angle = nil)
@@ -30,12 +30,12 @@ class Oven
     
     def put_icing icing_type
       @icing_type = icing_type
-      @body = Gosu::Image.new(@window, "media/#{@icing_type}_#{@cake_name}.png")
+      @body = Gosu::Image.new(@shop_window.window, "media/#{@icing_type}_#{@cake_name}.png")
     end
     
     def put_decoration decoration_type
       @decoration_type = decoration_type
-      @decoration = Gosu::Image.new(@window, "media/#{@decoration_type}_decoration.png")
+      @decoration = Gosu::Image.new(@shop_window.window, "media/#{@decoration_type}_decoration.png")
     end
     
     def render(z_index = ZOrder::CAKE)
@@ -56,9 +56,9 @@ class Oven
     
     PLATE_LENGTH_AND_WIDTH = 60
     
-    def initialize(window, cake)
-      @window = window
-      @plate_view = Gosu::Image.new(@window, 'media/plate.png', false)
+    def initialize(shop_window, cake)
+      @shop_window = shop_window
+      @plate_view = Gosu::Image.new(@shop_window.window, 'media/plate.png', false)
       @cake = cake
     end
     
@@ -74,7 +74,7 @@ class Oven
     end
     
     def handle event
-      @window.baker.walk_down_and_trigger(event.x, event.y) do |baker|
+      @shop_window.baker.walk_down_and_trigger(event.x, event.y) do |baker|
         @holder.give_plate_to(baker) && @holder = nil
       end
     end
@@ -108,12 +108,12 @@ class Oven
       @y = base_y + place[:y_off]
       @oven = oven
       @cake_name = name_identifier
-      @body = Gosu::Image.new(@oven.window, "media/#{name_identifier}_button.png", true)
+      @body = Gosu::Image.new(@oven.shop_window.window, "media/#{name_identifier}_button.png", true)
     end
     
     def handle(event)
-      @oven.window.baker.walk_down_and_trigger(event.x, event.y) do
-        @oven.bake(Cake.new(@oven.window, @cake_name)) unless @oven.baking?
+      @oven.shop_window.baker.walk_down_and_trigger(event.x, event.y) do
+        @oven.bake(Cake.new(@oven.shop_window, @cake_name)) unless @oven.baking?
       end
     end
 
@@ -135,22 +135,22 @@ class Oven
     end
   end
   
-  attr_reader :window
+  attr_reader :shop_window
   
   PROCESS_RUNNER_OFFSET = {:x => 75, :y => 15}
   BAKED_CAKE_PLATE_OFFSET = {:x => 70, :y => 110}
   
-  def initialize window
-    @window = window
-    @cake_holder = Gosu::Image.new(@window, 'media/oven_cake_holder.png', true)
-    @trash_can = Gosu::Image.new(@window, 'media/oven_dustbin.png', true)
-    @oven_machine_view = Gosu::Image.new(@window, 'media/oven_machine.png', true)
+  def initialize shop_window
+    @shop_window = shop_window
+    @cake_holder = Gosu::Image.new(@shop_window.window, 'media/oven_cake_holder.png', true)
+    @trash_can = Gosu::Image.new(@shop_window.window, 'media/oven_dustbin.png', true)
+    @oven_machine_view = Gosu::Image.new(@shop_window.window, 'media/oven_machine.png', true)
     @cake_plate_pos_anim = Util::PositionAnimation.new({:x => 530, :y => 0}, {:x => 530, :y => -100}, 40, true, {49 => lambda { put_baked_cake}, 99 => lambda { make_plate_pickable}})
-    @baking_process = Util::ProcessRunner.new(@window, 10, 530 + PROCESS_RUNNER_OFFSET[:x], 0 + PROCESS_RUNNER_OFFSET[:y]) { eject_baked_cake }
-    @window.register Button.new(self, 530, 0, :circular_cake)
-    @window.register Button.new(self, 530, 0, :rect_cake, Button::SECOND)
-    @window.register Button.new(self, 530, 0, :triangular_cake, Button::THIRD)
-    @window.register Button.new(self, 530, 0, :heart_cake, Button::FOURTH)
+    @baking_process = Util::ProcessRunner.new(@shop_window.window, 10, 530 + PROCESS_RUNNER_OFFSET[:x], 0 + PROCESS_RUNNER_OFFSET[:y]) { eject_baked_cake }
+    @shop_window.register Button.new(self, 530, 0, :circular_cake)
+    @shop_window.register Button.new(self, 530, 0, :rect_cake, Button::SECOND)
+    @shop_window.register Button.new(self, 530, 0, :triangular_cake, Button::THIRD)
+    @shop_window.register Button.new(self, 530, 0, :heart_cake, Button::FOURTH)
     update
   end
 
@@ -172,7 +172,7 @@ class Oven
   end
   
   def bake(cake)
-    @window.baker.pay(-30)
+    @shop_window.baker.pay(-30)
     @cake = cake
     @baking_process.start unless baking?
   end
@@ -186,12 +186,12 @@ class Oven
   end
   
   def put_baked_cake
-    @plate = Plate.new(self.window, @cake)
+    @plate = Plate.new(self.shop_window, @cake)
     @plate.holder = self
   end
   
   def make_plate_pickable
-    @window.register @plate
+    @shop_window.register @plate
   end
   
   private

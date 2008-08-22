@@ -4,11 +4,11 @@ class Showcase
   CAKE_PLATE_OFFSET = {:x => 10, :y => 10}
   X, Y = 256, 75
   
-  def initialize(window)
-    @window = window
-    @base = Gosu::Image.new(@window, 'media/showcase_base.png', true)
-    @cover = Gosu::Image.new(@window, 'media/showcase_cover.png', true)
-    @cant_put_two_cakes_in_there_message = Gosu::Sample.new(@window, 'media/cant_put_two_cakes_in_there.ogg')
+  def initialize(shop_window)
+    @shop_window = shop_window
+    @base = Gosu::Image.new(@shop_window.window, 'media/showcase_base.png', true)
+    @cover = Gosu::Image.new(@shop_window.window, 'media/showcase_cover.png', true)
+    @cant_put_two_cakes_in_there_message = Gosu::Sample.new(@shop_window.window, 'media/cant_put_two_cakes_in_there.ogg')
   end
   
   def perform_updates
@@ -17,7 +17,7 @@ class Showcase
   
   def receive_cake
     @plate && @cant_put_two_cakes_in_there_message.play && return
-    @window.baker.give_plate_to(self)
+    @shop_window.baker.give_plate_to(self)
     return unless @plate && @plate.holder = self
   end
   
@@ -36,7 +36,7 @@ class Showcase
   end
   
   def handle(event)
-    @window.baker.walk_down_and_trigger(event.x, event.y) do
+    @shop_window.baker.walk_down_and_trigger(event.x, event.y) do
       receive_cake
     end
   end

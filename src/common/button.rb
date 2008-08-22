@@ -8,16 +8,17 @@ class Button
     @x, @y, @z = view_options[:x], view_options[:y], view_options[:z]
     @dx, @dy = view_options[:dx], view_options[:dy]
     @owner = owner
+    @window = @owner.is_a?(Bakery::Window) ? @owner : @owner.window
     @callback_name = callback_name
-    @body = Gosu::Image.new(@owner.window, "media/#{view_options[:image] || @callback_name}_button.png", true)
+    @body = Gosu::Image.new(@window.window, "media/#{view_options[:image] || @callback_name}_button.png", true)
   end
   
   def activate
-    @owner.window.register(self)
+    @window.register(self)
   end
   
   def deactivate
-    @owner.window.unregister(self)
+    @window.unregister(self)
   end
   
   def handle(event)
