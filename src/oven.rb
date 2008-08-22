@@ -147,10 +147,10 @@ class Oven
     @oven_machine_view = Gosu::Image.new(@window, 'media/oven_machine.png', true)
     @cake_plate_pos_anim = Util::PositionAnimation.new({:x => 530, :y => 0}, {:x => 530, :y => -100}, 40, true, {49 => lambda { put_baked_cake}, 99 => lambda { make_plate_pickable}})
     @baking_process = Util::ProcessRunner.new(@window, 10, 530 + PROCESS_RUNNER_OFFSET[:x], 0 + PROCESS_RUNNER_OFFSET[:y]) { eject_baked_cake }
-    @window.register Button.new(self, 530, 0, :circular_cake)
-    @window.register Button.new(self, 530, 0, :rect_cake, Button::SECOND)
-    @window.register Button.new(self, 530, 0, :triangular_cake, Button::THIRD)
-    @window.register Button.new(self, 530, 0, :heart_cake, Button::FOURTH)
+    @window.register GameButton.new(self, 530, 0, :circular_cake)
+    @window.register GameButton.new(self, 530, 0, :rect_cake, Button::SECOND)
+    @window.register GameButton.new(self, 530, 0, :triangular_cake, Button::THIRD)
+    @window.register GameButton.new(self, 530, 0, :heart_cake, Button::FOURTH)
     update
   end
 

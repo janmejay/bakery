@@ -13,10 +13,10 @@ class Decorator
     @this_cake_is_already_decorated_message = Gosu::Sample.new(@window, 'media/this_cake_is_already_decorated.ogg')
     @decoration_process = Util::ProcessRunner.new(@window, 10, X + PROCESS_RUNNER_OFFSET[:x],
                                                                Y + PROCESS_RUNNER_OFFSET[:y]) { make_cake_available_after_decoration }
-    @buttons << Button.new(self, {:x => 922, :y => 312, :z => ZOrder::TABLE_MOUNTED_CONTROLS, :dx => 28, :dy => 28}, :tree_decoration)
-    @buttons << Button.new(self, {:x => 950, :y => 312, :z => ZOrder::TABLE_MOUNTED_CONTROLS, :dx => 28, :dy => 28}, :face_decoration)
-    @buttons << Button.new(self, {:x => 922, :y => 400, :z => ZOrder::TABLE_MOUNTED_CONTROLS, :dx => 28, :dy => 28}, :boat_decoration)
-    @buttons << Button.new(self, {:x => 950, :y => 400, :z => ZOrder::TABLE_MOUNTED_CONTROLS, :dx => 28, :dy => 28}, :candle_decoration)
+    @buttons << GameButton.new(self, {:x => 922, :y => 312, :z => ZOrder::TABLE_MOUNTED_CONTROLS, :dx => 28, :dy => 28}, :tree_decoration)
+    @buttons << GameButton.new(self, {:x => 950, :y => 312, :z => ZOrder::TABLE_MOUNTED_CONTROLS, :dx => 28, :dy => 28}, :face_decoration)
+    @buttons << GameButton.new(self, {:x => 922, :y => 400, :z => ZOrder::TABLE_MOUNTED_CONTROLS, :dx => 28, :dy => 28}, :boat_decoration)
+    @buttons << GameButton.new(self, {:x => 950, :y => 400, :z => ZOrder::TABLE_MOUNTED_CONTROLS, :dx => 28, :dy => 28}, :candle_decoration)
     @buttons.each do |button|
       button.activate
     end

@@ -9,6 +9,7 @@ require 'showcase'
 require 'decorator'
 require 'util/actions'
 require 'util/process_runner'
+require File.join(File.dirname(__FILE__), "common", "game_button")
 require 'set'
 
 class Bakery < Gosu::Window

@@ -21,9 +21,7 @@ class Button
   end
   
   def handle(event)
-    @owner.window.baker.walk_down_and_trigger(event.x, event.y) do
-      @owner.send(@callback_name)
-    end
+    @owner.send(@callback_name)
   end
 
   def render

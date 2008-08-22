@@ -2,7 +2,7 @@ require 'cursor'
 require 'util/actions'
 require 'common/text_field'
 require 'common/title'
-require 'common/button'
+require File.join(File.dirname(__FILE__), "common", "text_button")
 
 class GameLoader < Gosu::Window
   include Actions
@@ -19,10 +19,11 @@ class GameLoader < Gosu::Window
     self.caption = "Bakery"
     @cursor = Cursor.new(self)
     @background = Gosu::Image.new(self, 'media/game_loader_bg.png', false)
+    font = Gosu::Font.new(self, 'media/hand.ttf', 35)
     @buttons = []
-    @buttons << Button.new(self, {:x => BUTTON_OFFSET[:x], :y => BUTTON_OFFSET[:y], :z => 1, :dx => 348, :dy => 44, :image => :game_loader}, :new_game)
-    @buttons << Button.new(self, {:x => BUTTON_OFFSET[:x], :y => BUTTON_OFFSET[:y] + (44 + 20), :z => 1, :dx => 348, :dy => 44, :image => :game_loader}, :load_game)
-    @buttons << Button.new(self, {:x => BUTTON_OFFSET[:x], :y => BUTTON_OFFSET[:y] + 2*(44 + 20), :z => 1, :dx => 348, :dy => 44, :image => :game_loader}, :exit)
+    @buttons << TextButton.new(self, {:x => BUTTON_OFFSET[:x], :y => BUTTON_OFFSET[:y], :z => 1, :dx => 348, :dy => 44, :image => :game_loader}, :new_game, font)
+    @buttons << TextButton.new(self, {:x => BUTTON_OFFSET[:x], :y => BUTTON_OFFSET[:y] + (44 + 20), :z => 1, :dx => 348, :dy => 44, :image => :game_loader}, :load_game, font)
+    @buttons << TextButton.new(self, {:x => BUTTON_OFFSET[:x], :y => BUTTON_OFFSET[:y] + 2*(44 + 20), :z => 1, :dx => 348, :dy => 44, :image => :game_loader}, :exit, font)
     @buttons.each do |button|
       button.activate
     end

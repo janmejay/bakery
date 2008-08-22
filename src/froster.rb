@@ -1,7 +1,6 @@
 require 'util/animator'
 require 'util/actions'
 require 'util/process_runner'
-require File.join(File.dirname(__FILE__), "common", "button")
 
 class Froster
   attr_reader :window
@@ -16,10 +15,10 @@ class Froster
     @this_cake_is_already_iced_message = Gosu::Sample.new(@window, 'media/this_cake_is_already_iced.ogg')
     @action_anim = Util::Animator.new(window, 'media/cake-action-anim.png', 120, 100, false, 3, true)
     @icing_process = Util::ProcessRunner.new(@window, 10, X + PROCESS_RUNNER_OFFSET[:x], Y + PROCESS_RUNNER_OFFSET[:y]) { make_cake_available_after_icing }
-    @buttons << Button.new(self, {:x => 568, :y => 653, :z => ZOrder::TABLE_MOUNTED_CONTROLS, :dx => 24, :dy => 24}, :blackcurrent_frosting)
-    @buttons << Button.new(self, {:x => 568, :y => 695, :z => ZOrder::TABLE_MOUNTED_CONTROLS, :dx => 24, :dy => 24}, :vanilla_frosting)
-    @buttons << Button.new(self, {:x => 654, :y => 653, :z => ZOrder::TABLE_MOUNTED_CONTROLS, :dx => 24, :dy => 24}, :mint_frosting)
-    @buttons << Button.new(self, {:x => 654, :y => 695, :z => ZOrder::TABLE_MOUNTED_CONTROLS, :dx => 24, :dy => 24}, :jelly_frosting)
+    @buttons << GameButton.new(self, {:x => 568, :y => 653, :z => ZOrder::TABLE_MOUNTED_CONTROLS, :dx => 24, :dy => 24}, :blackcurrent_frosting)
+    @buttons << GameButton.new(self, {:x => 568, :y => 695, :z => ZOrder::TABLE_MOUNTED_CONTROLS, :dx => 24, :dy => 24}, :vanilla_frosting)
+    @buttons << GameButton.new(self, {:x => 654, :y => 653, :z => ZOrder::TABLE_MOUNTED_CONTROLS, :dx => 24, :dy => 24}, :mint_frosting)
+    @buttons << GameButton.new(self, {:x => 654, :y => 695, :z => ZOrder::TABLE_MOUNTED_CONTROLS, :dx => 24, :dy => 24}, :jelly_frosting)
     @buttons.each do |button|
       button.activate
     end
