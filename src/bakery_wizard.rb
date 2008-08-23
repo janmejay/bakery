@@ -66,7 +66,6 @@ class BakeryWizard
   
   def next
     @current_screen.close
-    puts "Context is #{@context.inspect}"
     @screens[@screens.index(@current_screen.class) + 1].new(@context, @window)
   end
   

@@ -39,10 +39,10 @@ class Shop < BakeryWizard::Window
   end
 
   def update
-    if button_down? Gosu::Button::MsLeft
-      publish(Event.new(:left_click, mouse_x, mouse_y))
-    elsif button_down? Gosu::Button::MsRight
-      publish(Event.new(:right_click, mouse_x, mouse_y))
+    case true
+    when button_down?(Gosu::Button::MsLeft): publish(Event.new(:left_click, mouse_x, mouse_y))
+    when button_down?(Gosu::Button::MsRight): publish(Event.new(:right_click, mouse_x, mouse_y))
+    when button_down?(Gosu::Button::KbEscape): $wizard.previous
     end
     @alive_entities.each {|entity| entity.update}
     for_each_subscriber {|subscriber| subscriber.perform_updates}
