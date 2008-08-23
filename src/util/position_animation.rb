@@ -1,5 +1,5 @@
 class Util::PositionAnimation
-  def initialize from, to, within, both_ways = false, callback_map = {}
+  def initialize from, to, within, both_ways = false, callback_map = {}, callback_receiver = nil
     @initial_x, @initial_y, @final_x, @final_y = from[:x], from[:y], to[:x], to[:y]
     @x, @y = @initial_x, @initial_y
     @both_ways = both_ways
@@ -10,6 +10,7 @@ class Util::PositionAnimation
     @hop_cords = []
     @handled_callbacks = {}
     @upcoming_callbacks = callback_map || {}
+    @callback_receiver = callback_receiver
   end
   
   def start 
@@ -45,7 +46,7 @@ class Util::PositionAnimation
   def execute_callbacks(x, y)
     @upcoming_callbacks.each_pair do |key, value|
       if (@hop_cords.length*100)/@total_hops_allowed < (100 - key)
-        value.call(x, y)
+        (value.class == Symbol) ? @callback_receiver.send(value, x, y) : value.call(x, y)
         @handled_callbacks[key] = value
       end
       @upcoming_callbacks.reject! {|key, value| @handled_callbacks.keys.include?(key)}

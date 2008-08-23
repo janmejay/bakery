@@ -11,7 +11,7 @@ class Dustbin
     @shop_window = shop_window
     @height = context_dustbin_data[:height]
     @image = Gosu::Image.new(@shop_window.window, context_dustbin_data[:bin_view], true)
-    @throwing_anim = Util::PositionAnimation.new(context_dustbin_data[:inactive], context_dustbin_data[:active], 40, true, {50 => lambda {ask_for_waste_cake}, 99 => lambda {discard_the_cake}})
+    @throwing_anim = Util::PositionAnimation.new(context_dustbin_data[:inactive], context_dustbin_data[:active], 40, true, {50 => :ask_for_waste_cake, 99 => :discard_the_cake}, self)
     perform_updates
   end
 
@@ -56,12 +56,12 @@ class Dustbin
     @throwing_anim.start
   end
   
-  def ask_for_waste_cake
+  def ask_for_waste_cake *ignore
     @shop_window.baker.give_plate_to(self)
     @cake_throwing_angle = rand(360)
   end
   
-  def discard_the_cake
+  def discard_the_cake *ignore
     @cake = nil
   end
 end

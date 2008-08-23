@@ -8,6 +8,7 @@ require 'bakery_wizard'
 require 'player_loader'
 require 'game_loader'
 require 'shop'
+require 'serialization_defaulter'
 
 $wizard = BakeryWizard.new
 $wizard.add(PlayerLoader)

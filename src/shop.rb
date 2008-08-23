@@ -25,6 +25,7 @@ class Shop < BakeryWizard::Window
     @background_image = Gosu::Image.new(self.window, context[:floor_view], true)
     register self
     register Dustbin.new(self, context[:dustbin])
+    puts Marshal.dump(self)
     context[:showcases].each { |showcase_data| register Showcase.new(self, showcase_data) }
     @renderables = Set.new
     @dead_entities = []
