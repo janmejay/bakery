@@ -2,6 +2,7 @@ require 'cursor'
 require 'util/actions'
 require 'common/text_field'
 require 'common/title'
+require 'yaml'
 require File.join(File.dirname(__FILE__), "common", "text_button")
 
 class GameLoader < BakeryWizard::Window
@@ -28,6 +29,7 @@ class GameLoader < BakeryWizard::Window
   end
   
   def new_game
+    @context.merge!(YAML.load_file(File.join(File.dirname(__FILE__), '..', 'data', 'new-game-data.yml')))
     $wizard.next
   end
   

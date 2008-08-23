@@ -25,15 +25,6 @@ class BakeryWizard
       {:x => (BaseWindow::WIDTH - self::WIDTH)/2 + map[:x], :y => (BaseWindow::HEIGHT - self::HEIGHT)/2 + map[:y]}
     end
     
-    def self.width= width
-      put "CALLED....."
-      @@width = width
-    end
-    
-    def self.height= height
-      @@height = height
-    end
-    
     def initialize(window, caption = 'Bakery')
       @window, @caption = window, caption
       @window.caption = caption
@@ -75,6 +66,7 @@ class BakeryWizard
   
   def next
     @current_screen.close
+    puts "Context is #{@context.inspect}"
     @screens[@screens.index(@current_screen.class) + 1].new(@context, @window)
   end
   

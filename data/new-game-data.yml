@@ -1,0 +1,14 @@
+---
+:money: 300
+:ovens:
+- :x: 530 
+  :y: 0
+  :buttons:
+  - :circular_cake
+  - :rect_cake
+  - :triangular_cake
+  - :heart_cake
+  :images:
+    :cake_holder: 'media/oven_cake_holder.png'
+    :trash_can: 'media/oven_dustbin.png'
+    :machine_view: 'media/oven_machine.png'

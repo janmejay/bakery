@@ -31,7 +31,9 @@ class Shop < BakeryWizard::Window
     @dead_entities << Cursor.new(self)
     @dead_entities << Table.new(self)
     @alive_entities = []
-    @alive_entities << Oven.new(self)
+    @context[:ovens].each do |oven_data|
+      @alive_entities << Oven.new(self, oven_data)
+    end
     @alive_entities << Froster.new(self)
     @alive_entities << Decorator.new(self)
     @alive_entities << @baker = Baker.new(self)
