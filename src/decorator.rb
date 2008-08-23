@@ -2,22 +2,23 @@ class Decorator
   PROCESS_RUNNER_OFFSET = {:x => 25, :y => 45}
   CAKE_PLATE_OFFSET = {:x => 20, :y => 39}
   ACTION_OFFSET = {:x => -10, :y => 20}
-  X, Y = 900, 300
+  BUTTON_OFFSETS = [
+      {:x => 22, :y => 12}, {:x => 50, :y => 12},
+      {:x => 22, :y => 100}, {:x => 50, :y => 100}
+    ]
 
-  def initialize shop_window
+  def initialize shop_window, context_decorator_data
     @shop_window = shop_window
-    @body = Gosu::Image.new(@shop_window.window, 'media/decorator.png', true)
+    @x, @y = 900, 300
+    @body = Gosu::Image.new(@shop_window.window, context_decorator_data[:machine_view], true)
     @buttons = []
     @action_anim = Util::Animator.new(@shop_window.window, 'media/cake-action-anim.png', 120, 100, false, 3, true)
     @this_cake_is_already_decorated_message = Gosu::Sample.new(@shop_window.window, 'media/this_cake_is_already_decorated.ogg')
-    @decoration_process = Util::ProcessRunner.new(@shop_window.window, 10, X + PROCESS_RUNNER_OFFSET[:x],
-                                                               Y + PROCESS_RUNNER_OFFSET[:y]) { make_cake_available_after_decoration }
-    @buttons << GameButton.new(self, {:x => 922, :y => 312, :z => ZOrder::TABLE_MOUNTED_CONTROLS, :dx => 28, :dy => 28}, :tree_decoration)
-    @buttons << GameButton.new(self, {:x => 950, :y => 312, :z => ZOrder::TABLE_MOUNTED_CONTROLS, :dx => 28, :dy => 28}, :face_decoration)
-    @buttons << GameButton.new(self, {:x => 922, :y => 400, :z => ZOrder::TABLE_MOUNTED_CONTROLS, :dx => 28, :dy => 28}, :boat_decoration)
-    @buttons << GameButton.new(self, {:x => 950, :y => 400, :z => ZOrder::TABLE_MOUNTED_CONTROLS, :dx => 28, :dy => 28}, :candle_decoration)
-    @buttons.each do |button|
-      button.activate
+    @decoration_process = Util::ProcessRunner.new(@shop_window.window, 10, @x + PROCESS_RUNNER_OFFSET[:x],
+                                                               @y + PROCESS_RUNNER_OFFSET[:y]) { make_cake_available_after_decoration }
+    context_decorator_data[:buttons].each_with_index do |button, index|
+      GameButton.new(self, {:x => @x + BUTTON_OFFSETS[index][:x], :y => @y + BUTTON_OFFSETS[index][:y], 
+        :z => ZOrder::TABLE_MOUNTED_CONTROLS, :dx => 28, :dy => 28}, button).activate
     end
   end
   
@@ -26,7 +27,7 @@ class Decorator
   end
 
   def update
-    @plate && @plate.update_position(X + CAKE_PLATE_OFFSET[:x], Y + CAKE_PLATE_OFFSET[:y])
+    @plate && @plate.update_position(@x + CAKE_PLATE_OFFSET[:x], @y + CAKE_PLATE_OFFSET[:y])
     @decoration_process.update
   end
 
@@ -65,8 +66,8 @@ class Decorator
   end
 
   def draw
-    @body.draw(X, Y, ZOrder::TABLE_MOUNTED_EQUIPMENTS)
-    @show_animation && @action_anim.slide.draw(X + ACTION_OFFSET[:x], Y + ACTION_OFFSET[:y], ZOrder::ACTION_CLOWD)
+    @body.draw(@x, @y, ZOrder::TABLE_MOUNTED_EQUIPMENTS)
+    @show_animation && @action_anim.slide.draw(@x + ACTION_OFFSET[:x], @y + ACTION_OFFSET[:y], ZOrder::ACTION_CLOWD)
     @decoration_process.render
     @plate && @plate.render
   end

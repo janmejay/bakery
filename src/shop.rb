@@ -33,7 +33,7 @@ class Shop < BakeryWizard::Window
     @alive_entities = []
     @context[:ovens].each { |oven_data| @alive_entities << Oven.new(self, oven_data) }
     @context[:frosters].each { |froster_data| @alive_entities << Froster.new(self, froster_data) }
-    @alive_entities << Decorator.new(self)
+    @context[:decorators].each { |decorator_data| @alive_entities << Decorator.new(self, decorator_data) }
     @alive_entities << @baker = Baker.new(self)
     @font = Gosu::Font.new(window, Gosu::default_font_name, 20)
     show

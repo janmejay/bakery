@@ -21,3 +21,12 @@
   - :vanilla_frosting
   - :mint_frosting
   - :jelly_frosting
+:decorators:
+- :x: 900
+  :y: 300
+  :machine_view: 'media/decorator.png' 
+  :buttons:
+  - :tree_decoration
+  - :face_decoration
+  - :boat_decoration
+  - :candle_decoration
