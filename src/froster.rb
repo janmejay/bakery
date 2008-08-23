@@ -5,21 +5,22 @@ require 'util/process_runner'
 class Froster
   PROCESS_RUNNER_OFFSET = {:x => 34, :y => 27}
   CAKE_PLATE_OFFSET = {:x => 30, :y => 21}
-  X, Y = 563, 635
+  BUTTON_OFFSET = [
+      {:x => 5, :y => 18}, {:x => 91, :y => 18},
+      {:x => 5, :y => 60}, {:x => 91, :y => 60}
+    ]
   
-  def initialize shop_window
+  def initialize shop_window, context_froster_data
+    @x, @y = context_froster_data[:x], context_froster_data[:y]
     @shop_window = shop_window
-    @body = Gosu::Image.new(@shop_window.window, 'media/froster.png', true)
+    @body = Gosu::Image.new(@shop_window.window, context_froster_data[:machine_view], true)
     @buttons = []
     @this_cake_is_already_iced_message = Gosu::Sample.new(@shop_window.window, 'media/this_cake_is_already_iced.ogg')
     @action_anim = Util::Animator.new(@shop_window.window, 'media/cake-action-anim.png', 120, 100, false, 3, true)
-    @icing_process = Util::ProcessRunner.new(@shop_window.window, 10, X + PROCESS_RUNNER_OFFSET[:x], Y + PROCESS_RUNNER_OFFSET[:y]) { make_cake_available_after_icing }
-    @buttons << GameButton.new(self, {:x => 568, :y => 653, :z => ZOrder::TABLE_MOUNTED_CONTROLS, :dx => 24, :dy => 24}, :blackcurrent_frosting)
-    @buttons << GameButton.new(self, {:x => 568, :y => 695, :z => ZOrder::TABLE_MOUNTED_CONTROLS, :dx => 24, :dy => 24}, :vanilla_frosting)
-    @buttons << GameButton.new(self, {:x => 654, :y => 653, :z => ZOrder::TABLE_MOUNTED_CONTROLS, :dx => 24, :dy => 24}, :mint_frosting)
-    @buttons << GameButton.new(self, {:x => 654, :y => 695, :z => ZOrder::TABLE_MOUNTED_CONTROLS, :dx => 24, :dy => 24}, :jelly_frosting)
-    @buttons.each do |button|
-      button.activate
+    @icing_process = Util::ProcessRunner.new(@shop_window.window, 10, @x + PROCESS_RUNNER_OFFSET[:x], @y + PROCESS_RUNNER_OFFSET[:y]) { make_cake_available_after_icing }
+    context_froster_data[:buttons].each_with_index do |button, index|
+      GameButton.new(self, {:x => @x + BUTTON_OFFSET[index][:x], :y => @y + BUTTON_OFFSET[index][:y], :z => ZOrder::TABLE_MOUNTED_CONTROLS, 
+        :dx => 24, :dy => 24}, button).activate
     end
   end
   
@@ -28,7 +29,7 @@ class Froster
   end
 
   def update
-    @plate && @plate.update_position(X + CAKE_PLATE_OFFSET[:x], Y + CAKE_PLATE_OFFSET[:y])
+    @plate && @plate.update_position(@x + CAKE_PLATE_OFFSET[:x], @y + CAKE_PLATE_OFFSET[:y])
     @icing_process.update
   end
   
@@ -67,8 +68,8 @@ class Froster
   end
 
   def draw
-    @body.draw(X, Y, ZOrder::TABLE_MOUNTED_EQUIPMENTS)
-    @show_animation && @action_anim.slide.draw(X, Y, ZOrder::ACTION_CLOWD)
+    @body.draw(@x, @y, ZOrder::TABLE_MOUNTED_EQUIPMENTS)
+    @show_animation && @action_anim.slide.draw(@x, @y, ZOrder::ACTION_CLOWD)
     @icing_process.render
     @plate && @plate.render
   end

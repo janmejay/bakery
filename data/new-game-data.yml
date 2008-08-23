@@ -12,3 +12,12 @@
     :cake_holder: 'media/oven_cake_holder.png'
     :trash_can: 'media/oven_dustbin.png'
     :machine_view: 'media/oven_machine.png'
+:frosters:
+- :x: 563
+  :y: 635
+  :machine_view: 'media/froster.png' 
+  :buttons:
+  - :blackcurrent_frosting
+  - :vanilla_frosting
+  - :mint_frosting
+  - :jelly_frosting

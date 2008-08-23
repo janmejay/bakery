@@ -31,10 +31,8 @@ class Shop < BakeryWizard::Window
     @dead_entities << Cursor.new(self)
     @dead_entities << Table.new(self)
     @alive_entities = []
-    @context[:ovens].each do |oven_data|
-      @alive_entities << Oven.new(self, oven_data)
-    end
-    @alive_entities << Froster.new(self)
+    @context[:ovens].each { |oven_data| @alive_entities << Oven.new(self, oven_data) }
+    @context[:frosters].each { |froster_data| @alive_entities << Froster.new(self, froster_data) }
     @alive_entities << Decorator.new(self)
     @alive_entities << @baker = Baker.new(self)
     @font = Gosu::Font.new(window, Gosu::default_font_name, 20)
