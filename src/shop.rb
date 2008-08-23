@@ -22,10 +22,10 @@ class Shop < BakeryWizard::Window
     super(window)
     @context = context
 
-    @background_image = Gosu::Image.new(self.window, "media/floor.png", true)
+    @background_image = Gosu::Image.new(self.window, context[:floor_view], true)
     register self
-    register Dustbin.new(self)
-    register Showcase.new(self)
+    register Dustbin.new(self, context[:dustbin])
+    context[:showcases].each { |showcase_data| register Showcase.new(self, showcase_data) }
     @renderables = Set.new
     @dead_entities = []
     @dead_entities << Cursor.new(self)

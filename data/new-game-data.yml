@@ -1,5 +1,6 @@
 ---
 :money: 300
+:floor_view: 'media/floor.png'
 :ovens:
 - :x: 530 
   :y: 0
@@ -30,3 +31,18 @@
   - :face_decoration
   - :boat_decoration
   - :candle_decoration
+:showcases:
+- :x: 256
+  :y: 75
+  :images:
+    :base_view: 'media/showcase_base.png'
+    :cover_view: 'media/showcase_cover.png'
+:dustbin:
+  :inactive:
+    :x: 865
+    :y: 166
+  :active:
+    :x: 790
+    :y: 166
+  :bin_view: 'media/dustbin.png'
+  :height: 120

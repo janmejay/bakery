@@ -2,17 +2,17 @@ class Showcase
   include Actions::ActiveRectangleSubscriber
   
   CAKE_PLATE_OFFSET = {:x => 10, :y => 10}
-  X, Y = 256, 75
   
-  def initialize(shop_window)
+  def initialize(shop_window, context_showcase_data)
     @shop_window = shop_window
-    @base = Gosu::Image.new(@shop_window.window, 'media/showcase_base.png', true)
-    @cover = Gosu::Image.new(@shop_window.window, 'media/showcase_cover.png', true)
+    @x, @y = context_showcase_data[:x], context_showcase_data[:y]
+    @base = Gosu::Image.new(@shop_window.window, context_showcase_data[:images][:base_view], true)
+    @cover = Gosu::Image.new(@shop_window.window, context_showcase_data[:images][:cover_view], true)
     @cant_put_two_cakes_in_there_message = Gosu::Sample.new(@shop_window.window, 'media/cant_put_two_cakes_in_there.ogg')
   end
   
   def perform_updates
-    @plate && @plate.update_position(X + CAKE_PLATE_OFFSET[:x], Y + CAKE_PLATE_OFFSET[:y])
+    @plate && @plate.update_position(@x + CAKE_PLATE_OFFSET[:x], @y + CAKE_PLATE_OFFSET[:y])
   end
   
   def receive_cake
@@ -30,8 +30,8 @@ class Showcase
   end
 
   def render
-    @base.draw(X, Y, zindex)
-    @cover.draw(X, Y, ZOrder::SHOWCASE_COVER)
+    @base.draw(@x, @y, zindex)
+    @cover.draw(@x, @y, ZOrder::SHOWCASE_COVER)
     @plate && @plate.render
   end
   
@@ -47,11 +47,11 @@ class Showcase
 
   protected
   def active_x
-    return X, X + 80
+    return @x, @x + 80
   end
 
   def active_y
-    return Y, Y + 80
+    return @y, @y + 80
   end
 end
 

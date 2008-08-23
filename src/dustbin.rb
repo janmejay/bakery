@@ -7,12 +7,11 @@ require 'util/actions'
 class Dustbin
   include Actions::ActiveRectangleSubscriber
   
-  HEIGHT = 120
-  
-  def initialize shop_window
+  def initialize shop_window, context_dustbin_data
     @shop_window = shop_window
-    @image = Gosu::Image.new(@shop_window.window, 'media/dustbin.png', true)
-    @throwing_anim = Util::PositionAnimation.new({:x => 865, :y => 166}, {:x => 790, :y => 166}, 40, true, {50 => lambda {ask_for_waste_cake}, 99 => lambda {discard_the_cake}})
+    @height = context_dustbin_data[:height]
+    @image = Gosu::Image.new(@shop_window.window, context_dustbin_data[:bin_view], true)
+    @throwing_anim = Util::PositionAnimation.new(context_dustbin_data[:inactive], context_dustbin_data[:active], 40, true, {50 => lambda {ask_for_waste_cake}, 99 => lambda {discard_the_cake}})
     perform_updates
   end
 
@@ -48,7 +47,7 @@ class Dustbin
   end
   
   def active_y
-    return 166, 166 + HEIGHT
+    return 166, 166 + @height
   end
   
   private
