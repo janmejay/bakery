@@ -1,6 +1,8 @@
 ---
 :money: 300
 :floor_view: 'media/floor.png'
+:table:
+  :table_view: 'media/table.png'
 :ovens:
 - :x: 530 
   :y: 0

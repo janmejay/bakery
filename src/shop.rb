@@ -29,13 +29,12 @@ class Shop < BakeryWizard::Window
     @renderables = Set.new
     @dead_entities = []
     @dead_entities << Cursor.new(self)
-    @dead_entities << Table.new(self)
+    @dead_entities << Table.new(self, context[:table])
     @alive_entities = []
     @context[:ovens].each { |oven_data| @alive_entities << Oven.new(self, oven_data) }
     @context[:frosters].each { |froster_data| @alive_entities << Froster.new(self, froster_data) }
     @context[:decorators].each { |decorator_data| @alive_entities << Decorator.new(self, decorator_data) }
     @alive_entities << @baker = Baker.new(self)
-    @font = Gosu::Font.new(window, Gosu::default_font_name, 20)
     show
   end
 
@@ -54,7 +53,6 @@ class Shop < BakeryWizard::Window
     @alive_entities.each {|entity| entity.draw}
     for_each_subscriber { |subscriber| subscriber.render}
     @renderables.each { |renderable| @renderables.delete(renderable) unless renderable.render }
-    @font.draw("Score: #{mouse_x} X #{mouse_y}", 10, 10, ZOrder::MESSAGES, 1.0, 1.0, 0xaaffffff)
   end
   
   def render

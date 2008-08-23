@@ -2,9 +2,9 @@
 # Time: 20 Jun, 2008 3:54:15 PM
 
 class Table
-  def initialize shop_window
+  def initialize shop_window, context_table_data
     @shop_window = shop_window
-    @table = Gosu::Image.new(@shop_window.window, "media/table.png", true)
+    @table = Gosu::Image.new(@shop_window.window, context_table_data[:table_view], true)
   end
 
   def draw
