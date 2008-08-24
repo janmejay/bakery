@@ -7,12 +7,16 @@ require 'util/actions'
 class Dustbin
   include Actions::ActiveRectangleSubscriber
   
-  def initialize shop_window, context_dustbin_data
-    @shop_window = shop_window
+  def initialize context_dustbin_data
+    @context_dustbin_data = context_dustbin_data
     @height = context_dustbin_data[:height]
-    @image = Gosu::Image.new(@shop_window.window, context_dustbin_data[:bin_view], true)
-    @throwing_anim = Util::PositionAnimation.new(context_dustbin_data[:inactive], context_dustbin_data[:active], 40, true, {50 => :ask_for_waste_cake, 99 => :discard_the_cake}, self)
+    @throwing_anim = Util::PositionAnimation.new(@context_dustbin_data[:inactive], @context_dustbin_data[:active], 40, true, {50 => :ask_for_waste_cake, 99 => :discard_the_cake}, self)
     perform_updates
+  end
+  
+  def window= shop_window
+    @shop_window = shop_window
+    @image = Gosu::Image.new(@shop_window.window, @context_dustbin_data[:bin_view], true)
   end
 
   def perform_updates

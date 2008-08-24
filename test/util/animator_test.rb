@@ -11,7 +11,8 @@ class Util::AnimatorTest < Test::Unit::TestCase
 
     setup do
       @window = Gosu::Window.new(120, 30, false)
-      @one_way_anim = Util::Animator.new(@window, ANIM_FILE_NAME, 30, 30)
+      @one_way_anim = Util::Animator.new(ANIM_FILE_NAME, 30, 30)
+      @one_way_anim.window = @window
     end
 
     context "when created" do
@@ -73,9 +74,10 @@ class Util::AnimatorTest < Test::Unit::TestCase
     
     context "callback proc handler" do
       setup do
-        @callback_anim = Util::Animator.new(@window, ANIM_FILE_NAME, 30, 30) do
+        @callback_anim = Util::Animator.new(ANIM_FILE_NAME, 30, 30) do
           callback_method
         end
+        @callback_anim.window = @window
         @callback_anim.start
       end
       
@@ -100,7 +102,8 @@ class Util::AnimatorTest < Test::Unit::TestCase
     
     context "callback :method handler" do
       setup do
-        @callback_anim = Util::Animator.new(@window, ANIM_FILE_NAME, 30, 30, :call_on_completion => :callback_method, :callback_receiver => self)
+        @callback_anim = Util::Animator.new(ANIM_FILE_NAME, 30, 30, :call_on_completion => :callback_method, :callback_receiver => self)
+        @callback_anim.window = @window
         @callback_anim.start
       end
       
@@ -125,7 +128,8 @@ class Util::AnimatorTest < Test::Unit::TestCase
 
     context "when played both ways" do
       setup do
-        @two_way_anim = Util::Animator.new(@window, ANIM_FILE_NAME, 30, 30, :play_both_ways => true)
+        @two_way_anim = Util::Animator.new(ANIM_FILE_NAME, 30, 30, :play_both_ways => true)
+        @two_way_anim.window = @window
         @slides = @two_way_anim.instance_variable_get('@slides')
       end
 
@@ -165,7 +169,8 @@ class Util::AnimatorTest < Test::Unit::TestCase
       ANIM_SLICE_WIDTH = 10
 
       setup do
-        @custom_slice_width_anim = Util::Animator.new(@window, ANIM_FILE_NAME, 30, 30, :chunk_slice_width => ANIM_SLICE_WIDTH)
+        @custom_slice_width_anim = Util::Animator.new(ANIM_FILE_NAME, 30, 30, :chunk_slice_width => ANIM_SLICE_WIDTH)
+        @custom_slice_width_anim.window = @window
         @slides = @custom_slice_width_anim.instance_variable_get('@slides')
       end
 
@@ -191,7 +196,8 @@ class Util::AnimatorTest < Test::Unit::TestCase
 
         context "both sides," do
           setup do
-            @custom_width_slice_bysided_anim = Util::Animator.new(@window, ANIM_FILE_NAME, 30, 30, :play_both_ways => true, :chunk_slice_width => ANIM_SLICE_WIDTH)
+            @custom_width_slice_bysided_anim = Util::Animator.new(ANIM_FILE_NAME, 30, 30, :play_both_ways => true, :chunk_slice_width => ANIM_SLICE_WIDTH)
+            @custom_width_slice_bysided_anim.window = @window
             @custom_width_slice_bysided_anim.start
             @slides = @custom_width_slice_bysided_anim.instance_variable_get('@slides')
           end
@@ -216,7 +222,8 @@ class Util::AnimatorTest < Test::Unit::TestCase
 
     context "marked for infinite running" do
       setup do
-        @anim_with_infinite_length = Util::Animator.new(@window, ANIM_FILE_NAME, 30, 30, :run_indefinitly => true)
+        @anim_with_infinite_length = Util::Animator.new(ANIM_FILE_NAME, 30, 30, :run_indefinitly => true)
+        @anim_with_infinite_length.window = @window
         @slides = @anim_with_infinite_length.instance_variable_get('@slides')
       end
 

@@ -15,11 +15,14 @@ class GameLoader < BakeryWizard::Window
   BUTTON_OFFSET = REL :x => 36, :y => 40
   BG_OFFSET = REL :x => 0, :y => 0
   
-  def initialize context, window
-    super(window)
+  def initialize context
     @context = context
-    
-    @cursor = Cursor.new(self)
+    @cursor = Cursor.new
+  end
+  
+  def window= window
+    @window = window
+    @cursor.window = self
     @background = Gosu::Image.new(self.window, 'media/game_loader_bg.png', false)
     font = Gosu::Font.new(self.window, 'media/hand.ttf', 35)
     TextButton.new(self, {:x => BUTTON_OFFSET[:x], :y => BUTTON_OFFSET[:y], :z => 1, :dx => 348, :dy => 44, :image => :game_loader}, :new_game, font).activate
@@ -33,7 +36,7 @@ class GameLoader < BakeryWizard::Window
   end
   
   def load_game
-    puts "Load Game Requested"
+    $wizard.next 'shop_dump'
   end
   
   def exit

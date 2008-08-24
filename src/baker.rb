@@ -32,13 +32,17 @@ class Baker
   
   attr_reader :plate
 
-  def initialize shop_window
-    @shop_window = shop_window
-    @walking_anim = Util::Animator.new(@shop_window.window, 'media/walking_baker.png', 105, 80, :chunk_slice_width => 2, :run_indefinitly => true)
-    @hat = Gosu::Image.new(@shop_window.window, 'media/baker_hat.png', false)
-    @cant_pick_two_plates_at_a_time = Gosu::Sample.new(@shop_window.window, 'media/cant_pick_two_plates_at_a_time.ogg')
+  def initialize 
+    @walking_anim = Util::Animator.new('media/walking_baker.png', 105, 80, :chunk_slice_width => 2, :run_indefinitly => true)
     @x, @y, @target_x, @target_y, @angle = 600, 400, 600, 400, 180
     @sane_walking_area = LimitingRectangle.new(384, 200, 835, 550)
+  end
+  
+  def window= shop_window
+    @shop_window = shop_window
+    @walking_anim.window = @shop_window.window
+    @hat = Gosu::Image.new(@shop_window.window, 'media/baker_hat.png', false)
+    @cant_pick_two_plates_at_a_time = Gosu::Sample.new(@shop_window.window, 'media/cant_pick_two_plates_at_a_time.ogg')
     transaction_font_path = File.join(File.dirname(__FILE__), '..', 'media', 'number.ttf')
     @loss_anim = Util::FontAnimator.new(@shop_window, 120, :z => ZOrder::MESSAGES, :color => 'ff0000', :font_name => transaction_font_path)
     @profit_anim = Util::FontAnimator.new(@shop_window, 120, :z => ZOrder::MESSAGES, :color => '00ff00', :font_name => transaction_font_path)

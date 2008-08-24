@@ -18,34 +18,57 @@ class Shop < BakeryWizard::Window
   include Publisher
   include Subscriber
   
-  def initialize context, window
-    super(window)
+  def initialize context
     @context = context
-
-    @background_image = Gosu::Image.new(self.window, context[:floor_view], true)
     register self
-    register Dustbin.new(self, context[:dustbin])
-    context[:showcases].each { |showcase_data| register Showcase.new(self, showcase_data) }
+    register Dustbin.new(context[:dustbin])
+    context[:showcases].each { |showcase_data| register Showcase.new(showcase_data) }
     @renderables = Set.new
     @dead_entities = []
-    @dead_entities << Cursor.new(self)
-    @dead_entities << Table.new(self, context[:table])
+    @dead_entities << Cursor.new
+    @dead_entities << Table.new(context[:table])
     @alive_entities = []
-    @context[:ovens].each { |oven_data| @alive_entities << Oven.new(self, oven_data) }
-    @context[:frosters].each { |froster_data| @alive_entities << Froster.new(self, froster_data) }
-    @context[:decorators].each { |decorator_data| @alive_entities << Decorator.new(self, decorator_data) }
-    @alive_entities << @baker = Baker.new(self)
-    puts Marshal.dump(self)
+    @context[:ovens].each { |oven_data| @alive_entities << Oven.new(oven_data) }
+    @context[:frosters].each { |froster_data| @alive_entities << Froster.new(froster_data) }
+    @context[:decorators].each { |decorator_data| @alive_entities << Decorator.new(decorator_data) }
+    @alive_entities << @baker = Baker.new
+  end
+  
+  def deactivate_all_buttons
+    to_be_unregistered = []
+    for_each_subscriber { |subscriber| subscriber.kind_of?(Button) && (to_be_unregistered << subscriber) }
+    for_each_subscriber { |subscriber| subscriber.kind_of?(Oven::Button) && (to_be_unregistered << subscriber) }
+    puts to_be_unregistered.collect {|u| u.class}.inspect
+    to_be_unregistered.each do |subscriber| 
+      unregister subscriber
+    end
+    for_each_subscriber { |sub| puts sub.class if sub.kind_of?(Oven::Button) }
+  end
+  
+  def window= window
+    @window = window
+    @background_image = Gosu::Image.new(self.window, @context[:floor_view], true)
+    for_each_subscriber { |subscriber| subscriber.window = self unless subscriber == self }
+    @dead_entities.each { |entity| entity.window = self }
+    @alive_entities.each { |entity| entity.window = self }
   end
 
   def update
     case true
     when button_down?(Gosu::Button::MsLeft): publish(Event.new(:left_click, mouse_x, mouse_y))
     when button_down?(Gosu::Button::MsRight): publish(Event.new(:right_click, mouse_x, mouse_y))
-    when button_down?(Gosu::Button::KbEscape): $wizard.previous
+    when button_down?(Gosu::Button::KbEscape):
+      deactivate_all_buttons
+      dump_shop && $wizard.previous
     end
     @alive_entities.each {|entity| entity.update}
     for_each_subscriber {|subscriber| subscriber.perform_updates}
+  end
+  
+  def dump_shop
+    File.open("shop_dump", "w") do |handle|
+      handle.write(Marshal.dump(self))
+    end
   end
 
   def draw

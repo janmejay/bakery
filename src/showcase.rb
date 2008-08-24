@@ -3,11 +3,15 @@ class Showcase
   
   CAKE_PLATE_OFFSET = {:x => 10, :y => 10}
   
-  def initialize(shop_window, context_showcase_data)
+  def initialize(context_showcase_data)
+    @context_showcase_data = context_showcase_data
+    @x, @y = @context_showcase_data[:x], @context_showcase_data[:y]
+  end
+  
+  def window= shop_window
     @shop_window = shop_window
-    @x, @y = context_showcase_data[:x], context_showcase_data[:y]
-    @base = Gosu::Image.new(@shop_window.window, context_showcase_data[:images][:base_view], true)
-    @cover = Gosu::Image.new(@shop_window.window, context_showcase_data[:images][:cover_view], true)
+    @base = Gosu::Image.new(@shop_window.window, @context_showcase_data[:images][:base_view], true)
+    @cover = Gosu::Image.new(@shop_window.window, @context_showcase_data[:images][:cover_view], true)
     @cant_put_two_cakes_in_there_message = Gosu::Sample.new(@shop_window.window, 'media/cant_put_two_cakes_in_there.ogg')
   end
   

@@ -1,14 +1,19 @@
 # User: janmejay.singh
 # Time: 20 Jun, 2008 7:44:35 PM
 class Util::Animator
-  def initialize window, strip_file_name, tile_width, tile_heights, options = {}, &block
+  def initialize strip_file_name, tile_width, tile_heights, options = {}, &block
+    @tile_width, @tile_heights = tile_width, tile_heights
+    @strip_file_name = strip_file_name
     options = {:play_both_ways => false, :chunk_slice_width => 1, :run_indefinitly => false}.merge(options)
-    @slides = Gosu::Image::load_tiles(window, strip_file_name, tile_width, tile_heights, true)
     @play_both_ways = options[:play_both_ways]
     @callback_on_completion = block || options[:call_on_completion]
     @callback_receiver = options[:callback_receiver]
     @chunk_slice_width = options[:chunk_slice_width]
     @run_indefinitly = options[:run_indefinitly]
+  end
+  
+  def window= window
+    @slides = Gosu::Image::load_tiles(window, @strip_file_name, @tile_width, @tile_heights, true)
     create_animated_sequence
     @current_anim_sequence = []
   end

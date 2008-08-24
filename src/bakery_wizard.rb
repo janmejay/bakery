@@ -20,15 +20,23 @@ class BakeryWizard
   end
   
   class Window
+    
+    module Buildable
+      def build context, window, from = nil, caption = 'Bakery'
+        instance = from ? Marshal.load(File.open(from, 'r').read) : new(context)
+        instance.window= window
+        window.caption = caption
+        window.listner = instance
+        instance
+      end
+    end
 
     def self.REL map
       {:x => (BaseWindow::WIDTH - self::WIDTH)/2 + map[:x], :y => (BaseWindow::HEIGHT - self::HEIGHT)/2 + map[:y]}
     end
     
-    def initialize(window, caption = 'Bakery')
-      @window, @caption = window, caption
-      @window.caption = caption
-      @window.listner = self
+    def self.inherited subclass
+      subclass.extend Buildable
     end
     
     def update; end
@@ -55,19 +63,21 @@ class BakeryWizard
   end
   
   def show
-    @current_screen = @screens[0].new(@context, @window)
+    @current_screen = @screens[0].build(@context, @window)
     @current_screen.show
   end
   
-  def next
+  def next *args
     @current_screen.close
-    @current_screen = @screens[@screens.index(@current_screen.class) + 1].new(@context, @window)
+    init_args = [@context, @window]
+    init_args += args
+    @current_screen = @screens[@screens.index(@current_screen.class) + 1].build(*init_args)
     @current_screen.show
   end
   
   def previous
     @current_screen.close
-    @current_screen = @screens[@screens.index(@current_screen.class) - 1].new(@context, @window)
+    @current_screen = @screens[@screens.index(@current_screen.class) - 1].build(@context, @window)
     @current_screen.show
   end
 end

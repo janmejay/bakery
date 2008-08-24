@@ -8,7 +8,7 @@ module SerializationDefaulter
   end
   
   module ClassMethods
-    def self._load serialized_window
+    def _load serialized_window
       return nil
     end
   end

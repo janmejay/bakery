@@ -15,18 +15,23 @@ class PlayerLoader < BakeryWizard::Window
   IMAGE_OFFSET = REL :x => 50, :y => 0
   BUTTON_OFFSET = REL :x => 397, :y => 318
   MESSAGE_COLOR = 0xff222222
-  def initialize context, window
-    super(window)
+  
+  def initialize context
     @context = context
+    @cursor = Cursor.new
+  end
+  
+  def window= window
+    @window = window
     @cake_image = Gosu::Image.new(self.window, 'media/loading-cake.png', false)
-    @cursor = Cursor.new(self)
+    @cursor.window = self
     @print_font = Gosu::Font.new(self.window, 'media/hand.ttf', 40)
     @name_field = TextField.new(self, @print_font, TEXT_FIELD_OFFSET[:x], TEXT_FIELD_OFFSET[:y], 'Sweta', 9, 
       :inactive_color  => 0x00ffffff, :active_color => 0x00ffffff, :selection_color => 0x00ffffff, :caret_color => MESSAGE_COLOR)
-    @title = Title.new(self, 80, TITLE_OFFSET[:x], TITLE_OFFSET[:y])
     self.text_input = @name_field
     @get_baking_button = TextButton.new(self, {:x => BUTTON_OFFSET[:x], :y => BUTTON_OFFSET[:y], :z => 1, :dx => 120, :dy => 120}, :get_baking, @print_font)
     @get_baking_button.activate
+    @title = Title.new(self, 80, TITLE_OFFSET[:x], TITLE_OFFSET[:y])
   end
   
   def update
