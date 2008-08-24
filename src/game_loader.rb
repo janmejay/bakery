@@ -25,7 +25,6 @@ class GameLoader < BakeryWizard::Window
     TextButton.new(self, {:x => BUTTON_OFFSET[:x], :y => BUTTON_OFFSET[:y], :z => 1, :dx => 348, :dy => 44, :image => :game_loader}, :new_game, font).activate
     TextButton.new(self, {:x => BUTTON_OFFSET[:x], :y => BUTTON_OFFSET[:y] + (44 + 20), :z => 1, :dx => 348, :dy => 44, :image => :game_loader}, :load_game, font).activate
     TextButton.new(self, {:x => BUTTON_OFFSET[:x], :y => BUTTON_OFFSET[:y] + 2*(44 + 20), :z => 1, :dx => 348, :dy => 44, :image => :game_loader}, :exit, font).activate
-    show
   end
   
   def new_game

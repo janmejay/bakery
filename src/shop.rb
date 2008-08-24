@@ -25,7 +25,6 @@ class Shop < BakeryWizard::Window
     @background_image = Gosu::Image.new(self.window, context[:floor_view], true)
     register self
     register Dustbin.new(self, context[:dustbin])
-    puts Marshal.dump(self)
     context[:showcases].each { |showcase_data| register Showcase.new(self, showcase_data) }
     @renderables = Set.new
     @dead_entities = []
@@ -35,6 +34,7 @@ class Shop < BakeryWizard::Window
     @context[:ovens].each { |oven_data| @alive_entities << Oven.new(self, oven_data) }
     @context[:frosters].each { |froster_data| @alive_entities << Froster.new(self, froster_data) }
     @context[:decorators].each { |decorator_data| @alive_entities << Decorator.new(self, decorator_data) }
+    puts Marshal.dump(self)
     @alive_entities << @baker = Baker.new(self)
     show
   end

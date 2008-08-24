@@ -29,7 +29,6 @@ class BakeryWizard
       @window, @caption = window, caption
       @window.caption = caption
       @window.listner = self
-      $wizard.accept_as_current_screen self
     end
     
     def update; end
@@ -55,22 +54,20 @@ class BakeryWizard
     @screens << screen
   end
   
-  def accept_as_current_screen current_screen
-    raise "TypeMismatch: Expected instance of type #{Window.name} got #{current_screen.class.name}" unless current_screen.is_a?(Window)
-    @current_screen = current_screen
-  end
-  
   def show
-    @screens[0].new(@context, @window)
+    @current_screen = @screens[0].new(@context, @window)
+    @current_screen.show
   end
   
   def next
     @current_screen.close
-    @screens[@screens.index(@current_screen.class) + 1].new(@context, @window)
+    @current_screen = @screens[@screens.index(@current_screen.class) + 1].new(@context, @window)
+    @current_screen.show
   end
   
   def previous
     @current_screen.close
     @current_screen = @screens[@screens.index(@current_screen.class) - 1].new(@context, @window)
+    @current_screen.show
   end
 end

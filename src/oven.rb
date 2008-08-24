@@ -146,8 +146,8 @@ class Oven
     @cake_holder = Gosu::Image.new(@shop_window.window, context_oven_data[:images][:cake_holder], true)
     @trash_can = Gosu::Image.new(@shop_window.window, context_oven_data[:images][:trash_can], true)
     @oven_machine_view = Gosu::Image.new(@shop_window.window, context_oven_data[:images][:machine_view], true)
-    @cake_plate_pos_anim = Util::PositionAnimation.new({:x => @x, :y => @y}, {:x => @x, :y => @y-100}, 40, true, {49 => lambda { put_baked_cake}, 99 => lambda { make_plate_pickable}})
-    @baking_process = Util::ProcessRunner.new(@shop_window.window, 10, @x + PROCESS_RUNNER_OFFSET[:x], @y + PROCESS_RUNNER_OFFSET[:y]) { eject_baked_cake }
+    @cake_plate_pos_anim = Util::PositionAnimation.new({:x => @x, :y => @y}, {:x => @x, :y => @y-100}, 40, true, {49 => :put_baked_cake, 99 => :make_plate_pickable}, self)
+    @baking_process = Util::ProcessRunner.new(@shop_window.window, 10, @x + PROCESS_RUNNER_OFFSET[:x], @y + PROCESS_RUNNER_OFFSET[:y], :eject_baked_cake, self)
     context_oven_data[:buttons].each_with_index do |button, index|
       @shop_window.register Button.new(self, @x, @y, button, Button::BUTTON_OFFSETS[index])
     end
@@ -185,12 +185,12 @@ class Oven
     @cake_plate_pos_anim.start
   end
   
-  def put_baked_cake
+  def put_baked_cake *ignore
     @plate = Plate.new(self.shop_window, @cake)
     @plate.holder = self
   end
   
-  def make_plate_pickable
+  def make_plate_pickable *ignore
     @shop_window.register @plate
   end
   

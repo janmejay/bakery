@@ -34,7 +34,7 @@ class Baker
 
   def initialize shop_window
     @shop_window = shop_window
-    @walking_anim = Util::Animator.new(@shop_window.window, 'media/walking_baker.png', 105, 80, false, 2, true)
+    @walking_anim = Util::Animator.new(@shop_window.window, 'media/walking_baker.png', 105, 80, :chunk_slice_width => 2, :run_indefinitly => true)
     @hat = Gosu::Image.new(@shop_window.window, 'media/baker_hat.png', false)
     @cant_pick_two_plates_at_a_time = Gosu::Sample.new(@shop_window.window, 'media/cant_pick_two_plates_at_a_time.ogg')
     @x, @y, @target_x, @target_y, @angle = 600, 400, 600, 400, 180

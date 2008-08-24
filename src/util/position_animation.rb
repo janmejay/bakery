@@ -46,7 +46,8 @@ class Util::PositionAnimation
   def execute_callbacks(x, y)
     @upcoming_callbacks.each_pair do |key, value|
       if (@hop_cords.length*100)/@total_hops_allowed < (100 - key)
-        (value.class == Symbol) ? @callback_receiver.send(value, x, y) : value.call(x, y)
+        value.is_a?(Symbol) && @callback_receiver.send(value, x, y)
+        value.is_a?(Proc) && value.call(x, y)
         @handled_callbacks[key] = value
       end
       @upcoming_callbacks.reject! {|key, value| @handled_callbacks.keys.include?(key)}

@@ -12,10 +12,10 @@ class Decorator
     @x, @y = 900, 300
     @body = Gosu::Image.new(@shop_window.window, context_decorator_data[:machine_view], true)
     @buttons = []
-    @action_anim = Util::Animator.new(@shop_window.window, 'media/cake-action-anim.png', 120, 100, false, 3, true)
+    @action_anim = Util::Animator.new(@shop_window.window, 'media/cake-action-anim.png', 120, 100, :chunk_slice_width => 3, :run_indefinitly => true)
     @this_cake_is_already_decorated_message = Gosu::Sample.new(@shop_window.window, 'media/this_cake_is_already_decorated.ogg')
     @decoration_process = Util::ProcessRunner.new(@shop_window.window, 10, @x + PROCESS_RUNNER_OFFSET[:x],
-                                                               @y + PROCESS_RUNNER_OFFSET[:y]) { make_cake_available_after_decoration }
+                                                               @y + PROCESS_RUNNER_OFFSET[:y], :make_cake_available_after_decoration, self)
     context_decorator_data[:buttons].each_with_index do |button, index|
       GameButton.new(self, {:x => @x + BUTTON_OFFSETS[index][:x], :y => @y + BUTTON_OFFSETS[index][:y], 
         :z => ZOrder::TABLE_MOUNTED_CONTROLS, :dx => 28, :dy => 28}, button).activate

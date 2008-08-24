@@ -16,8 +16,8 @@ class Froster
     @body = Gosu::Image.new(@shop_window.window, context_froster_data[:machine_view], true)
     @buttons = []
     @this_cake_is_already_iced_message = Gosu::Sample.new(@shop_window.window, 'media/this_cake_is_already_iced.ogg')
-    @action_anim = Util::Animator.new(@shop_window.window, 'media/cake-action-anim.png', 120, 100, false, 3, true)
-    @icing_process = Util::ProcessRunner.new(@shop_window.window, 10, @x + PROCESS_RUNNER_OFFSET[:x], @y + PROCESS_RUNNER_OFFSET[:y]) { make_cake_available_after_icing }
+    @action_anim = Util::Animator.new(@shop_window.window, 'media/cake-action-anim.png', 120, 100, :chunk_slice_width => 3, :run_indefinitly => true)
+    @icing_process = Util::ProcessRunner.new(@shop_window.window, 10, @x + PROCESS_RUNNER_OFFSET[:x], @y + PROCESS_RUNNER_OFFSET[:y], :make_cake_available_after_icing, self)
     context_froster_data[:buttons].each_with_index do |button, index|
       GameButton.new(self, {:x => @x + BUTTON_OFFSET[index][:x], :y => @y + BUTTON_OFFSET[index][:y], :z => ZOrder::TABLE_MOUNTED_CONTROLS, 
         :dx => 24, :dy => 24}, button).activate

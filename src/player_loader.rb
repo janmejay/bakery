@@ -27,7 +27,6 @@ class PlayerLoader < BakeryWizard::Window
     self.text_input = @name_field
     @get_baking_button = TextButton.new(self, {:x => BUTTON_OFFSET[:x], :y => BUTTON_OFFSET[:y], :z => 1, :dx => 120, :dy => 120}, :get_baking, @print_font)
     @get_baking_button.activate
-    show
   end
   
   def update
