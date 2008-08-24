@@ -1,4 +1,10 @@
 class Util::FontAnimator
+  module ZeroXasY
+    def self.x for_y
+      0
+    end
+  end
+  
   class Animation
     def initialize(shop_window, text, font, color, slide_sequence, z)
       @shop_window, @text, @font, @slide_sequence, @color, @z = shop_window, text, font, slide_sequence, color, z
@@ -17,7 +23,7 @@ class Util::FontAnimator
     @x, @y, @z = options[:x], options[:y], options[:z]
     @color = options[:color]
     @y_displacement = options[:y_displacement] || -60
-    @x_as_y = options[:x_as_y] || lambda {|y| 0}
+    @x_as_y = options[:x_as_y] || ZeroXasY
     @font = Gosu::Font.new(@shop_window.window, font_name, font_size)
     @length = length
   end
@@ -40,7 +46,7 @@ class Util::FontAnimator
     y_velocity = y_displacement.to_f/@length
     alpha_velocity = 255/@length
     @length.times do |index|
-      dx = x_as_y.call(dy = y_velocity*(index + 1))
+      dx = x_as_y.x(dy = y_velocity*(index + 1))
       alpha = 255 - alpha_velocity*index
       slide_details << {:x => (x + dx).to_i, :y => (y + dy).to_i, :alpha => alpha.to_s(16)}
     end
