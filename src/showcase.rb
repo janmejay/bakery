@@ -19,9 +19,9 @@ class Showcase
     @plate && @plate.update_position(@x + CAKE_PLATE_OFFSET[:x], @y + CAKE_PLATE_OFFSET[:y])
   end
   
-  def receive_cake
+  def receive_cake baker
     @plate && @cant_put_two_cakes_in_there_message.play && return
-    @shop_window.baker.give_plate_to(self)
+    baker.give_plate_to(self)
     return unless @plate && @plate.holder = self
   end
   
@@ -40,9 +40,7 @@ class Showcase
   end
   
   def handle(event)
-    @shop_window.baker.walk_down_and_trigger(event.x, event.y) do
-      receive_cake
-    end
+    @shop_window.baker.walk_down_and_trigger(event.x, event.y, :receive_cake, self)
   end
 
   def zindex

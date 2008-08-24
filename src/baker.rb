@@ -46,12 +46,14 @@ class Baker
     transaction_font_path = File.join(File.dirname(__FILE__), '..', 'media', 'number.ttf')
     @loss_anim = Util::FontAnimator.new(@shop_window, 120, :z => ZOrder::MESSAGES, :color => 'ff0000', :font_name => transaction_font_path)
     @profit_anim = Util::FontAnimator.new(@shop_window, 120, :z => ZOrder::MESSAGES, :color => '00ff00', :font_name => transaction_font_path)
+    @plate && @plate.window = @shop_window
   end
   
-  def walk_down_and_trigger(x_cord, y_cord, &trigger)
+  def walk_down_and_trigger(x_cord, y_cord, trigger_when_reached = nil, trigger_on = nil)
     @target_x, @target_y = @sane_walking_area.sanatize x_cord, y_cord
     @walking_anim.start
-    @trigger_when_reached = trigger
+    @trigger_when_reached = trigger_when_reached
+    @trigger_on = trigger_on
   end
   
   def accept_plate(plate)
@@ -81,7 +83,7 @@ class Baker
     @y += Gosu::offset_y(@angle, VELOCITY)
     if (almost_there)
       @walking_anim.stop
-      @trigger_when_reached && @trigger_when_reached.call(self)
+      @trigger_when_reached && @trigger_on.send(@trigger_when_reached, self)
     end
   end
 

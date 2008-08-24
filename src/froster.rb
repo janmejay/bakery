@@ -28,6 +28,7 @@ class Froster
       GameButton.new(self, {:x => @x + BUTTON_OFFSET[index][:x], :y => @y + BUTTON_OFFSET[index][:y], :z => ZOrder::TABLE_MOUNTED_CONTROLS, 
         :dx => 24, :dy => 24}, button).activate
     end
+    @plate && @plate.window = @shop_window
   end
   
   def window
@@ -48,19 +49,19 @@ class Froster
     @show_animation = true #REFACTOR ME!!!! put me in the animator
   end
   
-  def blackcurrent_frosting
+  def blackcurrent_frosting *ignore
     receive_cake && @plate.cake.put_icing(:blackcurrent)
   end
   
-  def vanilla_frosting
+  def vanilla_frosting *ignore
     receive_cake && @plate.cake.put_icing(:vanilla)
   end
   
-  def mint_frosting
+  def mint_frosting *ignore
     receive_cake && @plate.cake.put_icing(:mint)
   end
   
-  def jelly_frosting
+  def jelly_frosting *ignore
     receive_cake && @plate.cake.put_icing(:jelly)
   end
   

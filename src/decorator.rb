@@ -46,19 +46,19 @@ class Decorator
     @show_animation = true #REFACTOR ME!!!! put me in the animator
   end
 
-  def candle_decoration
+  def candle_decoration *ignore
     receive_cake && @plate.cake.put_decoration(:candle)
   end                               
                                     
-  def tree_decoration               
+  def tree_decoration *ignore
     receive_cake && @plate.cake.put_decoration(:tree)
   end                               
                                     
-  def boat_decoration               
+  def boat_decoration *ignore
     receive_cake && @plate.cake.put_decoration(:boat)
   end                               
                                     
-  def face_decoration               
+  def face_decoration *ignore
     receive_cake && @plate.cake.put_decoration(:face)
   end
 

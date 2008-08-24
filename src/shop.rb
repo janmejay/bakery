@@ -38,11 +38,7 @@ class Shop < BakeryWizard::Window
     to_be_unregistered = []
     for_each_subscriber { |subscriber| subscriber.kind_of?(Button) && (to_be_unregistered << subscriber) }
     for_each_subscriber { |subscriber| subscriber.kind_of?(Oven::Button) && (to_be_unregistered << subscriber) }
-    puts to_be_unregistered.collect {|u| u.class}.inspect
-    to_be_unregistered.each do |subscriber| 
-      unregister subscriber
-    end
-    for_each_subscriber { |sub| puts sub.class if sub.kind_of?(Oven::Button) }
+    unregister *to_be_unregistered
   end
   
   def window= window

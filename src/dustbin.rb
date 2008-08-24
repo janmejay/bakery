@@ -31,9 +31,11 @@ class Dustbin
   
   def handle(event)
     baker = @shop_window.baker
-    baker.walk_down_and_trigger(event.x, event.y) do
-      baker.has_plate? && open
-    end
+    baker.walk_down_and_trigger(event.x, event.y, :receive_trash_cake, self)
+  end
+  
+  def receive_trash_cake baker
+    baker.has_plate? && open
   end
   
   def zindex
