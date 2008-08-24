@@ -15,6 +15,9 @@ class GameLoader < BakeryWizard::Window
   BUTTON_OFFSET = REL :x => 36, :y => 40
   BG_OFFSET = REL :x => 0, :y => 0
   
+  V_PAD = 20
+  V_SPAN = 44
+  
   def initialize context
     @context = context
     @cursor = Cursor.new
@@ -25,18 +28,33 @@ class GameLoader < BakeryWizard::Window
     @cursor.window = self
     @background = Gosu::Image.new(self.window, 'media/game_loader_bg.png', false)
     font = Gosu::Font.new(self.window, 'media/hand.ttf', 35)
-    TextButton.new(self, {:x => BUTTON_OFFSET[:x], :y => BUTTON_OFFSET[:y], :z => 1, :dx => 348, :dy => 44, :image => :game_loader}, :new_game, font).activate
-    TextButton.new(self, {:x => BUTTON_OFFSET[:x], :y => BUTTON_OFFSET[:y] + (44 + 20), :z => 1, :dx => 348, :dy => 44, :image => :game_loader}, :load_game, font).activate
-    TextButton.new(self, {:x => BUTTON_OFFSET[:x], :y => BUTTON_OFFSET[:y] + 2*(44 + 20), :z => 1, :dx => 348, :dy => 44, :image => :game_loader}, :exit, font).activate
+    File.exists?(Shop.last_played_file_name(@context)) && TextButton.new(self, {:x => BUTTON_OFFSET[:x], :y => BUTTON_OFFSET[:y], :z => 1, :dx => 348, :dy => 44, :image => :game_loader}, :resume_game, font).activate
+    TextButton.new(self, {:x => BUTTON_OFFSET[:x], :y => BUTTON_OFFSET[:y] + (V_PAD + V_SPAN), :z => 1, :dx => 348, :dy => 44, :image => :game_loader}, :new_game, font).activate
+    TextButton.new(self, {:x => BUTTON_OFFSET[:x], :y => BUTTON_OFFSET[:y] + 2*(V_PAD + V_SPAN), :z => 1, :dx => 348, :dy => 44, :image => :game_loader}, :load_game, font).activate
+    TextButton.new(self, {:x => BUTTON_OFFSET[:x], :y => BUTTON_OFFSET[:y] + 3*(V_PAD + V_SPAN), :z => 1, :dx => 348, :dy => 44, :image => :game_loader}, :save_game, font).activate
+    TextButton.new(self, {:x => BUTTON_OFFSET[:x], :y => BUTTON_OFFSET[:y] + 4*(V_PAD + V_SPAN), :z => 1, :dx => 348, :dy => 44, :image => :game_loader}, :go_back, font).activate
+    TextButton.new(self, {:x => BUTTON_OFFSET[:x], :y => BUTTON_OFFSET[:y] + 5*(V_PAD + V_SPAN), :z => 1, :dx => 348, :dy => 44, :image => :game_loader}, :exit, font).activate
+  end
+  
+  def resume_game
+    $wizard.go_to Shop, Shop.last_played_file_name(@context)
+  end
+  
+  def save_game
+    puts "Save requested..."
   end
   
   def new_game
     @context.merge!(YAML.load_file(File.join(File.dirname(__FILE__), '..', 'data', 'new-game-data.yml')))
-    $wizard.next
+    $wizard.go_to Shop
+  end
+  
+  def go_back
+    $wizard.go_to PlayerLoader
   end
   
   def load_game
-    $wizard.next 'shop_dump'
+    puts "Load requested...."
   end
   
   def exit

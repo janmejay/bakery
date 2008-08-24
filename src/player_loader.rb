@@ -44,7 +44,7 @@ class PlayerLoader < BakeryWizard::Window
   end
   
   def get_baking
-    @name_field.text.empty? || (@context[:name] = @name_field.text) && $wizard.next 
+    @name_field.text.empty? || (@context[:name] = @name_field.text) && $wizard.go_to(GameLoader) 
   end
   
   def draw

@@ -11,7 +11,7 @@ require 'shop'
 require 'serialization_defaulter'
 
 $wizard = BakeryWizard.new
-$wizard.add(PlayerLoader)
-$wizard.add(GameLoader)
-$wizard.add(Shop)
-$wizard.show
+$wizard.add PlayerLoader
+$wizard.add GameLoader 
+$wizard.add Shop
+$wizard.go_to PlayerLoader

@@ -62,22 +62,10 @@ class BakeryWizard
     @screens << screen
   end
   
-  def show
-    @current_screen = @screens[0].build(@context, @window)
-    @current_screen.show
-  end
-  
-  def next *args
-    @current_screen.close
-    init_args = [@context, @window]
-    init_args += args
-    @current_screen = @screens[@screens.index(@current_screen.class) + 1].build(*init_args)
-    @current_screen.show
-  end
-  
-  def previous
-    @current_screen.close
-    @current_screen = @screens[@screens.index(@current_screen.class) - 1].build(@context, @window)
+  def go_to requested_screen, *args
+    @current_screen && @current_screen.close
+    arguments = [@context, @window] + args
+    @current_screen = @screens.find { |screen| screen == requested_screen }.build(*arguments)
     @current_screen.show
   end
 end
