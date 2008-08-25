@@ -6,12 +6,14 @@ require File.join(File.dirname(__FILE__), 'src', 'init')
 
 require 'bakery_wizard'
 require 'player_loader'
-require 'game_loader'
+require 'welcome_menu'
+require 'save_load'
 require 'shop'
 require 'serialization_defaulter'
 
 $wizard = BakeryWizard.new
 $wizard.add PlayerLoader
-$wizard.add GameLoader 
+$wizard.add WelcomeMenu
+$wizard.add SaveLoad
 $wizard.add Shop
 $wizard.go_to PlayerLoader

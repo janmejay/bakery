@@ -4,13 +4,13 @@ class Button
   
   include Actions::ActiveRectangleSubscriber
   
-  def initialize(owner, view_options, callback_name)
+  def initialize(owner, view_options, callback_name = nil, &callback)
     @x, @y, @z = view_options[:x], view_options[:y], view_options[:z]
     @dx, @dy = view_options[:dx], view_options[:dy]
     @owner = owner
     @window = @owner.is_a?(BakeryWizard::Window) ? @owner : @owner.window
-    @callback_name = callback_name
-    @body = Gosu::Image.new(@window.window, "media/#{view_options[:image] || @callback_name}_button.png", true)
+    @callback = block_given? ? callback : callback_name
+    @body = Gosu::Image.new(@window.window, "media/#{view_options[:image] || callback_name}_button.png", true)
   end
   
   def activate
@@ -22,7 +22,9 @@ class Button
   end
   
   def handle(event)
-    @owner.send(@callback_name)
+    sleep(0.2)
+    @callback.is_a?(Symbol) && @owner.send(@callback)
+    @callback.is_a?(Proc) && @callback.call
   end
 
   def render

@@ -10,6 +10,9 @@ end
 
 $LOAD_PATH << File.dirname(__FILE__)
 
+$SAVED_GAMES_DIR = File.join(File.dirname(__FILE__), '..', 'tmp', '#name#', 'saved_games')
+$LAST_PLAYED_GAME_PATH = File.join(File.dirname(__FILE__), '..', 'tmp', '#name#', 'last_played')
+
 require "rubygems"
 require 'gosu'
 require File.join('util', 'util')

@@ -18,10 +18,6 @@ class Shop < BakeryWizard::Window
   include Publisher
   include Subscriber
   
-  def self.last_played_file_name context
-    File.join(File.dirname(__FILE__), '..', 'tmp', "#{context[:name]}_last_played")
-  end
-  
   def initialize context
     @context = context
     register self
@@ -59,14 +55,14 @@ class Shop < BakeryWizard::Window
     when button_down?(Gosu::Button::MsRight): publish(Event.new(:right_click, mouse_x, mouse_y))
     when button_down?(Gosu::Button::KbEscape):
       deactivate_all_buttons
-      dump_shop && $wizard.go_to(GameLoader)
+      dump_shop && $wizard.go_to(WelcomeMenu)
     end
     @alive_entities.each {|entity| entity.update}
     for_each_subscriber {|subscriber| subscriber.perform_updates}
   end
   
   def dump_shop
-    File.open(self.class.last_played_file_name(@context), "w") do |handle|
+    File.open(Util.last_played_file_name(@context), "w") do |handle|
       handle.write(Marshal.dump(self))
     end
   end
