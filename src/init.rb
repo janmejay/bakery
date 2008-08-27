@@ -15,4 +15,5 @@ $LAST_PLAYED_GAME_PATH = File.join(File.dirname(__FILE__), '..', 'tmp', '#name#'
 
 require "rubygems"
 require 'gosu'
+require 'yaml'
 require File.join('util', 'util')

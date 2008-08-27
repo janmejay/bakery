@@ -1,0 +1,26 @@
+:simple_oven:
+  :name: Oven
+  :description: Oven is the device that bakes your cakes. This one is capable#of baking cakes of four different flavours.
+  :price: 300
+  :thumbnail: media/oven-thumb.png
+  :internal:
+    :baking_time: 10
+:simple_froster:
+  :name: Froster
+  :description: Froster is used to add icing to the cake. This froster can#hold upto four different flavours of icings.
+  :price: 200
+  :thumbnail: media/froster-thumb.png
+  :internal:
+    :frosting_time: 8
+:simple_decorator:
+  :name: Decorator
+  :description: Decorator is used to create fancy looking projections on the#cake.This one can project 4 interesting shapes.
+  :price: 200
+  :thumbnail: media/decorator-thumb.png
+  :internal:
+    :frosting_time: 7
+:simple_showcase:
+  :name: Showcase
+  :description: Showcase is a plate covered with shiny glass top, which is#meant for keeping the cakes in stock.
+  :price: 80
+  :thumbnail: media/showcase-thumb.png
