@@ -4,6 +4,7 @@ require 'baker'
 require 'table'
 require 'dustbin'
 require 'oven'
+require 'shoe'
 require 'zorder'
 require 'froster'
 require 'showcase'
@@ -28,6 +29,7 @@ class Shop < BakeryWizard::Window
     @dead_entities << Cursor.new
     @dead_entities << Table.new(context[:table])
     @alive_entities = []
+    @no_ui_entities = []
     @alive_entities << @baker = Baker.new
     @context[:assets].each { |asset_data| add_asset(asset_data) }
   end
@@ -36,6 +38,7 @@ class Shop < BakeryWizard::Window
     asset = class_for(asset_data[:class]).new(asset_data)
     asset.is_a?(AliveAsset) && @alive_entities << asset
     asset.is_a?(Subscriber) && register(asset)
+    asset.is_a?(NoUiAsset) && @no_ui_entities << asset
     asset
   end
   
@@ -57,6 +60,7 @@ class Shop < BakeryWizard::Window
     for_each_subscriber { |subscriber| subscriber.window = self unless subscriber == self }
     @dead_entities.each { |entity| entity.window = self }
     @alive_entities.each { |entity| entity.window = self }
+    @no_ui_entities.each { |entity| entity.window = self }
   end
 
   def update

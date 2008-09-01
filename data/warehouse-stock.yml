@@ -57,3 +57,11 @@
   :images:
     :base_view: 'media/showcase_base.png'
     :cover_view: 'media/showcase_cover.png'
+:shoe:
+  :name: Shoes
+  :class: Shoe
+  :description: Especially designed shoes have enormous grip and are extermely#light weight, they make the baker go faster without tiring.
+  :price: 400
+  :thumbnail: media/shoes-thumb.png
+  :speed: 4
+  :walking_anim_slice_width: 1

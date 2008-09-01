@@ -27,15 +27,20 @@ class Baker
       return x, y
     end
   end
-
-  VELOCITY = 2
   
   attr_reader :plate
 
-  def initialize 
+  def initialize
     @walking_anim = Util::Animator.new('media/walking_baker.png', 105, 80, :chunk_slice_width => 2, :run_indefinitly => true)
+    @velocity = 2
     @x, @y, @target_x, @target_y, @angle = 600, 400, 600, 400, 180
     @sane_walking_area = LimitingRectangle.new(384, 200, 835, 550)
+  end
+  
+  def wear_shoes shoes
+    @velocity = shoes.speed
+    @walking_anim = Util::Animator.new('media/walking_baker.png', 105, 80, :chunk_slice_width => shoes.walking_anim_slice_width, :run_indefinitly => true)
+    @walking_anim.window = @shop_window.window
   end
   
   def window= shop_window
@@ -79,8 +84,8 @@ class Baker
     @plate && @plate.update_position(*offset(PLATE_HOLDING_OFFSET_ANGLE, PLATE_HOLDING_OFFSET, Oven::Plate::PLATE_LENGTH_AND_WIDTH, Oven::Plate::PLATE_LENGTH_AND_WIDTH))
     return if almost_there
     @angle = Gosu::angle(@x, @y, @target_x, @target_y)
-    @x += Gosu::offset_x(@angle, VELOCITY)
-    @y += Gosu::offset_y(@angle, VELOCITY)
+    @x += Gosu::offset_x(@angle, @velocity)
+    @y += Gosu::offset_y(@angle, @velocity)
     if (almost_there)
       @walking_anim.stop
       @trigger_when_reached && @trigger_on.send(@trigger_when_reached, self)
