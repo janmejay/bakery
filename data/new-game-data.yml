@@ -3,42 +3,11 @@
 :floor_view: 'media/floor.png'
 :table:
   :table_view: 'media/table.png'
-:ovens:
-- :x: 530 
-  :y: 0
-  :buttons:
-  - :circular_cake
-  - :rect_cake
-  - :triangular_cake
-  - :heart_cake
-  :images:
-    :cake_holder: 'media/oven_cake_holder.png'
-    :trash_can: 'media/oven_dustbin.png'
-    :machine_view: 'media/oven_machine.png'
-:frosters:
-- :x: 563
-  :y: 635
-  :machine_view: 'media/froster.png' 
-  :buttons:
-  - :blackcurrent_frosting
-  - :vanilla_frosting
-  - :mint_frosting
-  - :jelly_frosting
-:decorators:
-- :x: 900
-  :y: 300
-  :machine_view: 'media/decorator.png' 
-  :buttons:
-  - :tree_decoration
-  - :face_decoration
-  - :boat_decoration
-  - :candle_decoration
-:showcases:
-- :x: 256
-  :y: 75
-  :images:
-    :base_view: 'media/showcase_base.png'
-    :cover_view: 'media/showcase_cover.png'
+:has_asset_ids:
+- :simple_oven
+- :simple_froster
+- :simple_decorator
+- :simple_showcase
 :dustbin:
   :inactive:
     :x: 865

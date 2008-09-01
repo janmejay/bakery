@@ -13,10 +13,9 @@ require 'warehouse'
 require 'serialization_defaulter'
 
 $wizard = BakeryWizard.new
-$wizard.add Warehouse
 $wizard.add PlayerLoader
 $wizard.add WelcomeMenu
 $wizard.add SaveLoad
 $wizard.add Shop
-$wizard.go_to Warehouse
-# $wizard.go_to PlayerLoader
+$wizard.add Warehouse
+$wizard.go_to PlayerLoader

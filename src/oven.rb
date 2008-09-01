@@ -153,6 +153,8 @@ class Oven
   PROCESS_RUNNER_OFFSET = {:x => 75, :y => 15}
   BAKED_CAKE_PLATE_OFFSET = {:x => 70, :y => 110}
   
+  include AliveAsset
+  
   def initialize context_oven_data
     @context_oven_data = context_oven_data
     @x, @y = @context_oven_data[:x], @context_oven_data[:y]

@@ -1,26 +1,179 @@
 :simple_oven:
   :name: Oven
+  :class: Oven
   :description: Oven is the device that bakes your cakes. This one is capable#of baking cakes of four different flavours.
   :price: 300
   :thumbnail: media/oven-thumb.png
-  :internal:
-    :baking_time: 10
+  :baking_time: 10
+  :x: 530 
+  :y: 0
+  :buttons:
+    - :circular_cake
+    - :rect_cake
+    - :triangular_cake
+    - :heart_cake
+  :images:
+    :cake_holder: 'media/oven_cake_holder.png'
+    :trash_can: 'media/oven_dustbin.png'
+    :machine_view: 'media/oven_machine.png'
 :simple_froster:
   :name: Froster
+  :class: Froster
   :description: Froster is used to add icing to the cake. This froster can#hold upto four different flavours of icings.
   :price: 200
   :thumbnail: media/froster-thumb.png
-  :internal:
-    :frosting_time: 8
+  :frosting_time: 8
+  :x: 563
+  :y: 635
+  :machine_view: 'media/froster.png' 
+  :buttons:
+  - :blackcurrent_frosting
+  - :vanilla_frosting
+  - :mint_frosting
+  - :jelly_frosting
 :simple_decorator:
   :name: Decorator
+  :class: Decorator
   :description: Decorator is used to create fancy looking projections on the#cake.This one can project 4 interesting shapes.
   :price: 200
   :thumbnail: media/decorator-thumb.png
-  :internal:
-    :frosting_time: 7
+  :frosting_time: 7
+  :x: 900
+  :y: 300
+  :machine_view: 'media/decorator.png' 
+  :buttons:
+  - :tree_decoration
+  - :face_decoration
+  - :boat_decoration
+  - :candle_decoration
 :simple_showcase:
   :name: Showcase
+  :class: Showcase
   :description: Showcase is a plate covered with shiny glass top, which is#meant for keeping the cakes in stock.
   :price: 80
   :thumbnail: media/showcase-thumb.png
+  :x: 256
+  :y: 75
+  :images:
+    :base_view: 'media/showcase_base.png'
+    :cover_view: 'media/showcase_cover.png'
+#CRAP STARTS HERE....
+:simple1_oven:
+  :name: Oven
+  :class: Oven
+  :description: Oven is the device that bakes your cakes. This one is capable#of baking cakes of four different flavours.
+  :price: 300
+  :thumbnail: media/oven-thumb.png
+  :baking_time: 10
+  :x: 530 
+  :y: 0
+  :buttons:
+    - :circular_cake
+    - :rect_cake
+    - :triangular_cake
+    - :heart_cake
+  :images:
+    :cake_holder: 'media/oven_cake_holder.png'
+    :trash_can: 'media/oven_dustbin.png'
+    :machine_view: 'media/oven_machine.png'
+:simple1_froster:
+  :name: Froster
+  :class: Froster
+  :description: Froster is used to add icing to the cake. This froster can#hold upto four different flavours of icings.
+  :price: 200
+  :thumbnail: media/froster-thumb.png
+  :frosting_time: 8
+  :x: 563
+  :y: 635
+  :machine_view: 'media/froster.png' 
+  :buttons:
+  - :blackcurrent_frosting
+  - :vanilla_frosting
+  - :mint_frosting
+  - :jelly_frosting
+:simple1_decorator:
+  :name: Decorator
+  :class: Decorator
+  :description: Decorator is used to create fancy looking projections on the#cake.This one can project 4 interesting shapes.
+  :price: 200
+  :thumbnail: media/decorator-thumb.png
+  :frosting_time: 7
+  :x: 900
+  :y: 300
+  :machine_view: 'media/decorator.png' 
+  :buttons:
+  - :tree_decoration
+  - :face_decoration
+  - :boat_decoration
+  - :candle_decoration
+:simple1_showcase:
+  :name: Showcase
+  :class: Showcase
+  :description: Showcase is a plate covered with shiny glass top, which is#meant for keeping the cakes in stock.
+  :price: 80
+  :thumbnail: media/showcase-thumb.png
+  :x: 256
+  :y: 75
+  :images:
+    :base_view: 'media/showcase_base.png'
+    :cover_view: 'media/showcase_cover.png'
+#HELL
+:simple2_oven:
+  :name: Oven
+  :class: Oven
+  :description: Oven is the device that bakes your cakes. This one is capable#of baking cakes of four different flavours.
+  :price: 300
+  :thumbnail: media/oven-thumb.png
+  :baking_time: 10
+  :x: 530 
+  :y: 0
+  :buttons:
+    - :circular_cake
+    - :rect_cake
+    - :triangular_cake
+    - :heart_cake
+  :images:
+    :cake_holder: 'media/oven_cake_holder.png'
+    :trash_can: 'media/oven_dustbin.png'
+    :machine_view: 'media/oven_machine.png'
+:simple2_froster:
+  :name: Froster
+  :class: Froster
+  :description: Froster is used to add icing to the cake. This froster can#hold upto four different flavours of icings.
+  :price: 200
+  :thumbnail: media/froster-thumb.png
+  :frosting_time: 8
+  :x: 563
+  :y: 635
+  :machine_view: 'media/froster.png' 
+  :buttons:
+  - :blackcurrent_frosting
+  - :vanilla_frosting
+  - :mint_frosting
+  - :jelly_frosting
+:simple2_decorator:
+  :name: Decorator
+  :class: Decorator
+  :description: Decorator is used to create fancy looking projections on the#cake.This one can project 4 interesting shapes.
+  :price: 200
+  :thumbnail: media/decorator-thumb.png
+  :frosting_time: 7
+  :x: 900
+  :y: 300
+  :machine_view: 'media/decorator.png' 
+  :buttons:
+  - :tree_decoration
+  - :face_decoration
+  - :boat_decoration
+  - :candle_decoration
+:simple2_showcase:
+  :name: Showcase
+  :class: Showcase
+  :description: Showcase is a plate covered with shiny glass top, which is#meant for keeping the cakes in stock.
+  :price: 80
+  :thumbnail: media/showcase-thumb.png
+  :x: 256
+  :y: 75
+  :images:
+    :base_view: 'media/showcase_base.png'
+    :cover_view: 'media/showcase_cover.png'

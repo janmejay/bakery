@@ -2,6 +2,7 @@ require 'cursor'
 require 'util/actions'
 require 'common/text_field'
 require 'common/title'
+require 'common/action_message'
 require 'yaml'
 require File.join(File.dirname(__FILE__), "common", "text_button")
 require 'fileutils'
@@ -15,9 +16,6 @@ class SaveLoad < BakeryWizard::Window
   
   V_PAD = 20
   V_SPAN = 44
-  
-  POSITIVE_MESSAGE_COLOR = 0xff1c6f0c
-  NEGETIVE_MESSAGE_COLOR = 0xffff6666
   
   ACTION_MESSAGE_OFFSET = REL :x => WIDTH/2, :y => 40
   MESSAGE_OFFSET = REL :x => 40, :y => 40 + V_SPAN + V_PAD
@@ -44,6 +42,7 @@ class SaveLoad < BakeryWizard::Window
     @cursor.window = self
     @background = Gosu::Image.new(self.window, 'media/game_loader_bg.png', false)
     @print_font = Gosu::Font.new(self.window, 'media/hand.ttf', 35)
+    @action_message = ActionMessage.new(@print_font, ACTION_MESSAGE_OFFSET[:x], ACTION_MESSAGE_OFFSET[:y])
     @new_file_name_field = TextField.new(self, @print_font, TEXT_FIELD_OFFSET[:x], TEXT_FIELD_OFFSET[:y], '', 15, 
       :inactive_color  => 0x00ffffff, :active_color => 0x00ffffff, :selection_color => 0x00ffffff, :caret_color => MESSAGE_COLOR)
     self.text_input = @new_file_name_field
@@ -80,15 +79,16 @@ class SaveLoad < BakeryWizard::Window
   end
   
   def save_game to_file = nil
-    to_file.nil? && (@saved_game_names.length >= MAX_FILES_HONORED) && (action_message "You can't save more files, please overwrite on an existing file.", NEGETIVE_MESSAGE_COLOR) && return
+    to_file.nil? && (@saved_game_names.length >= MAX_FILES_HONORED) && 
+      (@action_message.message("You can't save more files, please overwrite on an existing file.", ActionMessage::NEGETIVE_MESSAGE_COLOR)) && return
     FileUtils.mkdir_p dir_path = Util.saved_games_dir_name(@context)
     FileUtils.cp Util.last_played_file_name(@context), File.join(dir_path, to_file || file_name_requested)
     list_loadables
-    action_message "The game has been saved."
+    @action_message.message "The game has been saved."
   end
   
   def load_game from_file
-    $wizard.go_to Shop, File.join(Util.saved_games_dir_name(@context), from_file)
+    $wizard.go_to Shop, {:from_file => File.join(Util.saved_games_dir_name(@context), from_file)}
   end
   
   def file_name_requested
@@ -98,17 +98,11 @@ class SaveLoad < BakeryWizard::Window
   def delete_game from_file
     FileUtils.rm_rf File.join(Util.saved_games_dir_name(@context), from_file)
     list_loadables
-    action_message "Save file '#{from_file}' deleted."
+    @action_message.message "Save file '#{from_file}' deleted."
   end
   
   def go_back
     $wizard.go_to WelcomeMenu
-  end
-  
-  def action_message message, color = POSITIVE_MESSAGE_COLOR
-    @action_message = message
-    @action_message_color = color
-    @action_message_x_offset = - @print_font.text_width(@action_message)/2
   end
   
   def update
@@ -129,7 +123,6 @@ class SaveLoad < BakeryWizard::Window
     @saved_game_names.each_with_index do |name, index| 
       @print_font.draw(name, FILE_LISTING_OFFSET[:x], FILE_LISTING_OFFSET[:y] + index*(V_SPAN + V_PAD), 0, 1.0, 1.0, MESSAGE_COLOR)
     end
-    @action_message && @print_font.draw(@action_message, ACTION_MESSAGE_OFFSET[:x] + @action_message_x_offset, 
-      ACTION_MESSAGE_OFFSET[:y], 0, 1.0, 1.0, @action_message_color)
+    @action_message.draw
   end
 end

@@ -22,11 +22,13 @@ class BakeryWizard
   class Window
     
     module Buildable
-      def build context, window, from = nil, caption = 'Bakery'
-        instance = from ? Marshal.load(File.open(from, 'r').read) : new(context)
+      def build context, window, options = {}
+        options[:params] ||= []
+        instance = options.has_key?(:from_file) ? Marshal.load(File.open(options[:from_file], 'r').read) : new(context)
         instance.window= window
-        window.caption = caption
+        window.caption = options[:caption] || 'Bakery'
         window.listner = instance
+        options[:params].each { |option_name, option_value| instance.respond_to?("#{option_name}=") && instance.send("#{option_name}=", option_value) }
         instance
       end
     end

@@ -3,6 +3,9 @@ require 'util/actions'
 require 'util/process_runner'
 
 class Froster
+  
+  include AliveAsset
+  
   PROCESS_RUNNER_OFFSET = {:x => 34, :y => 27}
   CAKE_PLATE_OFFSET = {:x => 30, :y => 21}
   BUTTON_OFFSET = [

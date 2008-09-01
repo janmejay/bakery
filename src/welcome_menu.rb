@@ -36,7 +36,7 @@ class WelcomeMenu < BakeryWizard::Window
   end
   
   def resume_game
-    $wizard.go_to Shop, Util.last_played_file_name(@context)
+    $wizard.go_to Shop, {:from_file => Util.last_played_file_name(@context)}
   end
   
   def load_or_save_game
@@ -45,6 +45,9 @@ class WelcomeMenu < BakeryWizard::Window
   
   def new_game
     @context.merge!(YAML.load_file(File.join(File.dirname(__FILE__), '..', 'data', 'new-game-data.yml')))
+    warehouse_catlog = YAML.load_file(File.join(File.dirname(__FILE__), '..', 'data', 'warehouse-stock.yml'))
+    @context[:assets] = []
+    @context[:has_asset_ids].each { |asset_id| @context[:assets] << warehouse_catlog[asset_id] }
     $wizard.go_to Shop
   end
   

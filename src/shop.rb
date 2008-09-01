@@ -1,3 +1,4 @@
+require 'markers'
 require 'cursor'
 require 'baker'
 require 'table'
@@ -22,16 +23,19 @@ class Shop < BakeryWizard::Window
     @context = context
     register self
     register Dustbin.new(context[:dustbin])
-    context[:showcases].each { |showcase_data| register Showcase.new(showcase_data) }
     @renderables = Set.new
     @dead_entities = []
     @dead_entities << Cursor.new
     @dead_entities << Table.new(context[:table])
     @alive_entities = []
-    @context[:ovens].each { |oven_data| @alive_entities << Oven.new(oven_data) }
-    @context[:frosters].each { |froster_data| @alive_entities << Froster.new(froster_data) }
-    @context[:decorators].each { |decorator_data| @alive_entities << Decorator.new(decorator_data) }
     @alive_entities << @baker = Baker.new
+    @context[:assets].each { |asset_data| add_asset(asset_data) }
+  end
+  
+  def add_asset asset_data
+    asset = class_for(asset_data[:class]).new(asset_data)
+    asset.is_a?(AliveAsset) && @alive_entities << asset
+    asset.is_a?(Subscriber) && register(asset)
   end
   
   def deactivate_all_buttons
@@ -56,7 +60,12 @@ class Shop < BakeryWizard::Window
     when button_down?(Gosu::Button::KbEscape):
       deactivate_all_buttons
       dump_shop && $wizard.go_to(WelcomeMenu)
+    #HACK: this is a hack... this will go away once the story thing is in....
+    when button_down?(Gosu::Button::KbTab):
+      deactivate_all_buttons
+      dump_shop && $wizard.go_to(Warehouse, :params => {:shop_context => @context})
     end
+    #END
     @alive_entities.each {|entity| entity.update}
     for_each_subscriber {|subscriber| subscriber.perform_updates}
   end
@@ -98,5 +107,10 @@ class Shop < BakeryWizard::Window
   
   def zindex
     ZOrder::BACKGROUND
+  end
+  
+  private
+  def class_for class_name
+    self.class.module_eval("::#{class_name}", __FILE__, __LINE__)
   end
 end

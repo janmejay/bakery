@@ -1,4 +1,7 @@
 class Decorator
+  
+  include AliveAsset
+  
   PROCESS_RUNNER_OFFSET = {:x => 25, :y => 45}
   CAKE_PLATE_OFFSET = {:x => 20, :y => 39}
   ACTION_OFFSET = {:x => -10, :y => 20}
