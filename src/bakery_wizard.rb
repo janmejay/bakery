@@ -24,6 +24,7 @@ class BakeryWizard
     module Buildable
       def build context, window, options = {}
         options[:params] ||= []
+        puts "Loading from file...??? #{options.has_key?(:from_file)}"
         instance = options.has_key?(:from_file) ? Marshal.load(File.open(options[:from_file], 'r').read) : new(context)
         instance.window= window
         window.caption = options[:caption] || 'Bakery'

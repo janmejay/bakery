@@ -70,6 +70,15 @@ class Shop < BakeryWizard::Window
     for_each_subscriber {|subscriber| subscriber.perform_updates}
   end
   
+  def warehouse_context= context
+    @context = context
+    @context.delete(:newly_shipped).each do |asset_id, asset_data|
+      @context[:has_asset_ids] << asset_id
+      @context[:assets] << asset_data
+      add_asset(asset_data)
+    end
+  end
+  
   def dump_shop
     File.open(Util.last_played_file_name(@context), "w") do |handle|
       handle.write(Marshal.dump(self))

@@ -63,6 +63,7 @@ class Warehouse < BakeryWizard::Window
   
   CASH_LABEL_OFFSET = {:x => WIDTH*1/4, :y => 15}
   ACTION_MESSAGE_OFFSET = {:x => CASH_LABEL_OFFSET[:x], :y => 50}
+  BACK_BUTTON_OFFSET = {:x => 590, :y => 40}
   
   def initialize context
     @cursor = Cursor.new
@@ -72,17 +73,19 @@ class Warehouse < BakeryWizard::Window
   def shop_context= context
     @context = context
     update_cash_left_label
+    @items = []
     @warehouse_data.each do |item_id, item_data|
       @items << Item.new(self, item_id, item_data, @context[:has_asset_ids].include?(item_id))
     end
+    @context[:newly_shipped] = {}
   end
   
   def try_to_buy item_id
     (@context[:money] < @warehouse_data[item_id][:price]) && @action_message.message("You don't have enough money.", ActionMessage::NEGETIVE_MESSAGE_COLOR) && return 
     @context[:money] -= @warehouse_data[item_id][:price]
     @action_message.message("The new #{@warehouse_data[item_id][:name]} has been shipped.")
+    @context[:newly_shipped][item_id] = @warehouse_data[item_id]
     update_cash_left_label
-    @context[:newly_shipped] = @warehouse_data[item_id]
   end
   
   def update_cash_left_label
@@ -95,7 +98,11 @@ class Warehouse < BakeryWizard::Window
     @action_message = ActionMessage.new(@print_font, ACTION_MESSAGE_OFFSET[:x], ACTION_MESSAGE_OFFSET[:y])
     @cash_left_message = ActionMessage.new(@print_font, CASH_LABEL_OFFSET[:x], CASH_LABEL_OFFSET[:y])
     @cursor.window = self
-    @items = []
+    TextButton.new(self, {:x => BACK_BUTTON_OFFSET[:x], :y => BACK_BUTTON_OFFSET[:y], :z => 1, :dx => 348, :dy => 44, :image => :game_loader}, :go_back, @print_font).activate
+  end
+  
+  def go_back
+    $wizard.go_to(Shop, :from_file => Util.last_played_file_name(@context), :params => {:warehouse_context => @context})
   end
   
   def update

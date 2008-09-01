@@ -6,8 +6,8 @@
 :has_asset_ids:
 - :simple_oven
 - :simple_froster
-- :simple_decorator
-- :simple_showcase
+# - :simple_decorator
+# - :simple_showcase
 :dustbin:
   :inactive:
     :x: 865
