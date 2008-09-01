@@ -36,6 +36,12 @@ class Shop < BakeryWizard::Window
     asset = class_for(asset_data[:class]).new(asset_data)
     asset.is_a?(AliveAsset) && @alive_entities << asset
     asset.is_a?(Subscriber) && register(asset)
+    asset
+  end
+  
+  def add_live_asset asset_data
+    asset = add_asset(asset_data)
+    asset.window = self
   end
   
   def deactivate_all_buttons
@@ -60,12 +66,11 @@ class Shop < BakeryWizard::Window
     when button_down?(Gosu::Button::KbEscape):
       deactivate_all_buttons
       dump_shop && $wizard.go_to(WelcomeMenu)
-    #HACK: this is a hack... this will go away once the story thing is in....
+    #HACK: this is a hack(under this comment)... this will go away once the story thing is in....
     when button_down?(Gosu::Button::KbTab):
       deactivate_all_buttons
       dump_shop && $wizard.go_to(Warehouse, :params => {:shop_context => @context})
     end
-    #END
     @alive_entities.each {|entity| entity.update}
     for_each_subscriber {|subscriber| subscriber.perform_updates}
   end
@@ -75,7 +80,7 @@ class Shop < BakeryWizard::Window
     @context.delete(:newly_shipped).each do |asset_id, asset_data|
       @context[:has_asset_ids] << asset_id
       @context[:assets] << asset_data
-      add_asset(asset_data)
+      add_live_asset(asset_data)
     end
   end
   

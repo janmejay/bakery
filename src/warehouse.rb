@@ -22,7 +22,9 @@ class Warehouse < BakeryWizard::Window
     
     WIDTH, HEIGHT = 512, 108
     
-    @@count = 0
+    def self.set_counter_for_item_positioning
+      @@count = 0
+    end
     
     def initialize warehouse, item_id, item_data, having = false
       @warehouse = warehouse
@@ -68,6 +70,7 @@ class Warehouse < BakeryWizard::Window
   def initialize context
     @cursor = Cursor.new
     @warehouse_data = YAML.load_file(File.join(File.dirname(__FILE__), '..', 'data', 'warehouse-stock.yml'))
+    Item.set_counter_for_item_positioning
   end
   
   def shop_context= context
