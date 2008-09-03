@@ -76,10 +76,10 @@
   :x: 695 
   :y: 0
   :buttons:
-    - :circular_cake
-    - :rect_cake
-    - :triangular_cake
-    - :heart_cake
+    - :plus_cake
+    - :oval_cake
+    - :moon_cake
+    - :star_cake
   :images:
     :cake_holder: 'media/oven_cake_holder.png'
     :trash_can: 'media/oven_dustbin.png'
