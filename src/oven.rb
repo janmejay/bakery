@@ -109,9 +109,9 @@ class Oven
   end
 
   class Button
-    BUTTON_OFFSETS = [{:x_off => 27, :y_off => 40}, {:x_off => 60, :y_off => 64}, {:x_off => 106, :y_off => 64}, {:x_off => 138, :y_off => 40}]
+    BUTTON_OFFSETS = [{:x_off => 22, :y_off => 32}, {:x_off => 48, :y_off => 49}, {:x_off => 87, :y_off => 49}, {:x_off => 113, :y_off => 32}]
     
-    ACTIVE_RECT_SPAN = 35
+    ACTIVE_RECT_SPAN = 28
     
     include Actions::ActiveRectangleSubscriber
     def initialize(oven, base_x, base_y, name_identifier, place)
@@ -150,15 +150,15 @@ class Oven
   
   attr_reader :shop_window
   
-  PROCESS_RUNNER_OFFSET = {:x => 75, :y => 15}
-  BAKED_CAKE_PLATE_OFFSET = {:x => 70, :y => 110}
+  PROCESS_RUNNER_OFFSET = {:x => 57, :y => 5}
+  BAKED_CAKE_PLATE_OFFSET = {:x => 52, :y => 80}
   
   include AliveAsset
   
   def initialize context_oven_data
     @context_oven_data = context_oven_data
     @x, @y = @context_oven_data[:x], @context_oven_data[:y]
-    @cake_plate_pos_anim = Util::PositionAnimation.new({:x => @x, :y => @y}, {:x => @x, :y => @y-100}, 40, true, {49 => :put_baked_cake, 99 => :make_plate_pickable}, self)
+    @cake_plate_pos_anim = Util::PositionAnimation.new({:x => @x, :y => @y}, {:x => @x, :y => @y-80}, 40, true, {49 => :put_baked_cake, 99 => :make_plate_pickable}, self)
     @baking_process = Util::ProcessRunner.new(10, @x + PROCESS_RUNNER_OFFSET[:x], @y + PROCESS_RUNNER_OFFSET[:y], :eject_baked_cake, self)
   end
   

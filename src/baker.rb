@@ -34,7 +34,7 @@ class Baker
     @walking_anim = Util::Animator.new('media/walking_baker.png', 105, 80, :chunk_slice_width => 2, :run_indefinitly => true)
     @velocity = 2
     @x, @y, @target_x, @target_y, @angle = 600, 400, 600, 400, 180
-    @sane_walking_area = LimitingRectangle.new(384, 200, 835, 550)
+    @sane_walking_area = LimitingRectangle.new(384, 170, 835, 550)
   end
   
   def wear_shoes shoes
