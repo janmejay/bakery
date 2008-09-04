@@ -23,8 +23,8 @@
   :price: 200
   :thumbnail: media/froster-thumb.png
   :frosting_time: 8
-  :x: 563
-  :y: 635
+  :x: 420
+  :y: 625
   :machine_view: 'media/froster.png' 
   :buttons:
   - :blackcurrent_frosting
@@ -84,3 +84,18 @@
     :cake_holder: 'media/oven_cake_holder.png'
     :trash_can: 'media/oven_dustbin.png'
     :machine_view: 'media/oven_machine_2.png'
+:simple_froster_2:
+  :name: Another Froster
+  :class: Froster
+  :description: Froster is used to add icing to the cake. This froster can#hold upto four different flavours of icings.
+  :price: 200
+  :thumbnail: media/froster-thumb.png
+  :frosting_time: 8
+  :x: 730
+  :y: 615
+  :machine_view: 'media/froster_other.png' 
+  :buttons:
+  - :caramel_frosting
+  - :dark_chocolate_frosting
+  - :mizuame_frosting
+  - :butterscotch_frosting

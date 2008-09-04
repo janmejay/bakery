@@ -67,6 +67,22 @@ class Froster
   def jelly_frosting *ignore
     receive_cake && @plate.cake.put_icing(:jelly)
   end
+    
+  def mizuame_frosting *ignore
+    receive_cake && @plate.cake.put_icing(:mizuame)
+  end
+  
+  def butterscotch_frosting *ignore
+    receive_cake && @plate.cake.put_icing(:butterscotch)
+  end
+  
+  def dark_chocolate_frosting *ignore
+    receive_cake && @plate.cake.put_icing(:dark_chocolate)
+  end
+  
+  def caramel_frosting *ignore
+    receive_cake && @plate.cake.put_icing(:caramel)
+  end
   
   def give_plate_to baker
     baker.accept_plate(@plate) && @plate = nil
