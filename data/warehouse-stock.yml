@@ -89,7 +89,7 @@
   :class: Froster
   :description: Froster is used to add icing to the cake. This froster can#hold upto four different flavours of icings.
   :price: 200
-  :thumbnail: media/froster-thumb.png
+  :thumbnail: media/froster_other_thumb.png
   :frosting_time: 8
   :x: 730
   :y: 615
