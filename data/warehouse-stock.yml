@@ -88,7 +88,7 @@
   :class: ToppingOven
   :description: Toping cake oven bakes cakes to top the main cake. Just like#other ovens, it capable of baking cakes of four different flavours.
   :price: 300
-  :thumbnail: media/oven-2-thumb.png
+  :thumbnail: media/topping_oven-thumb.png
   :baking_time: 10
   :x: 540 
   :y: 0
