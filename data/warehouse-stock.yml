@@ -65,7 +65,6 @@
   :thumbnail: media/shoes-thumb.png
   :speed: 4
   :walking_anim_slice_width: 1
-#Toping cake oven bakes cakes to top the main cake. Just like#other ovens, it capable of baking cakes of four different flavours.
 :simple_oven_2:
   :name: Another Oven
   :class: Oven
@@ -84,6 +83,24 @@
     :cake_holder: 'media/oven_cake_holder.png'
     :trash_can: 'media/oven_dustbin.png'
     :machine_view: 'media/oven_machine_2.png'
+:toping_oven:
+  :name: Toping Oven
+  :class: Oven
+  :description: Toping cake oven bakes cakes to top the main cake. Just like#other ovens, it capable of baking cakes of four different flavours.
+  :price: 300
+  :thumbnail: media/oven-2-thumb.png
+  :baking_time: 10
+  :x: 540 
+  :y: 0
+  :buttons:
+    - :circular_toping_cake
+    - :shine_toping_cake
+    - :rect_toping_cake
+    - :rombus_toping_cake
+  :images:
+    :cake_holder: 'media/oven_cake_holder.png'
+    :trash_can: 'media/oven_dustbin.png'
+    :machine_view: 'media/toping_oven_machine.png'
 :simple_froster_2:
   :name: Another Froster
   :class: Froster
