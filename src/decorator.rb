@@ -12,7 +12,7 @@ class Decorator
 
   def initialize context_decorator_data
     @context_decorator_data = context_decorator_data
-    @x, @y = 900, 300
+    @x, @y = context_decorator_data[:x], context_decorator_data[:y]
     @buttons = []
     @action_anim = Util::Animator.new('media/cake-action-anim.png', 120, 100, :chunk_slice_width => 3, :run_indefinitly => true)
     @decoration_process = Util::ProcessRunner.new(10, @x + PROCESS_RUNNER_OFFSET[:x],
@@ -63,6 +63,22 @@ class Decorator
                                     
   def face_decoration *ignore
     receive_cake && @plate.cake.put_decoration(:face)
+  end
+  
+  def lips_decoration *ignore
+    receive_cake && @plate.cake.put_decoration(:lips)
+  end                               
+                                    
+  def knot_decoration *ignore
+    receive_cake && @plate.cake.put_decoration(:knot)
+  end                               
+                                    
+  def flower_decoration *ignore
+    receive_cake && @plate.cake.put_decoration(:flower)
+  end                               
+                                    
+  def glass_decoration *ignore
+    receive_cake && @plate.cake.put_decoration(:glass)
   end
 
   def give_plate_to baker

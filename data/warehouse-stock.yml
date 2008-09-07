@@ -39,7 +39,7 @@
   :thumbnail: media/decorator-thumb.png
   :frosting_time: 7
   :x: 900
-  :y: 300
+  :y: 270
   :machine_view: 'media/decorator.png' 
   :buttons:
   - :tree_decoration
@@ -116,3 +116,18 @@
   - :dark_chocolate_frosting
   - :mizuame_frosting
   - :butterscotch_frosting
+:simple_decorator_2:
+  :name: Another Decorator
+  :class: Decorator
+  :description: Decorator is used to create fancy looking projections on the#cake.This one can project 4 interesting shapes.
+  :price: 200
+  :thumbnail: media/decorator_2-thumb.png
+  :frosting_time: 7
+  :x: 870
+  :y: 460
+  :machine_view: 'media/decorator_2.png' 
+  :buttons:
+  - :lips_decoration
+  - :knot_decoration
+  - :flower_decoration
+  - :glass_decoration

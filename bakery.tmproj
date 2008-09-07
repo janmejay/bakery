@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>src/topping_oven.rb</string>
+	<string>bakery</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -13,6 +13,8 @@
 			<string>bakery</string>
 			<key>regexFolderFilter</key>
 			<string>!.*/(\.[^/]*|CVS|_darcs|_MTN|\{arch\}|blib|.*~\.nib|.*\.(framework|app|pbproj|pbxproj|xcode(proj)?|bundle))$</string>
+			<key>selected</key>
+			<true/>
 			<key>sourceDirectory</key>
 			<string></string>
 		</dict>
@@ -26,9 +28,9 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>26</integer>
+				<integer>21</integer>
 				<key>line</key>
-				<integer>14</integer>
+				<integer>7</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
@@ -54,9 +56,9 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>14</integer>
+				<integer>32</integer>
 				<key>line</key>
-				<integer>87</integer>
+				<integer>90</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
@@ -68,9 +70,9 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>59</integer>
+				<integer>10</integer>
 				<key>line</key>
-				<integer>90</integer>
+				<integer>74</integer>
 			</dict>
 			<key>columnSelection</key>
 			<false/>
@@ -81,16 +83,16 @@
 			<key>selectFrom</key>
 			<dict>
 				<key>column</key>
-				<integer>49</integer>
+				<integer>5</integer>
 				<key>line</key>
-				<integer>90</integer>
+				<integer>74</integer>
 			</dict>
 			<key>selectTo</key>
 			<dict>
 				<key>column</key>
-				<integer>69</integer>
+				<integer>10</integer>
 				<key>line</key>
-				<integer>90</integer>
+				<integer>74</integer>
 			</dict>
 		</dict>
 		<key>src/bakery_wizard.rb</key>
@@ -158,27 +160,27 @@
 				<key>column</key>
 				<integer>5</integer>
 				<key>line</key>
-				<integer>94</integer>
+				<integer>69</integer>
 			</dict>
 			<key>columnSelection</key>
 			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>54</integer>
+			<integer>53</integer>
 			<key>selectFrom</key>
 			<dict>
 				<key>column</key>
-				<integer>2</integer>
+				<integer>5</integer>
 				<key>line</key>
-				<integer>90</integer>
+				<integer>74</integer>
 			</dict>
 			<key>selectTo</key>
 			<dict>
 				<key>column</key>
 				<integer>5</integer>
 				<key>line</key>
-				<integer>94</integer>
+				<integer>69</integer>
 			</dict>
 		</dict>
 		<key>src/froster.rb</key>
@@ -230,30 +232,14 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>7</integer>
+				<integer>34</integer>
 				<key>line</key>
-				<integer>128</integer>
+				<integer>28</integer>
 			</dict>
-			<key>columnSelection</key>
-			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>117</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>4</integer>
-				<key>line</key>
-				<integer>126</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>7</integer>
-				<key>line</key>
-				<integer>128</integer>
-			</dict>
+			<integer>8</integer>
 		</dict>
 		<key>src/player_loader.rb</key>
 		<dict>
@@ -309,7 +295,7 @@
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>9</integer>
+			<integer>5</integer>
 		</dict>
 		<key>src/showcase.rb</key>
 		<dict>
@@ -330,9 +316,9 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>31</integer>
+				<integer>19</integer>
 				<key>line</key>
-				<integer>15</integer>
+				<integer>34</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
@@ -397,6 +383,6 @@
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{210, 46}, {1230, 832}}</string>
+	<string>{{209, 45}, {1230, 832}}</string>
 </dict>
 </plist>
