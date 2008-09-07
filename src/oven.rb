@@ -26,7 +26,7 @@ class Oven
     end
     
     def iced?
-      @icing_type
+      topped? ? @top_icing_type : @icing_type
     end
     
     def decorated?
@@ -38,8 +38,13 @@ class Oven
     end
     
     def put_icing icing_type
-      @icing_type = icing_type
-      @body = Gosu::Image.new(@shop_window.window, "media/#{@icing_type}_#{@cake_name}.png")
+      if topped?
+        @top_icing_type = icing_type
+        @topping = Gosu::Image.new(@shop_window.window, "media/#{@top_icing_type}_#{@topping_type}.png")
+      else
+        @icing_type = icing_type
+        @body = Gosu::Image.new(@shop_window.window, "media/#{@icing_type}_#{@cake_name}.png")
+      end
     end
     
     def put_decoration decoration_type
