@@ -26,11 +26,15 @@ class Oven
     end
     
     def iced?
-      not @icing_type.nil?
+      @icing_type
     end
     
     def decorated?
-      not @decoration_type.nil?
+      @decoration_type
+    end
+    
+    def topped?
+      @topping_type
     end
     
     def put_icing icing_type
@@ -43,12 +47,19 @@ class Oven
       @decoration = Gosu::Image.new(@shop_window.window, "media/#{@decoration_type}_decoration.png")
     end
     
+    def put_topping topping_type
+      @topping_type = topping_type
+      @topping = Gosu::Image.new(@shop_window.window, "media/#{@topping_type}.png")
+    end
+    
     def render(z_index = ZOrder::CAKE)
       if @angle
         @body.draw_rot(@x, @y, z_index, @angle)
+        @topping && @topping.draw_rot(@x, @y, z_index, @angle)
         @decoration && @decoration.draw_rot(@x, @y, z_index, @angle)
       else
         @body.draw(@x, @y, z_index)
+        @topping && @topping.draw(@x, @y, z_index)
         @decoration && @decoration.draw(@x, @y, z_index)
       end
     end
@@ -109,8 +120,6 @@ class Oven
   end
 
   class Button
-    BUTTON_OFFSETS = [{:x_off => 22, :y_off => 32}, {:x_off => 48, :y_off => 49}, {:x_off => 87, :y_off => 49}, {:x_off => 113, :y_off => 32}]
-    
     ACTIVE_RECT_SPAN = 28
     
     include Actions::ActiveRectangleSubscriber
@@ -153,6 +162,9 @@ class Oven
   PROCESS_RUNNER_OFFSET = {:x => 57, :y => 5}
   BAKED_CAKE_PLATE_OFFSET = {:x => 52, :y => 80}
   
+  BUTTON_OFFSETS = [{:x_off => 22, :y_off => 32}, {:x_off => 48, :y_off => 49}, {:x_off => 87, :y_off => 49}, {:x_off => 113, :y_off => 32}]
+  BUTTON_KLASS = Button
+  
   include AliveAsset
   
   def initialize context_oven_data
@@ -169,7 +181,7 @@ class Oven
     @oven_machine_view = Gosu::Image.new(@shop_window.window, @context_oven_data[:images][:machine_view], true)
     @baking_process.window = @shop_window.window
     @context_oven_data[:buttons].each_with_index do |button, index|
-      @shop_window.register Button.new(self, @x, @y, button, Button::BUTTON_OFFSETS[index])
+      @shop_window.register self.class.const_get('BUTTON_KLASS').new(self, @x, @y, button, self.class.const_get('BUTTON_OFFSETS')[index])
     end
     @plate && @plate.window = @shop_window
     update
