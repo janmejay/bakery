@@ -77,25 +77,26 @@ class Oven
     
     PLATE_LENGTH_AND_WIDTH = 60
     
-    def initialize(cake)
-      @cake = cake
+    def initialize(content)
+      @content = content
+      @has_cake = content.is_a?(Cake)
     end
     
     def window= shop_window
       @shop_window = shop_window
       @plate_view = Gosu::Image.new(@shop_window.window, 'media/plate.png', false)
-      @cake.window = shop_window
+      @content.window = shop_window
     end
     
     def update_position(x, y)
       @x = x
       @y = y
-      @cake.update_position(x, y)
+      @content.update_position(x, y)
     end
     
     def render(z_index = zindex)
       @plate_view.draw(@x, @y, z_index)
-      @cake.render(z_index + 1)
+      @content.render(z_index + 0.1)
     end
     
     def handle event
@@ -107,7 +108,7 @@ class Oven
     end
     
     def cake
-      @cake
+      @content
     end
 
     def zindex

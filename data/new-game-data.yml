@@ -1,11 +1,12 @@
 ---
-:money: 1000
+:money: 5000
 :floor_view: 'media/floor.png'
 :table:
   :table_view: 'media/table.png'
 :has_asset_ids:
 - :simple_oven
 - :simple_froster
+- :cookie_oven
 # - :simple_decorator
 # - :simple_showcase
 :dustbin:

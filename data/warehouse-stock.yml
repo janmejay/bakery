@@ -131,3 +131,18 @@
   - :knot_decoration
   - :flower_decoration
   - :glass_decoration
+:cookie_oven:
+  :name: Cookie Oven
+  :class: CookieOven
+  :description: This is a cookie oven.
+  :price: 200
+  :thumbnail: media/decorator-thumb.png
+  :baking_time: 10
+  :x: 560
+  :y: 625
+  :machine_view: 'media/cookie_machine.png'
+  :machine_hood: 'media/cookie_machine_hood.png'
+  :machine_base: 'media/cookie_machine_base.png'
+  :buttons:
+  - :brown_cookies
+  - :white_cookies
