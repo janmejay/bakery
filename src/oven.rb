@@ -79,7 +79,7 @@ class Oven
     
     def initialize(content)
       @content = content
-      @has_cake = content.is_a?(Cake)
+      @has_cookies = @content.is_a?(CookieOven::Cookies)
     end
     
     def window= shop_window
@@ -108,7 +108,16 @@ class Oven
     end
     
     def cake
+      has_cookies? && raise("this plate has cookies.... not cake.")
+      content
+    end
+    
+    def content
       @content
+    end
+    
+    def has_cookies?
+      @has_cookies
     end
 
     def zindex

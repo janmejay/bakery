@@ -44,7 +44,7 @@ class Dustbin
   
   def accept_plate plate
     @shop_window.unregister(plate)
-    @cake = plate.cake
+    @cake = plate.content
   end
   
   protected

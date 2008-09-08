@@ -39,6 +39,7 @@ class CookieOven
     @context_cookie_oven_data = context_cookie_oven_data
     @x, @y = context_cookie_oven_data[:x], context_cookie_oven_data[:y]
     @baking_process = Util::ProcessRunner.new(10, @x + PROCESS_RUNNER_OFFSET[:x], @y + PROCESS_RUNNER_OFFSET[:y], :make_cookies_available_when_baked, self)
+    drop_hood
   end
   
   def window= shop_window

@@ -25,6 +25,7 @@ class Decorator
     @action_anim.window = @shop_window.window
     @decoration_process.window = @shop_window.window
     @this_cake_is_already_decorated_message = Gosu::Sample.new(@shop_window.window, 'media/this_cake_is_already_decorated.ogg')
+    @cookies_can_not_be_decorated_message = Gosu::Sample.new(@shop_window.window, 'media/cookies_can_not_be_decorated.ogg')
     @context_decorator_data[:buttons].each_with_index do |button, index|
       GameButton.new(self, {:x => @x + BUTTON_OFFSETS[index][:x], :y => @y + BUTTON_OFFSETS[index][:y], 
         :z => ZOrder::TABLE_MOUNTED_CONTROLS, :dx => 28, :dy => 28}, button).activate
@@ -106,6 +107,7 @@ class Decorator
 
   def verify_cake_is_not_decorated_already
     plate = @plate || @shop_window.baker.plate
+    plate && plate.has_cookies? && @cookies_can_not_be_decorated_message.play && return
     plate && plate.cake.decorated? && @this_cake_is_already_decorated_message.play && return
     true
   end

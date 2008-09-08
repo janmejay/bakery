@@ -19,6 +19,7 @@ class ToppingOven < Oven
     super
     @this_cake_is_already_topped = Gosu::Sample.new(@shop_window.window, 'media/this_cake_is_already_topped.ogg')
     @a_decorated_cake_can_not_be_topped = Gosu::Sample.new(@shop_window.window, 'media/a_decorated_cake_can_not_be_topped.ogg')
+    @cookies_can_not_be_topped = Gosu::Sample.new(@shop_window.window, 'media/cookies_can_not_be_topped.ogg')
   end
   
   def put_baked_cake *ignore
@@ -34,6 +35,7 @@ class ToppingOven < Oven
   def verify_cake_is_nither_decorated_nor_topped baker
     given_plate = @plate || baker.plate
     given_plate || return
+    given_plate.has_cookies? && @cookies_can_not_be_topped.play && return
     given_plate.cake.decorated? && @a_decorated_cake_can_not_be_topped.play && return
     given_plate.cake.topped? && @this_cake_is_already_topped.play && return
     true

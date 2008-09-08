@@ -25,6 +25,7 @@ class Froster
     @shop_window = shop_window
     @body = Gosu::Image.new(@shop_window.window, @context_froster_data[:machine_view], true)
     @this_cake_is_already_iced_message = Gosu::Sample.new(@shop_window.window, 'media/this_cake_is_already_iced.ogg')
+    @cookies_can_not_be_iced_message = Gosu::Sample.new(@shop_window.window, 'media/cookies_can_not_be_iced.ogg')
     @action_anim.window = @shop_window.window
     @icing_process.window = @shop_window.window
     @context_froster_data[:buttons].each_with_index do |button, index|
@@ -109,6 +110,7 @@ class Froster
   
   def verify_cake_is_not_iced_already
     plate = @plate || @shop_window.baker.plate
+    plate && plate.has_cookies? && @cookies_can_not_be_iced_message.play && return
     plate && plate.cake.iced? && @this_cake_is_already_iced_message.play && return
     true
   end
