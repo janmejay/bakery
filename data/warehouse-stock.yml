@@ -53,9 +53,20 @@
   :price: 80
   :thumbnail: media/showcase-thumb.png
   :x: 256
-  :y: 75
+  :y: 50
   :images:
     :base_view: 'media/showcase_base.png'
+    :cover_view: 'media/showcase_cover.png'
+:simple_showcase_2:
+  :name: Showcase
+  :class: Showcase
+  :description: Showcase is a plate covered with shiny glass top, which is#meant for keeping the cakes in stock.
+  :price: 80
+  :thumbnail: media/showcase_2-thumb.png
+  :x: 245
+  :y: 145
+  :images:
+    :base_view: 'media/showcase_2_base.png'
     :cover_view: 'media/showcase_cover.png'
 :shoe:
   :name: Shoes
