@@ -8,6 +8,7 @@ require 'oven'
 require 'topping_oven'
 require 'cookie_oven'
 require 'shoe'
+require 'television'
 require 'froster'
 require 'showcase'
 require 'decorator'
@@ -39,6 +40,7 @@ class Shop < BakeryWizard::Window
   def add_asset asset_data
     asset = class_for(asset_data[:class]).new(asset_data)
     asset.is_a?(AliveAsset) && @alive_entities << asset
+    asset.is_a?(DeadAsset) && @dead_entities << asset
     asset.is_a?(Subscriber) && register(asset)
     asset.is_a?(NoUiAsset) && @no_ui_entities << asset
     asset

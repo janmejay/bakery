@@ -134,15 +134,25 @@
 :cookie_oven:
   :name: Cookie Oven
   :class: CookieOven
-  :description: This is a cookie oven.
+  :description: This oven bakes cookies. It is capable of baking#two flavours. It embeds cookies with chocolate chips.
   :price: 200
   :thumbnail: media/decorator-thumb.png
   :baking_time: 10
-  :x: 560
-  :y: 625
+  :x: 570
+  :y: 640
   :machine_view: 'media/cookie_machine.png'
   :machine_hood: 'media/cookie_machine_hood.png'
   :machine_base: 'media/cookie_machine_base.png'
   :buttons:
   - :brown_cookies
   - :white_cookies
+:tv:
+  :name: Television
+  :class: Television
+  :description: There are interesting programs aired in this area.#Having a TV in the shop keeps customers happy.
+  :price: 300
+  :thumbnail: media/tv-thumb.png
+  :x: 85
+  :y: 710 
+  :theta: 20
+  :top_view: 'media/tv_top.png'
