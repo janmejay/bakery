@@ -16,6 +16,7 @@ require 'util/actions'
 require 'util/process_runner'
 require File.join(File.dirname(__FILE__), "common", "game_button")
 require 'set'
+require 'level'
 
 class Shop < BakeryWizard::Window
   attr_reader :baker
@@ -35,6 +36,7 @@ class Shop < BakeryWizard::Window
     @no_ui_entities = []
     @alive_entities << @baker = Baker.new
     @context[:assets].each { |asset_data| add_asset(asset_data) }
+    @level = Level.new(@context)
   end
   
   def add_asset asset_data
@@ -65,6 +67,7 @@ class Shop < BakeryWizard::Window
     @dead_entities.each { |entity| entity.window = self }
     @alive_entities.each { |entity| entity.window = self }
     @no_ui_entities.each { |entity| entity.window = self }
+    @level.window = self
   end
 
   def update
@@ -81,6 +84,7 @@ class Shop < BakeryWizard::Window
     end
     @alive_entities.each {|entity| entity.update}
     for_each_subscriber {|subscriber| subscriber.perform_updates}
+    @level.update
   end
   
   def warehouse_context= context
@@ -103,6 +107,7 @@ class Shop < BakeryWizard::Window
     @alive_entities.each {|entity| entity.draw}
     for_each_subscriber { |subscriber| subscriber.render}
     @renderables.each { |renderable| @renderables.delete(renderable) unless renderable.render }
+    @level.draw
   end
   
   def render

@@ -1,0 +1,10 @@
+---
+:brave_sailor:
+  :patience_count: 10
+  :patience_factor: 10
+:rich_businessman:
+  :patience_count: 9
+  :patience_factor: 10
+:busy_lady:
+  :patience_count: 8
+  :patience_factor: 9
