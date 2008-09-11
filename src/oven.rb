@@ -182,6 +182,8 @@ class Oven
   
   include AliveAsset
   
+  COST = YAML::load_file(File.join(File.dirname(__FILE__), '..', 'data', 'returns.yml'))[:cake]
+  
   def initialize context_oven_data
     @context_oven_data = context_oven_data
     @x, @y = @context_oven_data[:x], @context_oven_data[:y]

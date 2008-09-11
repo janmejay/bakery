@@ -9,6 +9,8 @@ class Decorator
       {:x => 22, :y => 12}, {:x => 50, :y => 12},
       {:x => 22, :y => 100}, {:x => 50, :y => 100}
     ]
+    
+  COST = YAML::load_file(File.join(File.dirname(__FILE__), '..', 'data', 'returns.yml'))[:decoration]
 
   def initialize context_decorator_data
     @context_decorator_data = context_decorator_data

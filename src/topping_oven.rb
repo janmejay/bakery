@@ -11,6 +11,8 @@ class ToppingOven < Oven
     
   end
   
+  COST = YAML::load_file(File.join(File.dirname(__FILE__), '..', 'data', 'returns.yml'))[:topping]
+  
   BUTTON_KLASS = ToppingButton
   
   BUTTON_OFFSETS = [{:x_off => 22, :y_off => 49}, {:x_off => 52, :y_off => 49}, {:x_off => 82, :y_off => 49}, {:x_off => 113, :y_off => 49}]

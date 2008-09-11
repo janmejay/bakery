@@ -9,6 +9,11 @@ module OrderBuilder
                                       {:cost_inclination => [:medium_cost, :high_cost], :builder_sequence => [Oven, Froster, ToppingOven, Decorator]},
                                       {:cost_inclination => [:high_cost], :builder_sequence => [Oven, Froster, ToppingOven, Froster, Decorator]},
                                       {:cost_inclination => [:low_cost, :medium_cost], :builder_sequence => [CookieOven]}]
+  
+  VALID_ORDER_BUILDER_COMBINATIONS.each do |valid_combination|
+    valid_combination[:cost] = valid_combination[:builder_sequence].inject(0) {|sum, seq| seq::COST + sum }
+  end
+  
                   
   def self.physically_possible_combinations assets
     available_order_builders = assets.collect {|asset| asset.class }
@@ -18,6 +23,10 @@ module OrderBuilder
   def self.customer_prefered_combinations customer, assets
     valid_combinations = physically_possible_combinations assets
     valid_combinations.select {|combi| combi[:cost_inclination].include?(customer.cost_inclination)}
+  end
+  
+  def self.order_for customer, assets
+    customer_prefered_combinations(customer, assets).sort {|one, another| another[:cost] <=> one[:cost]}[0...2][rand(1)]
   end
   
 end

@@ -23,6 +23,8 @@ class CookieOven
 
   include AliveAsset
   
+  COST = YAML::load_file(File.join(File.dirname(__FILE__), '..', 'data', 'returns.yml'))[:cookies]
+  
   BASE_Z_INDEX = ZOrder::TABLE_MOUNTED_EQUIPMENTS
   PLATE_Z_INDEX = BASE_Z_INDEX + 0.1
   COOKIE_Z_INDEX = PLATE_Z_INDEX + 0.1 #no one uses this.. but it gets used implicitly...(by plates z index allocation to cake)

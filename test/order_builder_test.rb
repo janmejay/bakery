@@ -3,14 +3,19 @@ require File.join(File.dirname(__FILE__), '..', 'src', 'level')
 
 class OrderBuilderTest < Test::Unit::TestCase
   class ::Oven
+    COST = 10
   end
   class ::Froster
+    COST = 5
   end
   class ::Decorator
+    COST = 5
   end
   class ::ToppingOven
+    COST = 8
   end
   class ::CookieOven
+    COST = 10
   end
   
   require File.join(File.dirname(__FILE__), '..', 'src', 'order_builder')
@@ -55,6 +60,12 @@ class OrderBuilderTest < Test::Unit::TestCase
   end
   
   should "pick one of the top two costliest combinations" do
-    
+    assets = [Oven.new, Froster.new, ToppingOven.new]
+    combination = OrderBuilder.order_for(Level::Customer.new(:brave_sailor), assets)
+    combination = combination[:builder_sequence]
+    assert((combination == [Oven, Froster]) || (combination == [Oven, ToppingOven]))
+    combination = OrderBuilder.order_for(Level::Customer.new(:rich_businessman), assets)
+    combination = combination[:builder_sequence]
+    assert((combination == [Oven, Froster, ToppingOven]) || (combination == [Oven, Froster, ToppingOven, Froster]))
   end
 end

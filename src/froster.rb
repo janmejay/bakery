@@ -12,6 +12,8 @@ class Froster
       {:x => 5, :y => 18}, {:x => 91, :y => 18},
       {:x => 5, :y => 60}, {:x => 91, :y => 60}
     ]
+    
+  COST = YAML::load_file(File.join(File.dirname(__FILE__), '..', 'data', 'returns.yml'))[:icing]
   
   def initialize context_froster_data
     @context_froster_data = context_froster_data
