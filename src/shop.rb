@@ -26,6 +26,7 @@ class Shop < BakeryWizard::Window
   
   def initialize context
     @context = context
+    @assets = []
     register self
     register Dustbin.new(context[:dustbin])
     @renderables = Set.new
@@ -39,12 +40,17 @@ class Shop < BakeryWizard::Window
     @level = Level.new(@context)
   end
   
+  def assets
+    @assets
+  end
+  
   def add_asset asset_data
     asset = class_for(asset_data[:class]).new(asset_data)
     asset.is_a?(AliveAsset) && @alive_entities << asset
     asset.is_a?(DeadAsset) && @dead_entities << asset
     asset.is_a?(Subscriber) && register(asset)
     asset.is_a?(NoUiAsset) && @no_ui_entities << asset
+    @assets << asset
     asset
   end
   

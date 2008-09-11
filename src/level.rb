@@ -2,9 +2,17 @@ class Level
   LEVELS_CONFIG = YAML::load_file(File.join(File.dirname(__FILE__), '..', 'data', 'levels.yml'))
   
   class Customer
+    
+    CUSTOMER_CONFIG = YAML::load_file(File.join(File.dirname(__FILE__), '..', 'data', 'customers.yml'))
+    
     def initialize name
       @name = name
+      @cost_inclination = CUSTOMER_CONFIG[@name][:cost_inclination]
       @time = Time.now
+    end
+    
+    def cost_inclination
+      @cost_inclination
     end
     
     def window= shop_window
@@ -86,7 +94,8 @@ class Level
   end
   
   def dispense_customer
-    create_customer
+    customer = create_customer
+    # order = create_an_order
   end
   
   def create_customer

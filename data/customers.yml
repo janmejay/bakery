@@ -2,9 +2,12 @@
 :brave_sailor:
   :patience_count: 10
   :patience_factor: 10
+  :cost_inclination: :low_cost
 :rich_businessman:
   :patience_count: 9
   :patience_factor: 10
+  :cost_inclination: :medium_cost
 :busy_lady:
   :patience_count: 8
   :patience_factor: 9
+  :cost_inclination: :high_cost
