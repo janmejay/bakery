@@ -10,6 +10,30 @@ module OrderBuilder
                                       {:cost_inclination => [:high_cost], :builder_sequence => [Oven, Froster, ToppingOven, Froster, Decorator]},
                                       {:cost_inclination => [:low_cost, :medium_cost], :builder_sequence => [CookieOven]}]
   
+  class Order
+    
+    SAMPLE_PLATE_OFFSET = {:x => 28, :y => 20}
+    
+    def initialize plate
+      @plate = plate
+    end
+    
+    def window= shop_window
+      @order_bubble = Gosu::Image.new(shop_window.window, 'media/order_bubble.png')
+      @plate.window = shop_window
+    end
+    
+    def update_position x, y
+      @x, @y= x, y
+      @plate.update_position(@x + SAMPLE_PLATE_OFFSET[:x], @y + SAMPLE_PLATE_OFFSET[:y])
+    end
+    
+    def render
+      @order_bubble.draw(@x, @y, ZOrder::ORDER_BUBBLE)
+      @plate.render
+    end
+  end
+  
   VALID_ORDER_BUILDER_COMBINATIONS.each do |valid_combination|
     valid_combination[:cost] = valid_combination[:builder_sequence].inject(0) {|sum, seq| seq::COST + sum }
   end
@@ -37,7 +61,8 @@ module OrderBuilder
     order_combination = order_combination_for(customer, assets)
     builder_assets = order_combination[:builder_sequence].map { |builder_klass| assets.select { |asset| asset.class == builder_klass }}
     builder_sequence = builder_assets.map { |to_be_builders| to_be_builders[rand(to_be_builders.length)] }
-    return builder_sequence.inject(nil) { |product_sample, builder| builder.build_sample_on(product_sample) }, order_combination[:cost]
+    sample_plate = builder_sequence.inject(nil) { |product_sample, builder| builder.build_sample_on(product_sample) }
+    return Order.new(sample_plate), order_combination[:cost]
   end
   
 end

@@ -23,6 +23,10 @@ class Level
       @order_sample = order_sample
     end
     
+    def minimum_payment= payment
+      @payment = payment
+    end
+        
     def window= shop_window
       @shop_window = shop_window
       @body = Gosu::Image.new(@shop_window.window, "media/#{@name}.png")
@@ -30,7 +34,7 @@ class Level
     
     def update(xy_map)
       @x, @y = xy_map[:x], xy_map[:y]
-      @order_sample.update_position(@x + 30, @y + 30)
+      @order_sample.update_position(@x + 80, @y + 30)
     end
     
     def draw
@@ -108,7 +112,10 @@ class Level
   
   def dispense_customer
     customer = create_customer
-    customer.order, cash_needed = OrderBuilder.build_for(customer, @shop_window.assets)
+    order, price = OrderBuilder.build_for(customer, @shop_window.assets)
+    order.window = @shop_window
+    customer.order = order
+    customer.minimum_payment = price
     customer
   end
   
