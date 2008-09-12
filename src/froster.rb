@@ -30,7 +30,7 @@ class Froster
     @cookies_can_not_be_iced_message = Gosu::Sample.new(@shop_window.window, 'media/cookies_can_not_be_iced.ogg')
     @action_anim.window = @shop_window.window
     @icing_process.window = @shop_window.window
-    @context_froster_data[:buttons].each_with_index do |button, index|
+    (@froster_button_names = @context_froster_data[:buttons]).each_with_index do |button, index|
       GameButton.new(self, {:x => @x + BUTTON_OFFSET[index][:x], :y => @y + BUTTON_OFFSET[index][:y], :z => ZOrder::TABLE_MOUNTED_CONTROLS, 
         :dx => 24, :dy => 24}, button).activate
     end
@@ -53,6 +53,11 @@ class Froster
     @action_anim.start
     @icing_process.start
     @show_animation = true #REFACTOR ME!!!! put me in the animator
+  end
+  
+  def build_sample_on plate
+    plate.cake.put_icing(@froster_button_names[rand(@froster_button_names.length - 1)].to_s.gsub(/_frosting/, ''))
+    plate
   end
   
   def blackcurrent_frosting *ignore

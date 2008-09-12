@@ -61,11 +61,39 @@ class OrderBuilderTest < Test::Unit::TestCase
   
   should "pick one of the top two costliest combinations" do
     assets = [Oven.new, Froster.new, ToppingOven.new]
-    combination = OrderBuilder.order_for(Level::Customer.new(:brave_sailor), assets)
+    combination = OrderBuilder.order_combination_for(Level::Customer.new(:brave_sailor), assets)
     combination = combination[:builder_sequence]
     assert((combination == [Oven, Froster]) || (combination == [Oven, ToppingOven]))
-    combination = OrderBuilder.order_for(Level::Customer.new(:rich_businessman), assets)
+    combination = OrderBuilder.order_combination_for(Level::Customer.new(:rich_businessman), assets)
     combination = combination[:builder_sequence]
     assert((combination == [Oven, Froster, ToppingOven]) || (combination == [Oven, Froster, ToppingOven, Froster]))
+  end
+  
+  should "build the order on using order combination" do
+    assets = [oven = Oven.new, froster = Froster.new, topping_oven = ToppingOven.new]
+    combination = OrderBuilder.order_combination_for(sailor = Level::Customer.new(:brave_sailor), assets)
+    OrderBuilder.stubs(:order_combination_for).with(sailor, assets).returns(combination)
+    oven.expects(:build_sample_on).with(nil).returns(plate_with_cake = 'plate_with_cake')
+    second_asset = combination[:builder_sequence].last == Froster ? froster : topping_oven
+    second_asset.expects(:build_sample_on).with(plate_with_cake).returns(final_sample = 'final_sample')
+    order, cost = OrderBuilder.build_for(sailor, assets)
+    assert_equal(final_sample, order)
+    assert_equal(combination[:cost], cost)
+  end
+  
+  should "be able to tell if a cost inclination can be supported" do
+    assets = [Oven.new]
+    assert OrderBuilder.can_support?(:low_cost, assets)
+    assert !OrderBuilder.can_support?(:medium_cost, assets)
+    assert !OrderBuilder.can_support?(:high_cost, assets)
+    assets << Froster.new
+    assets << Decorator.new
+    assert OrderBuilder.can_support?(:low_cost, assets)
+    assert OrderBuilder.can_support?(:medium_cost, assets)
+    assert !OrderBuilder.can_support?(:high_cost, assets)
+    assets << ToppingOven.new
+    assert OrderBuilder.can_support?(:low_cost, assets)
+    assert OrderBuilder.can_support?(:medium_cost, assets)
+    assert OrderBuilder.can_support?(:high_cost, assets)
   end
 end

@@ -14,6 +14,9 @@ module OrderBuilder
     valid_combination[:cost] = valid_combination[:builder_sequence].inject(0) {|sum, seq| seq::COST + sum }
   end
   
+  def self.can_support?(cost_inclination, with_assets)
+    not physically_possible_combinations(with_assets).select { |combination| combination[:cost_inclination].include?(cost_inclination) }.empty?
+  end
                   
   def self.physically_possible_combinations assets
     available_order_builders = assets.collect {|asset| asset.class }
@@ -25,8 +28,15 @@ module OrderBuilder
     valid_combinations.select {|combi| combi[:cost_inclination].include?(customer.cost_inclination)}
   end
   
-  def self.order_for customer, assets
+  def self.order_combination_for customer, assets
     customer_prefered_combinations(customer, assets).sort {|one, another| another[:cost] <=> one[:cost]}[0...2][rand(1)]
+  end
+  
+  def self.build_for customer, assets
+    order_combination = order_combination_for(customer, assets)
+    builder_assets = order_combination[:builder_sequence].map { |builder_klass| assets.select { |asset| asset.class == builder_klass }}
+    builder_sequence = builder_assets.map { |to_be_builders| to_be_builders[rand(to_be_builders.length - 1)] }
+    return builder_sequence.inject(nil) { |product_sample, builder| builder.build_sample_on(product_sample) }, order_combination[:cost]
   end
   
 end

@@ -5,6 +5,10 @@ class Level
     
     CUSTOMER_CONFIG = YAML::load_file(File.join(File.dirname(__FILE__), '..', 'data', 'customers.yml'))
     
+    def self.cost_inclination_for type
+      CUSTOMER_CONFIG[type][:cost_inclination]
+    end
+    
     def initialize name
       @name = name
       @cost_inclination = CUSTOMER_CONFIG[@name][:cost_inclination]
@@ -15,6 +19,10 @@ class Level
       @cost_inclination
     end
     
+    def order= order_sample
+      @order_sample = order_sample
+    end
+    
     def window= shop_window
       @shop_window = shop_window
       @body = Gosu::Image.new(@shop_window.window, "media/#{@name}.png")
@@ -22,10 +30,12 @@ class Level
     
     def update(xy_map)
       @x, @y = xy_map[:x], xy_map[:y]
+      @order_sample.update_position(@x + 30, @y + 30)
     end
     
     def draw
       @body.draw(@x, @y, ZOrder::CUSTOMER)
+      @order_sample.render
     end
     
     def done?
@@ -74,7 +84,6 @@ class Level
   
   def initialize player_context
     @level = LEVELS_CONFIG[player_context[:level]]
-    @customer_types = @level[:customer_types]
     @customer_queue = CustomerQueue.new
     @total_number_of_customers_expected = @level[:factor_of_safty]*@level[:expected_earnings]
   end
@@ -82,6 +91,10 @@ class Level
   def window= shop_window
     @shop_window = shop_window
     @customer_queue.window = @shop_window
+    @customer_types = {}
+    @level[:customer_types].each do |percentage, customer_type| 
+      OrderBuilder.can_support?(Customer.cost_inclination_for(customer_type), @shop_window.assets) && @customer_types[percentage] = customer_type
+    end
   end
   
   def update
@@ -95,7 +108,8 @@ class Level
   
   def dispense_customer
     customer = create_customer
-    # order = create_an_order
+    customer.order, cash_needed = OrderBuilder.build_for(customer, @shop_window.assets)
+    customer
   end
   
   def create_customer

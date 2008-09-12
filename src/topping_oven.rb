@@ -24,6 +24,11 @@ class ToppingOven < Oven
     @cookies_can_not_be_topped = Gosu::Sample.new(@shop_window.window, 'media/cookies_can_not_be_topped.ogg')
   end
   
+  def build_sample_on sample_plate
+    sample_plate.cake.put_topping(@button_names[rand(@button_names.length - 1)])
+    sample_plate
+  end
+  
   def put_baked_cake *ignore
     @plate.cake.put_topping @cake
     @plate.holder = self

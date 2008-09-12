@@ -197,7 +197,7 @@ class Oven
     @trash_can = Gosu::Image.new(@shop_window.window, @context_oven_data[:images][:trash_can], true)
     @oven_machine_view = Gosu::Image.new(@shop_window.window, @context_oven_data[:images][:machine_view], true)
     @baking_process.window = @shop_window.window
-    @context_oven_data[:buttons].each_with_index do |button, index|
+    (@button_names = @context_oven_data[:buttons]).each_with_index do |button, index|
       @shop_window.register self.class.const_get('BUTTON_KLASS').new(self, @x, @y, button, self.class.const_get('BUTTON_OFFSETS')[index])
     end
     @plate && @plate.window = @shop_window
@@ -212,6 +212,12 @@ class Oven
   
   def give_plate_to(baker)
     baker.accept_plate(@plate) && @plate = nil
+  end
+  
+  def build_sample_on *ignore
+    sample_plate = Plate.new(Cake.new(@button_names[rand(@button_names.length - 1)]))
+    sample_plate.window = @shop_window
+    sample_plate
   end
 
   def draw

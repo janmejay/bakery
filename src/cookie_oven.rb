@@ -50,10 +50,16 @@ class CookieOven
     @body = Gosu::Image.new(@shop_window.window, @context_cookie_oven_data[:machine_view], true)
     @base = Gosu::Image.new(@shop_window.window, @context_cookie_oven_data[:machine_base], true)
     @hood = Gosu::Image.new(@shop_window.window, @context_cookie_oven_data[:machine_hood], true)
-    @context_cookie_oven_data[:buttons].each_with_index do |button, index|
+    (@cookie_names = @context_cookie_oven_data[:buttons]).each_with_index do |button, index|
       GameButton.new(self, {:x => @x + BUTTON_OFFSETS[index][:x], :y => @y + BUTTON_OFFSETS[index][:y], 
         :z => ZOrder::TABLE_MOUNTED_CONTROLS, :dx => 28, :dy => 28}, button).activate
     end
+  end
+  
+  def build_sample_on *ignore
+    plate = Oven::Plate.new(Cookies.new(@cookie_names[rand(@cookie_names.length - 1)]))
+    plate.window = window
+    plate
   end
   
   def brown_cookies *ignore
