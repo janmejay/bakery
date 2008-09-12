@@ -38,6 +38,7 @@ class Shop < BakeryWizard::Window
     @no_ui_entities = []
     @alive_entities << @baker = Baker.new
     @context[:assets].each { |asset_data| add_asset(asset_data) }
+    @level = Level.new(@context)
   end
   
   def assets
@@ -76,7 +77,6 @@ class Shop < BakeryWizard::Window
   end
   
   def ready_for_update_and_render
-    @level = Level.new(@context)
     @level.window = self
   end
 

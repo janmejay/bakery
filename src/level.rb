@@ -30,6 +30,7 @@ class Level
     def window= shop_window
       @shop_window = shop_window
       @body = Gosu::Image.new(@shop_window.window, "media/#{@name}.png")
+      @order_sample.window = @shop_window
     end
     
     def update(xy_map)
@@ -49,10 +50,10 @@ class Level
   
   class CustomerQueue
     
-    CUSTOMER_POSITIONS = [{:x => 100, :y => 150},
-                          {:x => 90, :y => 300}, 
+    CUSTOMER_POSITIONS = [{:x => 100, :y => 230},
+                          {:x => 90, :y => 340}, 
                           {:x => 100, :y => 450},
-                          {:x => 140, :y => 600}].reverse
+                          {:x => 130, :y => 560}].reverse
     
     def initialize
       @queue = []
@@ -111,21 +112,15 @@ class Level
   end
   
   def dispense_customer
-    customer = create_customer
-    order, price = OrderBuilder.build_for(customer, @shop_window.assets)
-    order.window = @shop_window
-    customer.order = order
-    customer.minimum_payment = price
-    customer
-  end
-  
-  def create_customer
     random_number = rand(100)
     customer = nil
     @customer_types.keys.sort.each do |probablity_percentage|
       (random_number > probablity_percentage) && next
       (customer = Customer.new(@customer_types[probablity_percentage])) && break
     end
+    order, price = OrderBuilder.build_for(customer, @shop_window.assets)
+    customer.order = order
+    customer.minimum_payment = price
     customer.window = @shop_window
     customer
   end
