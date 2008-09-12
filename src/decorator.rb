@@ -28,10 +28,15 @@ class Decorator
     @decoration_process.window = @shop_window.window
     @this_cake_is_already_decorated_message = Gosu::Sample.new(@shop_window.window, 'media/this_cake_is_already_decorated.ogg')
     @cookies_can_not_be_decorated_message = Gosu::Sample.new(@shop_window.window, 'media/cookies_can_not_be_decorated.ogg')
-    @context_decorator_data[:buttons].each_with_index do |button, index|
+    (@decoration_types = @context_decorator_data[:buttons]).each_with_index do |button, index|
       GameButton.new(self, {:x => @x + BUTTON_OFFSETS[index][:x], :y => @y + BUTTON_OFFSETS[index][:y], 
         :z => ZOrder::TABLE_MOUNTED_CONTROLS, :dx => 28, :dy => 28}, button).activate
     end
+  end
+  
+  def build_sample_on sample_plate
+    sample_plate.cake.put_decoration(@decoration_types[rand(@decoration_types.length)].to_s.gsub(/_decoration/, ''))
+    sample_plate
   end
   
   def window

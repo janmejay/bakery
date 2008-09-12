@@ -25,7 +25,7 @@ class ToppingOven < Oven
   end
   
   def build_sample_on sample_plate
-    sample_plate.cake.put_topping(@button_names[rand(@button_names.length - 1)])
+    sample_plate.cake.put_topping(@button_names[rand(@button_names.length)])
     sample_plate
   end
   

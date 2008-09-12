@@ -29,6 +29,7 @@ class BakeryWizard
         window.caption = options[:caption] || 'Bakery'
         window.listner = instance
         options[:params].each { |option_name, option_value| instance.respond_to?("#{option_name}=") && instance.send("#{option_name}=", option_value) }
+        instance.respond_to?(:ready_for_update_and_render) && instance.ready_for_update_and_render
         instance
       end
     end

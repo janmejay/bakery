@@ -29,13 +29,14 @@ module OrderBuilder
   end
   
   def self.order_combination_for customer, assets
-    customer_prefered_combinations(customer, assets).sort {|one, another| another[:cost] <=> one[:cost]}[0...2][rand(1)]
+    top_two = customer_prefered_combinations(customer, assets).sort {|one, another| another[:cost] <=> one[:cost]}[0...2]
+    top_two[rand(top_two.length)]
   end
   
   def self.build_for customer, assets
     order_combination = order_combination_for(customer, assets)
     builder_assets = order_combination[:builder_sequence].map { |builder_klass| assets.select { |asset| asset.class == builder_klass }}
-    builder_sequence = builder_assets.map { |to_be_builders| to_be_builders[rand(to_be_builders.length - 1)] }
+    builder_sequence = builder_assets.map { |to_be_builders| to_be_builders[rand(to_be_builders.length)] }
     return builder_sequence.inject(nil) { |product_sample, builder| builder.build_sample_on(product_sample) }, order_combination[:cost]
   end
   

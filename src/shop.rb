@@ -73,6 +73,9 @@ class Shop < BakeryWizard::Window
     @dead_entities.each { |entity| entity.window = self }
     @alive_entities.each { |entity| entity.window = self }
     @no_ui_entities.each { |entity| entity.window = self }
+  end
+  
+  def ready_for_update_and_render
     @level = Level.new(@context)
     @level.window = self
   end

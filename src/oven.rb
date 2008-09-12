@@ -215,7 +215,7 @@ class Oven
   end
   
   def build_sample_on *ignore
-    sample_plate = Plate.new(Cake.new(@button_names[rand(@button_names.length - 1)]))
+    sample_plate = Plate.new(Cake.new(@button_names[rand(@button_names.length)]))
     sample_plate.window = @shop_window
     sample_plate
   end
