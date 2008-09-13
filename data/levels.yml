@@ -2,18 +2,21 @@
 1:
   :customer_types:
     100: :brave_sailor
-  :expected_earnings: 200
-  :factor_of_safty: 40
+  :required_earning: 200
+  :factor_of_safty: 0.5
+  :timeout: 200
 2:
   :customer_types:
     100:  :brave_sailor
     40:  :rich_businessman
-  :expected_earnings: 300
-  :factor_of_safty: 30
+  :required_earning: 300
+  :factor_of_safty: 0.4
+  :timeout: 200
 3:
   :customer_types:
     100: :brave_sailor
     80: :rich_businessman
     20: :busy_lady
-  :expected_earnings: 500
-  :factor_of_safty: 20
+  :required_earning: 500
+  :factor_of_safty: 0.3
+  :timeout: 200

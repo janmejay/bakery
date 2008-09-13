@@ -41,7 +41,7 @@ class Level
     end
     
     def leave_the_shop
-      @movement_anim = Util::PositionAnimation.new({:x => @x, :y => @y}, {:x => 0, :y => @y}, 20, false, {80 => :free_place_in_the_queue}, self)
+      @movement_anim = Util::PositionAnimation.new({:x => @x, :y => @y}, EXIT.merge(:y => @y), 20, false, {90 => :free_place_in_the_queue}, self)
       @movement_anim.start
       @leaving_the_shop = true
     end
@@ -94,54 +94,65 @@ class Level
     
     def initialize
       @queue = []
+      @in_shop_queue = []
     end
     
     def window= shop_window
       @queue.each {|customer| customer.window = shop_window }
+      @in_shop_queue.each {|customer| customer.window = shop_window}
     end
     
     def update
+      (4 - @in_shop_queue.length).times { add_a_new_customer }
+      
       unsatisfied_customer_count = 0
-      done_customers = []
-      @queue.each do |customer|
-        customer.done? && (done_customers << customer) && next
+      @in_shop_queue.dup.each do |customer|
+        customer.done? && @in_shop_queue.delete(customer) && next
         customer.update(CUSTOMER_POSITIONS[unsatisfied_customer_count])
         unsatisfied_customer_count += 1
       end
-      @queue -= done_customers
+      puts @queue.length
     end
     
     def draw
-      @queue.each {|customer| customer.draw }
+      @in_shop_queue.each {|customer| customer.draw }
     end
     
-    def number_of_customers
-      @queue.length
+    def << new_customer
+      @queue << new_customer
     end
     
-    def new_customer customer
-      @queue << customer
-      customer.entered_the_shop(CUSTOMER_POSITIONS[@queue.index(customer)])
+    private
+    
+    def add_a_new_customer
+      @queue.empty? && return
+      @in_shop_queue << customer = @queue.shift
+      customer && customer.entered_the_shop(CUSTOMER_POSITIONS[@in_shop_queue.length - 1])
     end
   end
   
   def initialize player_context
     @level = LEVELS_CONFIG[player_context[:level]]
-    @customer_queue = CustomerQueue.new
-    @total_number_of_customers_expected = @level[:factor_of_safty]*@level[:expected_earnings]
+    @level_timeout = @level[:timeout]
+    @required_earning = @level[:required_earning]
+    @possible_earning = @required_earning*@level[:factor_of_safty]
+    @customer_queue = CustomerQueue.new 
   end
   
   def window= shop_window
     @shop_window = shop_window
-    @customer_queue.window = @shop_window
     @customer_types = {}
     @level[:customer_types].each do |percentage, customer_type| 
       OrderBuilder.can_support?(Customer.cost_inclination_for(customer_type), @shop_window.assets) && @customer_types[percentage] = customer_type
     end
+    @earning_oppourtunity_ensured = 0
+    while @earning_oppourtunity_ensured < @possible_earning 
+      @earning_oppourtunity_ensured += add_customer
+    end
+    @customer_queue.window = @shop_window
   end
   
   def update
-    (@customer_queue.number_of_customers < 4) && @customer_queue.new_customer(dispense_customer)
     @customer_queue.update
   end
   
@@ -149,17 +160,16 @@ class Level
     @customer_queue.draw
   end
   
-  def dispense_customer
+  def add_customer
     random_number = rand(100)
     customer = nil
     @customer_types.keys.sort.each do |probablity_percentage|
       (random_number > probablity_percentage) && next
       (customer = Customer.new(@customer_types[probablity_percentage])) && break
     end
-    order, price = OrderBuilder.build_for(customer, @shop_window.assets)
-    customer.order = order
+    customer.order, price = OrderBuilder.build_for(customer, @shop_window.assets)
     customer.minimum_payment = price
-    customer.window = @shop_window
-    customer
+    @customer_queue << customer
+    price
   end
 end
