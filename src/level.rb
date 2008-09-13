@@ -54,7 +54,15 @@ class Level
     end
     
     def update(xy_map)
-      @x, @y = @movement_anim.running? ? @movement_anim.hop : [xy_map[:x], xy_map[:y]]
+      x, y = xy_map[:x], xy_map[:y]
+      #5 stands for significant displacement
+      if !@movement_anim.running? && ((@x != x) || (@y != y))
+        @movement_anim = Util::PositionAnimation.new({:x => @x, :y => @y}, {:x => x, :y => y}, 5)
+        @movement_anim.start
+      end
+      
+      @x, @y = @movement_anim.hop
+      
       @order_sample.update_position(@x + 80, @y + 30)
       @number_of_patience_units_left = ((@patience_timeout - (Time.now - @entered_the_shop_at))/@patience_factor).to_i
       @leaving_the_shop || (@patience_timeout < (Time.now - @entered_the_shop_at) && leave_the_shop)
