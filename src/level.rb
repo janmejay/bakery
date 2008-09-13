@@ -111,7 +111,6 @@ class Level
         customer.update(CUSTOMER_POSITIONS[unsatisfied_customer_count])
         unsatisfied_customer_count += 1
       end
-      puts @queue.length
     end
     
     def draw
