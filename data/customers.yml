@@ -4,7 +4,7 @@
   :patience_factor: 10
   :cost_inclination: :low_cost
 :rich_businessman:
-  :patience_count: 9
+  :patience_count: 1
   :patience_factor: 10
   :cost_inclination: :medium_cost
 :busy_lady:

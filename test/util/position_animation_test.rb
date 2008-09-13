@@ -6,6 +6,17 @@ class Util::PositionAnimationTest < Test::Unit::TestCase
     setup do
       @initial_x, @initial_y = 20, 20
     end
+    
+    should "know if it is running" do
+      animation = Util::PositionAnimation.new({:x => @initial_x, :y => @initial_y}, {:x => 40, :y => 60}, 2)
+      assert !animation.running?
+      animation.start
+      assert animation.running?
+      animation.hop
+      assert animation.running?
+      animation.hop
+      assert !animation.running?
+    end
 
     context "with one sides animation" do
       setup do

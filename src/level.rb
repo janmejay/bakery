@@ -1,3 +1,5 @@
+require File.join('util', 'position_animation')
+
 class Level 
   LEVELS_CONFIG = YAML::load_file(File.join(File.dirname(__FILE__), '..', 'data', 'levels.yml'))
   
@@ -5,6 +7,9 @@ class Level
     
     CUSTOMER_CONFIG = YAML::load_file(File.join(File.dirname(__FILE__), '..', 'data', 'customers.yml'))
     HEARTS_OFFSET = {:x => -25, :dx => -6, :y => 34}
+    
+    ENTERANCE = {:x => 100, :y => 0}
+    EXIT = {:x => -200}
     
     def self.cost_inclination_for type
       CUSTOMER_CONFIG[type][:cost_inclination]
@@ -29,8 +34,16 @@ class Level
       @payment = payment
     end
     
-    def entered_the_shop
+    def entered_the_shop go_to
       @entered_the_shop_at = Time.now
+      @movement_anim = Util::PositionAnimation.new(ENTERANCE, go_to, 15)
+      @movement_anim.start
+    end
+    
+    def leave_the_shop
+      @movement_anim = Util::PositionAnimation.new({:x => @x, :y => @y}, {:x => 0, :y => @y}, 20, false, {80 => :free_place_in_the_queue}, self)
+      @movement_anim.start
+      @leaving_the_shop = true
     end
         
     def window= shop_window
@@ -41,28 +54,35 @@ class Level
     end
     
     def update(xy_map)
-      @x, @y = xy_map[:x], xy_map[:y]
+      @x, @y = @movement_anim.running? ? @movement_anim.hop : [xy_map[:x], xy_map[:y]]
       @order_sample.update_position(@x + 80, @y + 30)
       @number_of_patience_units_left = ((@patience_timeout - (Time.now - @entered_the_shop_at))/@patience_factor).to_i
+      @leaving_the_shop || (@patience_timeout < (Time.now - @entered_the_shop_at) && leave_the_shop)
     end
     
     def draw
       @body.draw(@x, @y, ZOrder::CUSTOMER)
-      @order_sample.render
+      @leaving_the_shop || @order_sample.render
       @number_of_patience_units_left.times { |i| @patience_unit.draw(@x + HEARTS_OFFSET[:x] + HEARTS_OFFSET[:dx]*i, @y + HEARTS_OFFSET[:y], ZOrder::CUSTOMER) }
     end
     
     def done?
-      @patience_timeout < (Time.now - @entered_the_shop_at)
+      @customer_is_done
+    end
+    
+    private
+    
+    def free_place_in_the_queue *ignore
+      @customer_is_done = true
     end
   end
   
   class CustomerQueue
     
-    CUSTOMER_POSITIONS = [{:x => 100, :y => 230},
+    CUSTOMER_POSITIONS = [{:x => 93, :y => 230},
                           {:x => 90, :y => 340}, 
                           {:x => 100, :y => 450},
-                          {:x => 130, :y => 560}].reverse
+                          {:x => 124, :y => 560}].reverse
     
     def initialize
       @queue = []
@@ -93,7 +113,7 @@ class Level
     
     def new_customer customer
       @queue << customer
-      customer.entered_the_shop
+      customer.entered_the_shop(CUSTOMER_POSITIONS[@queue.index(customer)])
     end
   end
   

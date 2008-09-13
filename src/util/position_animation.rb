@@ -23,6 +23,10 @@ class Util::PositionAnimation
     @hop_cords += @hop_cords.reverse[1..-1]
   end
   
+  def running?
+    @hop_cords.length > 1
+  end
+  
   def hop
     return @both_ways ? [@initial_x, @initial_y] : [@final_x, @final_y] if @hop_cords.empty?
     coord_map = @hop_cords.shift
