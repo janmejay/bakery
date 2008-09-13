@@ -4,6 +4,7 @@ class Level
   class Customer
     
     CUSTOMER_CONFIG = YAML::load_file(File.join(File.dirname(__FILE__), '..', 'data', 'customers.yml'))
+    HEARTS_OFFSET = {:x => -25, :dx => -6, :y => 34}
     
     def self.cost_inclination_for type
       CUSTOMER_CONFIG[type][:cost_inclination]
@@ -12,7 +13,8 @@ class Level
     def initialize name
       @name = name
       @cost_inclination = CUSTOMER_CONFIG[@name][:cost_inclination]
-      @time = Time.now
+      @patience_factor = CUSTOMER_CONFIG[@name][:patience_factor]
+      @patience_timeout = @patience_factor*CUSTOMER_CONFIG[@name][:patience_count]
     end
     
     def cost_inclination
@@ -26,25 +28,32 @@ class Level
     def minimum_payment= payment
       @payment = payment
     end
+    
+    def entered_the_shop
+      @entered_the_shop_at = Time.now
+    end
         
     def window= shop_window
       @shop_window = shop_window
       @body = Gosu::Image.new(@shop_window.window, "media/#{@name}.png")
       @order_sample.window = @shop_window
+      @patience_unit = Gosu::Image.new(shop_window.window, "media/patience.png")
     end
     
     def update(xy_map)
       @x, @y = xy_map[:x], xy_map[:y]
       @order_sample.update_position(@x + 80, @y + 30)
+      @number_of_patience_units_left = ((@patience_timeout - (Time.now - @entered_the_shop_at))/@patience_factor).to_i
     end
     
     def draw
       @body.draw(@x, @y, ZOrder::CUSTOMER)
       @order_sample.render
+      @number_of_patience_units_left.times { |i| @patience_unit.draw(@x + HEARTS_OFFSET[:x] + HEARTS_OFFSET[:dx]*i, @y + HEARTS_OFFSET[:y], ZOrder::CUSTOMER) }
     end
     
     def done?
-      @time && (@time + 10 < Time.now)
+      @patience_timeout < (Time.now - @entered_the_shop_at)
     end
   end
   
@@ -84,6 +93,7 @@ class Level
     
     def new_customer customer
       @queue << customer
+      customer.entered_the_shop
     end
   end
   
