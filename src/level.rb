@@ -33,18 +33,6 @@ class Level
     def minimum_payment= payment
       @payment = payment
     end
-    
-    def entered_the_shop go_to
-      @entered_the_shop_at = Time.now
-      @movement_anim = Util::PositionAnimation.new(ENTERANCE, go_to, 15)
-      @movement_anim.start
-    end
-    
-    def leave_the_shop
-      @movement_anim = Util::PositionAnimation.new({:x => @x, :y => @y}, EXIT.merge(:y => @y), 20, false, {90 => :free_place_in_the_queue}, self)
-      @movement_anim.start
-      @leaving_the_shop = true
-    end
         
     def window= shop_window
       @shop_window = shop_window
@@ -62,10 +50,10 @@ class Level
       end
       
       @x, @y = @movement_anim.hop
-      
       @order_sample.update_position(@x + 80, @y + 30)
-      @number_of_patience_units_left = ((@patience_timeout - (Time.now - @entered_the_shop_at))/@patience_factor).to_i
-      @leaving_the_shop || (@patience_timeout < (Time.now - @entered_the_shop_at) && leave_the_shop)
+      @number_of_patience_units_left = (@patience_timeout/@patience_factor).to_i
+      @leaving_the_shop || leave_the_shop_if_done
+      update_patience_timeout
     end
     
     def draw
@@ -74,14 +62,37 @@ class Level
       @number_of_patience_units_left.times { |i| @patience_unit.draw(@x + HEARTS_OFFSET[:x] + HEARTS_OFFSET[:dx]*i, @y + HEARTS_OFFSET[:y], ZOrder::CUSTOMER) }
     end
     
-    def done?
-      @customer_is_done
+    def leave_the_shop_if_done
+      (@patience_timeout == 0) && leave_the_shop
+    end
+    
+    def left_the_shop?
+      @left
+    end
+    
+    def enter_the_shop go_to
+      @entered_the_shop_at = Time.now
+      @movement_anim = Util::PositionAnimation.new(ENTERANCE, go_to, 15)
+      @movement_anim.start
     end
     
     private
     
+    def update_patience_timeout
+      time_now = Time.now.to_i
+      (@last_updated_on == time_now) && return
+      @patience_timeout -= 1
+      @last_updated_on = time_now
+    end
+    
+    def leave_the_shop
+      @movement_anim = Util::PositionAnimation.new({:x => @x, :y => @y}, EXIT.merge(:y => @y), 20, false, {90 => :free_place_in_the_queue}, self)
+      @movement_anim.start
+      @leaving_the_shop = true
+    end
+    
     def free_place_in_the_queue *ignore
-      @customer_is_done = true
+      @left = true
     end
   end
   
@@ -107,7 +118,7 @@ class Level
       
       unsatisfied_customer_count = 0
       @in_shop_queue.dup.each do |customer|
-        customer.done? && @in_shop_queue.delete(customer) && next
+        customer.left_the_shop? && @in_shop_queue.delete(customer) && next
         customer.update(CUSTOMER_POSITIONS[unsatisfied_customer_count])
         unsatisfied_customer_count += 1
       end
@@ -126,7 +137,7 @@ class Level
     def add_a_new_customer
       @queue.empty? && return
       @in_shop_queue << customer = @queue.shift
-      customer && customer.entered_the_shop(CUSTOMER_POSITIONS[@in_shop_queue.length - 1])
+      customer && customer.enter_the_shop(CUSTOMER_POSITIONS[@in_shop_queue.length - 1])
     end
   end
   
