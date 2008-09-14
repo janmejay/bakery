@@ -15,8 +15,9 @@ module OrderBuilder
 
     SAMPLE_PLATE_OFFSET = {:x => 28, :y => 20}
     
-    def initialize plate
+    def initialize plate, customer
       @plate = plate
+      @customer = customer
     end
     
     def window= shop_window
@@ -61,6 +62,7 @@ module OrderBuilder
     end
     
     def satisfy_order baker
+      @customer.left_the_shop? && return
       baker.has_plate? || return
       baker.is_plate_equal_to?(@plate) || puts("Fuck.. you brought something else... :-)") || return
       baker.give_plate_to(self)
@@ -104,7 +106,7 @@ module OrderBuilder
     builder_assets = order_combination[:builder_sequence].map { |builder_klass| assets.select { |asset| asset.class == builder_klass }}
     builder_sequence = builder_assets.map { |to_be_builders| to_be_builders[rand(to_be_builders.length)] }
     sample_plate = builder_sequence.inject(nil) { |product_sample, builder| builder.build_sample_on(product_sample) }
-    return Order.new(sample_plate), order_combination[:cost]
+    return Order.new(sample_plate, customer), order_combination[:cost]
   end
   
 end
