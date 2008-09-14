@@ -6,10 +6,10 @@ class Level
   
   class CustomerQueue
     
-    CUSTOMER_POSITIONS = [{:x => 93, :y => 230},
-                          {:x => 90, :y => 340}, 
-                          {:x => 100, :y => 450},
-                          {:x => 124, :y => 560}].reverse
+    CUSTOMER_POSITIONS = [{:x => 140, :y => 270},
+                          {:x => 137, :y => 380}, 
+                          {:x => 147, :y => 490},
+                          {:x => 171, :y => 600}].reverse
                           
     MAX_CUSTOMERS_IN_SHOP = CUSTOMER_POSITIONS.length
     
@@ -40,7 +40,7 @@ class Level
     end
     
     def draw
-      @in_shop_queue.each {|customer| customer.draw }
+      @in_shop_queue.each {|customer| customer.render }
     end
     
     def << new_customer
@@ -70,7 +70,7 @@ class Level
     @level = LEVELS_CONFIG[player_context[:level]]
     @level_timeout = @level[:timeout]
     @required_earning = @level[:required_earning]
-    @possible_earning = @required_earning*@level[:factor_of_safty]
+    @possible_earning = @required_earning*(1 + @level[:factor_of_safty])
     @customer_queue = CustomerQueue.new @level.dup
   end
   

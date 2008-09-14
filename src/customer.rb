@@ -3,7 +3,7 @@ class Customer
   class Money
     include Actions::ActiveRectangleSubscriber
     
-    MONEY_OFFSET = {:x => 140, :y => 40}
+    MONEY_OFFSET = {:x => 95, :y => 0}
     
     def initialize customer
       @customer = customer
@@ -14,7 +14,7 @@ class Customer
     end
     
     def perform_updates
-       @y = MONEY_OFFSET[:y] + @customer.y
+      @y = MONEY_OFFSET[:y] + @customer.y
     end
     
     def window= shop_window
@@ -51,10 +51,16 @@ class Customer
   end
   
   CUSTOMER_CONFIG = YAML::load_file(File.join(File.dirname(__FILE__), '..', 'data', 'customers.yml'))
-  HEARTS_OFFSET = {:x => -25, :dx => -6, :y => 34}
+  HEARTS_OFFSET = {:x => -75, :dx => -6, :y => 0}
   
   ENTERANCE = {:x => 100, :y => 0}
   EXIT = {:x => -200}
+  
+  ORDER_BOX_OFFSET = {:x => 38, :y => -15}
+  
+  MENU_CARD_OFFSET = {:x => 60, :y => -20}
+  
+  X_INCREMENT_WHEN_READING_MENU = 30
   
   def self.cost_inclination_for type
     CUSTOMER_CONFIG[type][:cost_inclination]
@@ -63,11 +69,15 @@ class Customer
   attr_accessor :payment
   attr_reader :x, :y, :shop_window
   
+  include Actions::ActiveRectangleSubscriber
+  
   def initialize name
     @name = name
     @cost_inclination = CUSTOMER_CONFIG[@name][:cost_inclination]
     @patience_factor = CUSTOMER_CONFIG[@name][:patience_factor]
     @patience_timeout = @patience_factor*CUSTOMER_CONFIG[@name][:patience_count]
+    @hasnt_ordered_yet = true
+    @body_angle = 0
   end
   
   def cost_inclination
@@ -83,6 +93,7 @@ class Customer
     @body = Gosu::Image.new(@shop_window.window, "media/#{@name}.png")
     @order_sample.window = @shop_window
     @patience_unit = Gosu::Image.new(shop_window.window, "media/patience.png")
+    @menu_card = Gosu::Image.new(shop_window.window, "media/menu_card.png")
   end
   
   def update(xy_map)
@@ -93,17 +104,20 @@ class Customer
       @movement_anim.start
     end
     
+    @hasnt_ordered_yet && order_if_decided
+    
     @x, @y = @movement_anim.hop
-    @order_sample.update_position(@x + 80, @y + 30)
+    @order_sample.update_position(@x + ORDER_BOX_OFFSET[:x], @y + ORDER_BOX_OFFSET[:y])
     @number_of_patience_units_left = (@patience_timeout/@patience_factor).to_i
     @leaving_the_shop || leave_the_shop_if_done
-    update_patience_timeout
+    update_timeouts
   end
   
-  def draw
+  def render
     @dont_draw_customer && return
-    @body.draw(@x, @y, ZOrder::CUSTOMER)
-    @leaving_the_shop || @order_sample.render
+    @body.draw_rot(@x + (@has_menu_card ? X_INCREMENT_WHEN_READING_MENU : 0), @y, zindex, @body_angle)
+    @leaving_the_shop || @hasnt_ordered_yet || @order_sample.render
+    @has_menu_card && @menu_card.draw(@x + MENU_CARD_OFFSET[:x], @y + MENU_CARD_OFFSET[:y], ZOrder::TABLE_MOUNTED_EQUIPMENTS)
     @number_of_patience_units_left.times { |i| @patience_unit.draw(@x + HEARTS_OFFSET[:x] + HEARTS_OFFSET[:dx]*i, @y + HEARTS_OFFSET[:y], ZOrder::CUSTOMER) }
   end
   
@@ -117,9 +131,35 @@ class Customer
   
   def enter_the_shop go_to
     @entered_the_shop_at = Time.now
-    @movement_anim = Util::PositionAnimation.new(ENTERANCE, go_to, 15)
+    @movement_anim = Util::PositionAnimation.new(ENTERANCE, go_to, 15, false, {90 => :get_ready_to_accept_menu_card}, self)
     @movement_anim.start
+  end
+  
+  def handle(event)
+    @shop_window.baker.walk_down_and_trigger(event.x, event.y, :take_the_menu_card, self)
+  end
+  
+  def take_the_menu_card *ignore
+    @has_menu_card = true
+    @going_to_order_after = rand(CUSTOMER_CONFIG[@name][:max_time_to_decide_order])
+    @body_angle = 270
+  end
+  
+  def order_if_decided
+    (@going_to_order_after == 0) || return
+    @hasnt_ordered_yet = false
     @order_sample.activate
+    @has_menu_card = false
+    @shop_window.unregister self
+    @body_angle = 0
+  end
+  
+  def get_ready_to_accept_menu_card *ignore
+    @shop_window.register self
+  end
+  
+  def zindex
+    ZOrder::CUSTOMER
   end
 
   def tip_amount
@@ -130,12 +170,23 @@ class Customer
     @free_customers_place = true
   end
   
-  private
+  protected
+  def active_x
+    dx = @body.width/2
+    return @x - dx, @x + dx
+  end
+
+  def active_y
+    dy = @body.height/2
+    return @y - dy, @y + dy
+  end
   
-  def update_patience_timeout
+  private
+  def update_timeouts
     time_now = Time.now.to_i
     (@last_updated_on == time_now) && return
     @patience_timeout -= 1
+    @going_to_order_after && (@going_to_order_after -= 1)
     @last_updated_on = time_now
   end
   
@@ -144,6 +195,8 @@ class Customer
     @movement_anim.start
     @shop_window.unregister @order_sample
     @leaving_the_shop = true
+    @body_angle = 0
+    @has_menu_card = false
     @order_sample.satisfied? && put_money_on_the_table
   end
   
