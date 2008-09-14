@@ -61,7 +61,8 @@ class Level
     def consider_pushing_customers_in
       slots_available = MAX_CUSTOMERS_IN_SHOP - @in_shop_queue.length
       (slots_available >= @min_free_slot_limit) && (rand(PROBABLITY_BASE) < @grouping_probablity) && add_new_customers(rand(@min_free_slot_limit) + 1) && return
-      (rand(PROBABLITY_BASE) > @min_slot_respecting_probablity) && (slots_available > 0) && add_new_customer
+      (rand(PROBABLITY_BASE) > @min_slot_respecting_probablity) && (slots_available > 0) && add_new_customer && return
+      (@in_shop_queue.length == 0) && add_new_customer
     end
   end
   
@@ -83,7 +84,6 @@ class Level
     while @earning_oppourtunity_ensured < @possible_earning 
       @earning_oppourtunity_ensured += add_customer
     end
-    puts @customer_queue.instance_variable_get('@queue').length
     @customer_queue.window = @shop_window
   end
   
