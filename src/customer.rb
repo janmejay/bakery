@@ -8,8 +8,13 @@ class Customer
     def initialize customer
       @customer = customer
       @amount = @customer.payment + @customer.tip_amount
-      @x, @y = MONEY_OFFSET[:x] + @customer.x, MONEY_OFFSET[:y] + @customer.y
+      @x = MONEY_OFFSET[:x] + @customer.x
+      perform_updates
       self.window = customer.shop_window
+    end
+    
+    def perform_updates
+       @y = MONEY_OFFSET[:y] + @customer.y
     end
     
     def window= shop_window
