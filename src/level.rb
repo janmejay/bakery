@@ -5,6 +5,51 @@ class Level
   
   class Customer
     
+    class Money
+      include Actions::ActiveRectangleSubscriber
+      
+      MONEY_OFFSET = {:x => 140, :y => 40}
+      
+      def initialize customer
+        @customer = customer
+        @amount = @customer.payment + @customer.tip_amount
+        @x, @y = MONEY_OFFSET[:x] + @customer.x, MONEY_OFFSET[:y] + @customer.y
+        self.window = customer.shop_window
+      end
+      
+      def window= shop_window
+        @shop_window = shop_window
+        @body = Gosu::Image.new(@shop_window.window, 'media/money.png', true)
+      end
+      
+      def render
+        @body.draw(@x, @y, zindex)
+      end
+      
+      def zindex
+        ZOrder::TABLE_MOUNTED_EQUIPMENTS
+      end
+      
+      def handle(event)
+        @shop_window.baker.walk_down_and_trigger(event.x, event.y, :jump_to_bakers_wallet, self)
+      end
+
+      protected
+      def active_x
+        return @x, @x + @body.width
+      end
+
+      def active_y
+        return @y, @y + @body.height
+      end
+      
+      private
+      def jump_to_bakers_wallet *ignore
+        @shop_window.unregister self
+        @customer.free_customers_place
+      end
+    end
+    
     CUSTOMER_CONFIG = YAML::load_file(File.join(File.dirname(__FILE__), '..', 'data', 'customers.yml'))
     HEARTS_OFFSET = {:x => -25, :dx => -6, :y => 34}
     
@@ -14,6 +59,9 @@ class Level
     def self.cost_inclination_for type
       CUSTOMER_CONFIG[type][:cost_inclination]
     end
+    
+    attr_accessor :payment
+    attr_reader :x, :y, :shop_window
     
     def initialize name
       @name = name
@@ -28,10 +76,6 @@ class Level
     
     def order= order_sample
       @order_sample = order_sample
-    end
-    
-    def minimum_payment= payment
-      @payment = payment
     end
         
     def window= shop_window
@@ -57,6 +101,7 @@ class Level
     end
     
     def draw
+      @dont_draw_customer && return
       @body.draw(@x, @y, ZOrder::CUSTOMER)
       @leaving_the_shop || @order_sample.render
       @number_of_patience_units_left.times { |i| @patience_unit.draw(@x + HEARTS_OFFSET[:x] + HEARTS_OFFSET[:dx]*i, @y + HEARTS_OFFSET[:y], ZOrder::CUSTOMER) }
@@ -67,7 +112,7 @@ class Level
     end
     
     def left_the_shop?
-      @left
+      @order_sample.satisfied? ? @left && @free_customers_place : @left
     end
     
     def enter_the_shop go_to
@@ -75,6 +120,14 @@ class Level
       @movement_anim = Util::PositionAnimation.new(ENTERANCE, go_to, 15)
       @movement_anim.start
       @order_sample.activate
+    end
+
+    def tip_amount
+      rand(@number_of_patience_units_left)
+    end
+
+    def free_customers_place
+      @free_customers_place = true
     end
     
     private
@@ -91,10 +144,16 @@ class Level
       @movement_anim.start
       @shop_window.unregister @order_sample
       @leaving_the_shop = true
+      @order_sample.satisfied? && put_money_on_the_table
     end
     
     def free_place_in_the_queue *ignore
       @left = true
+      @dont_draw_customer = true
+    end
+    
+    def put_money_on_the_table
+      @shop_window.register(Money.new(self))
     end
   end
   
@@ -180,7 +239,7 @@ class Level
       (customer = Customer.new(@customer_types[probablity_percentage])) && break
     end
     customer.order, price = OrderBuilder.build_for(customer, @shop_window.assets)
-    customer.minimum_payment = price
+    customer.payment = price
     @customer_queue << customer
     price
   end
