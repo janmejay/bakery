@@ -1,161 +1,8 @@
 require File.join('util', 'position_animation')
+require 'customer'
 
 class Level 
   LEVELS_CONFIG = YAML::load_file(File.join(File.dirname(__FILE__), '..', 'data', 'levels.yml'))
-  
-  class Customer
-    
-    class Money
-      include Actions::ActiveRectangleSubscriber
-      
-      MONEY_OFFSET = {:x => 140, :y => 40}
-      
-      def initialize customer
-        @customer = customer
-        @amount = @customer.payment + @customer.tip_amount
-        @x, @y = MONEY_OFFSET[:x] + @customer.x, MONEY_OFFSET[:y] + @customer.y
-        self.window = customer.shop_window
-      end
-      
-      def window= shop_window
-        @shop_window = shop_window
-        @body = Gosu::Image.new(@shop_window.window, 'media/money.png', true)
-      end
-      
-      def render
-        @body.draw(@x, @y, zindex)
-      end
-      
-      def zindex
-        ZOrder::TABLE_MOUNTED_EQUIPMENTS
-      end
-      
-      def handle(event)
-        @shop_window.baker.walk_down_and_trigger(event.x, event.y, :jump_to_bakers_wallet, self)
-      end
-
-      protected
-      def active_x
-        return @x, @x + @body.width
-      end
-
-      def active_y
-        return @y, @y + @body.height
-      end
-      
-      private
-      def jump_to_bakers_wallet *ignore
-        @shop_window.unregister self
-        @customer.free_customers_place
-      end
-    end
-    
-    CUSTOMER_CONFIG = YAML::load_file(File.join(File.dirname(__FILE__), '..', 'data', 'customers.yml'))
-    HEARTS_OFFSET = {:x => -25, :dx => -6, :y => 34}
-    
-    ENTERANCE = {:x => 100, :y => 0}
-    EXIT = {:x => -200}
-    
-    def self.cost_inclination_for type
-      CUSTOMER_CONFIG[type][:cost_inclination]
-    end
-    
-    attr_accessor :payment
-    attr_reader :x, :y, :shop_window
-    
-    def initialize name
-      @name = name
-      @cost_inclination = CUSTOMER_CONFIG[@name][:cost_inclination]
-      @patience_factor = CUSTOMER_CONFIG[@name][:patience_factor]
-      @patience_timeout = @patience_factor*CUSTOMER_CONFIG[@name][:patience_count]
-    end
-    
-    def cost_inclination
-      @cost_inclination
-    end
-    
-    def order= order_sample
-      @order_sample = order_sample
-    end
-        
-    def window= shop_window
-      @shop_window = shop_window
-      @body = Gosu::Image.new(@shop_window.window, "media/#{@name}.png")
-      @order_sample.window = @shop_window
-      @patience_unit = Gosu::Image.new(shop_window.window, "media/patience.png")
-    end
-    
-    def update(xy_map)
-      x, y = xy_map[:x], xy_map[:y]
-      #5 stands for significant displacement
-      if !@movement_anim.running? && ((@x != x) || (@y != y))
-        @movement_anim = Util::PositionAnimation.new({:x => @x, :y => @y}, {:x => x, :y => y}, 5)
-        @movement_anim.start
-      end
-      
-      @x, @y = @movement_anim.hop
-      @order_sample.update_position(@x + 80, @y + 30)
-      @number_of_patience_units_left = (@patience_timeout/@patience_factor).to_i
-      @leaving_the_shop || leave_the_shop_if_done
-      update_patience_timeout
-    end
-    
-    def draw
-      @dont_draw_customer && return
-      @body.draw(@x, @y, ZOrder::CUSTOMER)
-      @leaving_the_shop || @order_sample.render
-      @number_of_patience_units_left.times { |i| @patience_unit.draw(@x + HEARTS_OFFSET[:x] + HEARTS_OFFSET[:dx]*i, @y + HEARTS_OFFSET[:y], ZOrder::CUSTOMER) }
-    end
-    
-    def leave_the_shop_if_done
-      ((@patience_timeout == 0) || @order_sample.satisfied?) && leave_the_shop
-    end
-    
-    def left_the_shop?
-      @order_sample.satisfied? ? @left && @free_customers_place : @left
-    end
-    
-    def enter_the_shop go_to
-      @entered_the_shop_at = Time.now
-      @movement_anim = Util::PositionAnimation.new(ENTERANCE, go_to, 15)
-      @movement_anim.start
-      @order_sample.activate
-    end
-
-    def tip_amount
-      rand(@number_of_patience_units_left)
-    end
-
-    def free_customers_place
-      @free_customers_place = true
-    end
-    
-    private
-    
-    def update_patience_timeout
-      time_now = Time.now.to_i
-      (@last_updated_on == time_now) && return
-      @patience_timeout -= 1
-      @last_updated_on = time_now
-    end
-    
-    def leave_the_shop
-      @movement_anim = Util::PositionAnimation.new({:x => @x, :y => @y}, EXIT.merge(:y => @y), 20, false, {90 => :free_place_in_the_queue}, self)
-      @movement_anim.start
-      @shop_window.unregister @order_sample
-      @leaving_the_shop = true
-      @order_sample.satisfied? && put_money_on_the_table
-    end
-    
-    def free_place_in_the_queue *ignore
-      @left = true
-      @dont_draw_customer = true
-    end
-    
-    def put_money_on_the_table
-      @shop_window.register(Money.new(self))
-    end
-  end
   
   class CustomerQueue
     
@@ -163,10 +10,17 @@ class Level
                           {:x => 90, :y => 340}, 
                           {:x => 100, :y => 450},
                           {:x => 124, :y => 560}].reverse
+                          
+    MAX_CUSTOMERS_IN_SHOP = CUSTOMER_POSITIONS.length
     
-    def initialize
+    PROBABLITY_BASE = 100000
+    
+    def initialize level_data
       @queue = []
       @in_shop_queue = []
+      @grouping_probablity = level_data[:grouping_probablity]
+      @min_free_slot_limit = level_data[:min_free_slot_limit]
+      @min_slot_respecting_probablity = level_data[:min_slot_respecting_probablity]
     end
     
     def window= shop_window
@@ -175,7 +29,7 @@ class Level
     end
     
     def update
-      (4 - @in_shop_queue.length).times { add_a_new_customer }
+      (@in_shop_queue.length < MAX_CUSTOMERS_IN_SHOP) && consider_pushing_customers_in
       
       unsatisfied_customer_count = 0
       @in_shop_queue.dup.each do |customer|
@@ -195,10 +49,19 @@ class Level
     
     private
     
-    def add_a_new_customer
-      @queue.empty? && return
-      @in_shop_queue << customer = @queue.shift
-      customer && customer.enter_the_shop(CUSTOMER_POSITIONS[@in_shop_queue.length - 1])
+    def add_new_customers number = 1
+      number.times do
+        @queue.empty? && return
+        @in_shop_queue << customer = @queue.shift
+        customer && customer.enter_the_shop(CUSTOMER_POSITIONS[@in_shop_queue.length - 1])
+      end
+    end
+    alias_method :add_new_customer, :add_new_customers
+    
+    def consider_pushing_customers_in
+      slots_available = MAX_CUSTOMERS_IN_SHOP - @in_shop_queue.length
+      (slots_available >= @min_free_slot_limit) && (rand(PROBABLITY_BASE) < @grouping_probablity) && add_new_customers(rand(@min_free_slot_limit) + 1) && return
+      (rand(PROBABLITY_BASE) > @min_slot_respecting_probablity) && (slots_available > 0) && add_new_customer
     end
   end
   
@@ -207,7 +70,7 @@ class Level
     @level_timeout = @level[:timeout]
     @required_earning = @level[:required_earning]
     @possible_earning = @required_earning*@level[:factor_of_safty]
-    @customer_queue = CustomerQueue.new 
+    @customer_queue = CustomerQueue.new @level.dup
   end
   
   def window= shop_window
@@ -220,6 +83,7 @@ class Level
     while @earning_oppourtunity_ensured < @possible_earning 
       @earning_oppourtunity_ensured += add_customer
     end
+    puts @customer_queue.instance_variable_get('@queue').length
     @customer_queue.window = @shop_window
   end
   
