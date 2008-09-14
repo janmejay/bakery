@@ -11,7 +11,8 @@ module OrderBuilder
                                       {:cost_inclination => [:low_cost, :medium_cost], :builder_sequence => [CookieOven]}]
   
   class Order
-    
+    include Actions::ActiveRectangleSubscriber
+
     SAMPLE_PLATE_OFFSET = {:x => 28, :y => 20}
     
     def initialize plate
@@ -19,8 +20,9 @@ module OrderBuilder
     end
     
     def window= shop_window
-      @order_bubble = Gosu::Image.new(shop_window.window, 'media/order_bubble.png')
-      @plate.window = shop_window
+      @shop_window = shop_window
+      @order_bubble = Gosu::Image.new(@shop_window.window, 'media/order_bubble.png')
+      @plate.window = @shop_window
     end
     
     def update_position x, y
@@ -28,9 +30,49 @@ module OrderBuilder
       @plate.update_position(@x + SAMPLE_PLATE_OFFSET[:x], @y + SAMPLE_PLATE_OFFSET[:y])
     end
     
+    def perform_updates; end
+    
     def render
-      @order_bubble.draw(@x, @y, ZOrder::ORDER_BUBBLE)
+      @order_bubble.draw(@x, @y, zindex)
       @plate.render
+    end
+    
+    def activate
+      @shop_window.register self
+    end
+
+    def handle(event)
+      @shop_window.baker.walk_down_and_trigger(event.x, event.y, :satisfy_order, self)
+    end
+    
+    def zindex
+      ZOrder::ORDER_BUBBLE
+    end
+    
+    def accept_plate plate
+      plate && plate.holder = self
+      @shop_window.unregister plate
+      @shop_window.unregister self
+      @satisfied = true
+    end
+    
+    def satisfied?
+      @satisfied
+    end
+    
+    def satisfy_order baker
+      baker.has_plate? || return
+      baker.is_plate_equal_to?(@plate) || puts("Fuck.. you brought something else... :-)") || return
+      baker.give_plate_to(self)
+    end
+    
+    protected
+    def active_x
+      return @x, @x + 109
+    end
+
+    def active_y
+      return @y, @y + 100
     end
   end
   

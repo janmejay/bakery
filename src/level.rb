@@ -63,7 +63,7 @@ class Level
     end
     
     def leave_the_shop_if_done
-      (@patience_timeout == 0) && leave_the_shop
+      ((@patience_timeout == 0) || @order_sample.satisfied?) && leave_the_shop
     end
     
     def left_the_shop?
@@ -74,6 +74,7 @@ class Level
       @entered_the_shop_at = Time.now
       @movement_anim = Util::PositionAnimation.new(ENTERANCE, go_to, 15)
       @movement_anim.start
+      @order_sample.activate
     end
     
     private
@@ -88,6 +89,7 @@ class Level
     def leave_the_shop
       @movement_anim = Util::PositionAnimation.new({:x => @x, :y => @y}, EXIT.merge(:y => @y), 20, false, {90 => :free_place_in_the_queue}, self)
       @movement_anim.start
+      @shop_window.unregister @order_sample
       @leaving_the_shop = true
     end
     

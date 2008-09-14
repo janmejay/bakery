@@ -79,6 +79,10 @@ class Baker
   def has_plate?
     not @plate.nil?
   end
+  
+  def is_plate_equal_to? this_plate
+    @plate == this_plate
+  end
 
   def update
     @plate && @plate.update_position(*offset(PLATE_HOLDING_OFFSET_ANGLE, PLATE_HOLDING_OFFSET, Oven::Plate::PLATE_LENGTH_AND_WIDTH, Oven::Plate::PLATE_LENGTH_AND_WIDTH))

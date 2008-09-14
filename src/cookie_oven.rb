@@ -16,6 +16,11 @@ class CookieOven
       @angle = angle
     end
     
+    def == other
+      (self.class == other.class) &&
+      (@cookies_name == other.instance_variable_get('@cookies_name'))
+    end
+    
     def render(z_index = ZOrder::CAKE)
       @angle ? @body.draw_rot(@x, @y, z_index, @angle) : @body.draw(@x, @y, z_index)
     end

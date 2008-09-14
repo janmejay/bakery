@@ -56,7 +56,7 @@ class Froster
   end
   
   def build_sample_on plate
-    plate.cake.put_icing(@froster_button_names[rand(@froster_button_names.length)].to_s.gsub(/_frosting/, ''))
+    plate.cake.put_icing(@froster_button_names[rand(@froster_button_names.length)].to_s.gsub(/_frosting/, '').to_sym)
     plate
   end
   

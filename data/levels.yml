@@ -15,7 +15,7 @@
 3:
   :customer_types:
     100: :brave_sailor
-    80: :rich_businessman
+    10: :rich_businessman
     20: :busy_lady
   :required_earning: 500
   :factor_of_safty: 0.3

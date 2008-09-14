@@ -35,7 +35,7 @@ class Decorator
   end
   
   def build_sample_on sample_plate
-    sample_plate.cake.put_decoration(@decoration_types[rand(@decoration_types.length)].to_s.gsub(/_decoration/, ''))
+    sample_plate.cake.put_decoration(@decoration_types[rand(@decoration_types.length)].to_s.gsub(/_decoration/, '').to_sym)
     sample_plate
   end
   

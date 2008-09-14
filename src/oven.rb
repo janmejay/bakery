@@ -57,6 +57,15 @@ class Oven
       @topping = Gosu::Image.new(@shop_window.window, "media/#{@topping_type}.png")
     end
     
+    def == other
+      (self.class == other.class) &&
+      (@cake_name == other.instance_variable_get('@cake_name')) &&
+      (@decoration_type == other.instance_variable_get('@decoration_type')) &&
+      (@icing_type == other.instance_variable_get('@icing_type')) &&
+      (@top_icing_type == other.instance_variable_get('@top_icing_type')) &&
+      (@topping_type == other.instance_variable_get('@topping_type'))
+    end
+    
     def render(z_index = ZOrder::CAKE)
       if @angle
         @body.draw_rot(@x, @y, z_index, @angle)
@@ -122,6 +131,10 @@ class Oven
 
     def zindex
       ZOrder::PLATE
+    end
+    
+    def == other
+      (self.class == other.class) && (content == other.content)
     end
     
     protected
