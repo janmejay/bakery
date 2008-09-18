@@ -8,6 +8,7 @@
   :grouping_probablity: 0
   :min_free_slot_limit: 1
   :min_slot_respecting_probablity: 00000
+  :story_dir: 'jan'
 2:
   :customer_types:
     100:  :brave_sailor
@@ -17,6 +18,7 @@
   :grouping_probablity: 0
   :min_free_slot_limit: 1
   :min_slot_respecting_probablity: 00000
+  :story_dir: 'feb'
 3:
   :customer_types:
     100: :brave_sailor
@@ -27,3 +29,4 @@
   :grouping_probablity: 40000
   :min_free_slot_limit: 3
   :min_slot_respecting_probablity: 99500
+  :story_dir: 'mar'

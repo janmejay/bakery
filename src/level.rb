@@ -66,8 +66,12 @@ class Level
     end
   end
   
+  def self.level_details_for level_id
+    LEVELS_CONFIG[level_id]
+  end
+  
   def initialize player_context
-    @level = LEVELS_CONFIG[player_context[:level]]
+    @level = self.class.level_details_for(player_context[:level])
     @level_timeout = @level[:timeout]
     @required_earning = @level[:required_earning]
     @possible_earning = @required_earning*(1 + @level[:factor_of_safty])

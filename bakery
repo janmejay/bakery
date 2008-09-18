@@ -8,6 +8,7 @@ require 'bakery_wizard'
 require 'player_loader'
 require 'welcome_menu'
 require 'save_load'
+require 'story_player'
 require 'shop'
 require 'warehouse'
 require 'serialization_defaulter'
@@ -16,6 +17,7 @@ $wizard = BakeryWizard.new
 $wizard.add PlayerLoader
 $wizard.add WelcomeMenu
 $wizard.add SaveLoad
+$wizard.add StoryPlayer
 $wizard.add Shop
 $wizard.add Warehouse
 $wizard.go_to PlayerLoader
