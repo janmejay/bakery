@@ -10,6 +10,6 @@ class TextButton < Button
   
   def render
     super
-    @font.draw(@title, (@dx - @font.text_width(@title))/2 + @x, (@dy - @font.height)/2 + @y, 1, 1.0, 1.0, @color)
+    @font.draw(@title, (@dx - @font.text_width(@title))/2 + @x, (@dy - @font.height)/2 + @y, @z, 1.0, 1.0, @color)
   end
 end

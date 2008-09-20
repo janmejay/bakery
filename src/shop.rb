@@ -28,6 +28,10 @@ class Shop < BakeryWizard::Window
   SUCCESS_MESSAGE_OFFSET = {:x => 255, :y => 290}
   FAILURE_MESSAGE_OFFSET = {:x => 211, :y => 330}
   
+  RETRY_BOX_OFFSET = {:x => 312, :y => 324}
+  RETRY_BUTTON_OFFSET = {:x => RETRY_BOX_OFFSET[:x] + 26, :y => RETRY_BOX_OFFSET[:y] + 11}
+  MENU_BUTTON_OFFSET = {:x => RETRY_BOX_OFFSET[:x] + 26, :y => RETRY_BOX_OFFSET[:y] + 65}
+  
   def initialize context
     self.level_context = context
     @assets = []
@@ -42,6 +46,10 @@ class Shop < BakeryWizard::Window
     @alive_entities << @baker = Baker.new(context)
     @context[:assets].each { |asset_data| add_asset(asset_data) }
     @show_message_upto = Time.now
+  end
+  
+  def ready_for_setting_window
+    dump_shop
   end
   
   def assets
@@ -83,12 +91,7 @@ class Shop < BakeryWizard::Window
     case true
     when button_down?(Gosu::Button::MsLeft): publish(Event.new(:left_click, mouse_x, mouse_y))
     when button_down?(Gosu::Button::MsRight): publish(Event.new(:right_click, mouse_x, mouse_y))
-    when button_down?(Gosu::Button::KbEscape):
-      deactivate_all_buttons
-      dump_shop && $wizard.go_to(WelcomeMenu)
-    #HACK: this is a hack(under this comment)... this will go away once the story thing is in....
-    when button_down?(Gosu::Button::KbTab):
-      dump_shop && $wizard.go_to(Warehouse, :params => {:shop_context => @context})
+    when button_down?(Gosu::Button::KbEscape): dump_shop && $wizard.go_to(WelcomeMenu)
     end
     @alive_entities.each {|entity| entity.update}
     for_each_subscriber {|subscriber| subscriber.perform_updates}
@@ -125,6 +128,7 @@ class Shop < BakeryWizard::Window
     @renderables.each { |renderable| @renderables.delete(renderable) unless renderable.render }
     @level.draw
     show_game_message_if_needed
+    @show_retry_box && @show_retry_box.draw(RETRY_BOX_OFFSET[:x], RETRY_BOX_OFFSET[:y], ZOrder::MODAL_PANES)
   end
   
   def render
@@ -167,8 +171,24 @@ class Shop < BakeryWizard::Window
   end
   
   def terminate_once_message_displayed
-    (Time.now > @show_message_upto) && @level.out_of_customers? && dump_shop && 
-      $wizard.go_to(StoryPlayer, :pre_params => {:current_context => @context.merge(:level => @context[:level] + 1)})
+    ((Time.now > @show_message_upto) && @level.out_of_customers?) || return
+    @show_success_message && dump_shop && $wizard.go_to(StoryPlayer, :pre_params => {:current_context => @context.merge(:level => @context[:level] + 1)}) && return
+    @show_failure_message && show_retry_option
+  end
+  
+  def show_retry_option
+    @show_retry_box = Gosu::Image.new(window, 'media/retry_box.png')
+    font = Gosu::Font.new(self.window, 'media/hand.ttf', 35)
+    TextButton.new(self, {:x => RETRY_BUTTON_OFFSET[:x], :y => RETRY_BUTTON_OFFSET[:y], :z => ZOrder::MODAL_BUTTONS, :dx => 348, :dy => 44, :image => :game_loader}, :retry_level, font).activate
+    TextButton.new(self, {:x => MENU_BUTTON_OFFSET[:x], :y => MENU_BUTTON_OFFSET[:y], :z => ZOrder::MODAL_BUTTONS, :dx => 348, :dy => 44, :image => :game_loader}, :go_to_main_menu, font).activate
+  end
+  
+  def retry_level
+    $wizard.go_to Shop, {:from_file => Util.last_played_file_name(@context)}
+  end
+  
+  def go_to_main_menu
+    $wizard.go_to(WelcomeMenu)
   end
   
   def set_message_time
