@@ -30,11 +30,16 @@ class Baker
   
   attr_reader :plate
 
-  def initialize
+  def initialize context
     @walking_anim = Util::Animator.new('media/walking_baker.png', 105, 80, :chunk_slice_width => 2, :run_indefinitly => true)
     @velocity = 2
     @x, @y, @target_x, @target_y, @angle = 600, 400, 600, 400, 180
     @sane_walking_area = LimitingRectangle.new(384, 170, 835, 550)
+    @money = context[:money]
+  end
+  
+  def money
+    @money
   end
   
   def wear_shoes shoes
@@ -104,10 +109,12 @@ class Baker
   
   def pay bucks
     @loss_anim.start_anim bucks.to_s, :x => @x, :y => @y
+    @money -= (@money < bucks ? @money : bucks)
   end
   
   def accept_payment bucks
     @profit_anim.start_anim bucks.to_s, :x => @x, :y => @y
+    @money += bucks
   end
 
   private

@@ -44,8 +44,9 @@ class Customer
     end
     
     private
-    def jump_to_bakers_wallet *ignore
+    def jump_to_bakers_wallet baker
       @shop_window.unregister self
+      baker.accept_payment @amount
       @customer.free_customers_place
     end
   end

@@ -47,6 +47,10 @@ class Level
       @queue << new_customer
     end
     
+    def out_of_customers?
+      @queue.empty? && @in_shop_queue.empty?
+    end
+    
     private
     
     def add_new_customers number = 1
@@ -89,6 +93,8 @@ class Level
       @earning_oppourtunity_ensured += add_customer
     end
     @customer_queue.window = @shop_window
+    
+    @required_total_money = @level[:required_earning] + @shop_window.baker.money
   end
   
   def update
@@ -97,6 +103,14 @@ class Level
   
   def draw
     @customer_queue.draw
+  end
+  
+  def out_of_customers?
+    @customer_queue.out_of_customers?
+  end
+  
+  def required_earning_surpassed?
+    @required_total_money < @shop_window.baker.money
   end
   
   def add_customer

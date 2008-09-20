@@ -26,6 +26,7 @@ class StoryPlayer < BakeryWizard::Window
   
   def next_slide
     (@current_story_slide = @story_series_images.shift) && return
+    File.exists?(Util.last_played_file_name(@context)) && $wizard.go_to(Warehouse)
     $wizard.go_to(Shop)
   end
   

@@ -148,7 +148,7 @@
   :class: CookieOven
   :description: This oven bakes cookies. It is capable of baking#two flavours. It embeds cookies with chocolate chips.
   :price: 200
-  :thumbnail: media/decorator-thumb.png
+  :thumbnail: media/cookie_machine-thumb.png
   :baking_time: 10
   :x: 570
   :y: 640

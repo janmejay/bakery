@@ -241,7 +241,7 @@ class Oven
   end
   
   def bake(cake)
-    @shop_window.baker.pay(-30)
+    # @shop_window.baker.pay(-30)
     @cake = cake
     @baking_process.start unless baking?
   end

@@ -25,6 +25,9 @@ class Shop < BakeryWizard::Window
   include Publisher
   include Subscriber
   
+  SUCCESS_MESSAGE_OFFSET = {:x => 255, :y => 290}
+  FAILURE_MESSAGE_OFFSET = {:x => 211, :y => 330}
+  
   def initialize context
     @context = context
     @assets = []
@@ -36,9 +39,10 @@ class Shop < BakeryWizard::Window
     @dead_entities << Table.new(context[:table])
     @alive_entities = []
     @no_ui_entities = []
-    @alive_entities << @baker = Baker.new
+    @alive_entities << @baker = Baker.new(context)
     @context[:assets].each { |asset_data| add_asset(asset_data) }
     @level = Level.new(@context)
+    @show_message_upto = Time.now
   end
   
   def assets
@@ -70,6 +74,8 @@ class Shop < BakeryWizard::Window
   def window= window
     @window = window
     @background_image = Gosu::Image.new(self.window, @context[:floor_view], true)
+    @success_message = Gosu::Image.new(self.window, 'media/bakers_goal_achived.png')
+    @failure_message = Gosu::Image.new(self.window, 'media/baker_failed.png')
     for_each_subscriber { |subscriber| subscriber.window = self unless subscriber == self }
     @dead_entities.each { |entity| entity.window = self }
     @alive_entities.each { |entity| entity.window = self }
@@ -95,6 +101,7 @@ class Shop < BakeryWizard::Window
     @alive_entities.each {|entity| entity.update}
     for_each_subscriber {|subscriber| subscriber.perform_updates}
     @level.update
+    @level.required_earning_surpassed? ? display_success_result : (@level.out_of_customers? && display_failure_result)
   end
   
   def warehouse_context= context
@@ -118,6 +125,7 @@ class Shop < BakeryWizard::Window
     for_each_subscriber { |subscriber| subscriber.render}
     @renderables.each { |renderable| @renderables.delete(renderable) unless renderable.render }
     @level.draw
+    show_game_message_if_needed
   end
   
   def render
@@ -147,6 +155,27 @@ class Shop < BakeryWizard::Window
   end
   
   private
+  
+  def display_success_result
+    set_message_time
+    @show_success_message = true
+  end
+  
+  def display_failure_result
+    set_message_time
+    @show_failure_message = true
+  end
+  
+  def set_message_time
+    @show_message_upto = (Time.now + 10)
+  end
+  
+  def show_game_message_if_needed
+    (@show_message_upto < Time.now) && return
+    @show_success_message && @success_message.draw(SUCCESS_MESSAGE_OFFSET[:x], SUCCESS_MESSAGE_OFFSET[:y], ZOrder::MESSAGES)
+    @show_failure_message && @failure_message.draw(FAILURE_MESSAGE_OFFSET[:x], FAILURE_MESSAGE_OFFSET[:y], ZOrder::MESSAGES)
+  end
+  
   def class_for class_name
     self.class.module_eval("::#{class_name}", __FILE__, __LINE__)
   end

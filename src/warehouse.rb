@@ -71,16 +71,16 @@ class Warehouse < BakeryWizard::Window
     @cursor = Cursor.new
     @warehouse_data = YAML.load_file(File.join(File.dirname(__FILE__), '..', 'data', 'warehouse-stock.yml'))
     Item.set_counter_for_item_positioning
+    @context = context
+    @items = []
+    @context[:newly_shipped] = {}
   end
   
-  def shop_context= context
-    @context = context
-    update_cash_left_label
-    @items = []
+  def ready_for_update_and_render
     @warehouse_data.each do |item_id, item_data|
       @items << Item.new(self, item_id, item_data, @context[:has_asset_ids].include?(item_id))
     end
-    @context[:newly_shipped] = {}
+    update_cash_left_label
   end
   
   def try_to_buy item_id
@@ -101,10 +101,10 @@ class Warehouse < BakeryWizard::Window
     @action_message = ActionMessage.new(@print_font, ACTION_MESSAGE_OFFSET[:x], ACTION_MESSAGE_OFFSET[:y])
     @cash_left_message = ActionMessage.new(@print_font, CASH_LABEL_OFFSET[:x], CASH_LABEL_OFFSET[:y])
     @cursor.window = self
-    TextButton.new(self, {:x => BACK_BUTTON_OFFSET[:x], :y => BACK_BUTTON_OFFSET[:y], :z => 1, :dx => 348, :dy => 44, :image => :game_loader}, :go_back, @print_font).activate
+    TextButton.new(self, {:x => BACK_BUTTON_OFFSET[:x], :y => BACK_BUTTON_OFFSET[:y], :z => 1, :dx => 348, :dy => 44, :image => :game_loader}, :get_baking, @print_font).activate
   end
   
-  def go_back
+  def get_baking
     $wizard.go_to(Shop, :from_file => Util.last_played_file_name(@context), :params => {:warehouse_context => @context})
   end
   
