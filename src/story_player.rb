@@ -8,10 +8,7 @@ class StoryPlayer < BakeryWizard::Window
   BUTTON_OFFSET = {:x => 930, :y => 680}
   
   def initialize context
-    @context = context
-    @level = Level.level_details_for @context[:level]
-    story_dir = File.join(STORY_BASE_DIR, @level[:story_dir])
-    @story_file_names = Dir.entries(story_dir).select { |file_name| file_name =~ /^\d+\.png$/ }.map { |file_name| "#{File.join(story_dir, file_name)}"}
+    self.current_context = context
     @cursor = Cursor.new
   end
 
@@ -24,10 +21,17 @@ class StoryPlayer < BakeryWizard::Window
     next_slide
   end
   
+  def current_context= context
+    @context = context
+    @level = Level.level_details_for @context[:level]
+    story_dir = File.join(STORY_BASE_DIR, @level[:story_dir])
+    @story_file_names = Dir.entries(story_dir).select { |file_name| file_name =~ /^\d+\.png$/ }.map { |file_name| "#{File.join(story_dir, file_name)}"}
+  end
+  
   def next_slide
     (@current_story_slide = @story_series_images.shift) && return
-    File.exists?(Util.last_played_file_name(@context)) && $wizard.go_to(Warehouse)
-    $wizard.go_to(Shop)
+    (@context[:level] > 1) && File.exists?(Util.last_played_file_name(@context)) && $wizard.go_to(Warehouse, :pre_params => {:level_context => @context})
+    $wizard.go_to(Shop, :pre_params => {:level_context => @context})
   end
   
   def update

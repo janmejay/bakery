@@ -29,7 +29,7 @@ class Shop < BakeryWizard::Window
   FAILURE_MESSAGE_OFFSET = {:x => 211, :y => 330}
   
   def initialize context
-    @context = context
+    self.level_context = context
     @assets = []
     register self
     register Dustbin.new(context[:dustbin])
@@ -41,7 +41,6 @@ class Shop < BakeryWizard::Window
     @no_ui_entities = []
     @alive_entities << @baker = Baker.new(context)
     @context[:assets].each { |asset_data| add_asset(asset_data) }
-    @level = Level.new(@context)
     @show_message_upto = Time.now
   end
   
@@ -64,13 +63,6 @@ class Shop < BakeryWizard::Window
     asset.window = self
   end
   
-  def deactivate_all_buttons
-    to_be_unregistered = []
-    for_each_subscriber { |subscriber| subscriber.kind_of?(Button) && (to_be_unregistered << subscriber) }
-    for_each_subscriber { |subscriber| subscriber.kind_of?(Oven::Button) && (to_be_unregistered << subscriber) }
-    unregister *to_be_unregistered
-  end
-  
   def window= window
     @window = window
     @background_image = Gosu::Image.new(self.window, @context[:floor_view], true)
@@ -80,6 +72,7 @@ class Shop < BakeryWizard::Window
     @dead_entities.each { |entity| entity.window = self }
     @alive_entities.each { |entity| entity.window = self }
     @no_ui_entities.each { |entity| entity.window = self }
+    @show_success_message = @show_failure_message = false
   end
   
   def ready_for_update_and_render
@@ -95,13 +88,18 @@ class Shop < BakeryWizard::Window
       dump_shop && $wizard.go_to(WelcomeMenu)
     #HACK: this is a hack(under this comment)... this will go away once the story thing is in....
     when button_down?(Gosu::Button::KbTab):
-      deactivate_all_buttons
       dump_shop && $wizard.go_to(Warehouse, :params => {:shop_context => @context})
     end
     @alive_entities.each {|entity| entity.update}
     for_each_subscriber {|subscriber| subscriber.perform_updates}
     @level.update
     @level.required_earning_surpassed? ? display_success_result : (@level.out_of_customers? && display_failure_result)
+    terminate_once_message_displayed
+  end
+  
+  def level_context= context
+    @context = context
+    @level = Level.new(@context)
   end
   
   def warehouse_context= context
@@ -114,6 +112,7 @@ class Shop < BakeryWizard::Window
   end
   
   def dump_shop
+    drop_non_recoverable_resources
     File.open(Util.last_played_file_name(@context), "w") do |handle|
       handle.write(Marshal.dump(self))
     end
@@ -157,17 +156,23 @@ class Shop < BakeryWizard::Window
   private
   
   def display_success_result
-    set_message_time
+    @show_success_message || set_message_time
     @show_success_message = true
+    @level.clear_remaining_customers!
   end
   
   def display_failure_result
-    set_message_time
+    @show_failure_message || set_message_time
     @show_failure_message = true
   end
   
+  def terminate_once_message_displayed
+    (Time.now > @show_message_upto) && @level.out_of_customers? && dump_shop && 
+      $wizard.go_to(StoryPlayer, :pre_params => {:current_context => @context.merge(:level => @context[:level] + 1)})
+  end
+  
   def set_message_time
-    @show_message_upto = (Time.now + 10)
+    @show_message_upto = (Time.now + 5)
   end
   
   def show_game_message_if_needed
@@ -178,5 +183,13 @@ class Shop < BakeryWizard::Window
   
   def class_for class_name
     self.class.module_eval("::#{class_name}", __FILE__, __LINE__)
+  end
+
+  def drop_non_recoverable_resources
+    to_be_unregistered = []
+    for_each_subscriber { |subscriber| subscriber.kind_of?(Button) && (to_be_unregistered << subscriber) }
+    for_each_subscriber { |subscriber| subscriber.kind_of?(Oven::Button) && (to_be_unregistered << subscriber) }
+    unregister *to_be_unregistered
+    @renderables.clear
   end
 end

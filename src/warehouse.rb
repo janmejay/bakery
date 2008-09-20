@@ -67,12 +67,15 @@ class Warehouse < BakeryWizard::Window
   ACTION_MESSAGE_OFFSET = {:x => CASH_LABEL_OFFSET[:x], :y => 50}
   BACK_BUTTON_OFFSET = {:x => 590, :y => 40}
   
-  def initialize context
+  def initialize *ignore
     @cursor = Cursor.new
     @warehouse_data = YAML.load_file(File.join(File.dirname(__FILE__), '..', 'data', 'warehouse-stock.yml'))
     Item.set_counter_for_item_positioning
-    @context = context
     @items = []
+  end
+  
+  def level_context= context
+    @context = context
     @context[:newly_shipped] = {}
   end
   
@@ -105,7 +108,7 @@ class Warehouse < BakeryWizard::Window
   end
   
   def get_baking
-    $wizard.go_to(Shop, :from_file => Util.last_played_file_name(@context), :params => {:warehouse_context => @context})
+    $wizard.go_to(Shop, :from_file => Util.last_played_file_name(@context), :params => {:warehouse_context => @context}, :pre_params => {:level_context => @context})
   end
   
   def update

@@ -51,6 +51,10 @@ class Level
       @queue.empty? && @in_shop_queue.empty?
     end
     
+    def clear_remaining_customers!
+      @queue.clear
+    end
+    
     private
     
     def add_new_customers number = 1
@@ -103,6 +107,10 @@ class Level
   
   def draw
     @customer_queue.draw
+  end
+  
+  def clear_remaining_customers!
+    @customer_queue.clear_remaining_customers!
   end
   
   def out_of_customers?
