@@ -3,6 +3,8 @@ class About < BakeryWizard::Window
   include Publisher
   include Subscriber
   
+  VERSION = "Bakery-#{$version}"
+  
   TITLE = "Thanks a lot for playing Bakery....."
   
   MESSAGE = <<-MESSAGE
@@ -25,12 +27,14 @@ Bakery is a free and open source game. I created Bakery
   
   WIDTH, HEIGHT = 420, 700
   
-  TITLE_OFFSET = REL :x => 0, :y => 0
-  MESSAGE_OFFSET = REL :x => 0, :y => 50
+  VERSION_Y_OFFSET = 20
+  TITLE_Y_OFFSET = 54
   
-  MODAL_BOX_OFFSET = REL :x => 10, :y => 550
-  SHOW_CREDITS_BUTTON_OFFSET = REL :x => 36, :y => 560
-  MAIN_MENU_BUTTON_OFFSET = REL :x => 36, :y => 615
+  MESSAGE_OFFSET = REL :x => 0, :y => 70
+  
+  MODAL_BOX_OFFSET = REL :x => 10, :y => 570
+  SHOW_CREDITS_BUTTON_OFFSET = REL :x => 36, :y => 580
+  MAIN_MENU_BUTTON_OFFSET = REL :x => 36, :y => 635
   
   MESSAGE_LINE_GAP = 3
   
@@ -46,10 +50,14 @@ Bakery is a free and open source game. I created Bakery
     @cursor.window = self
     @background = Gosu::Image.new(self.window, 'media/game_loader_bg.png', false)
     @modal_box = Gosu::Image.new(window, 'media/modal_box.png')
-    @font = Gosu::Font.new(self.window, 'media/hand.ttf', 35)
+    font = Gosu::Font.new(self.window, 'media/hand.ttf', 35)
     @message_font = Gosu::Font.new(self.window, 'media/hand.ttf', 28)
-    TextButton.new(self, {:x => SHOW_CREDITS_BUTTON_OFFSET[:x], :y => SHOW_CREDITS_BUTTON_OFFSET[:y], :z => ZOrder::MODAL_BUTTONS, :dx => 348, :dy => 44, :image => :game_loader}, :show_credits, @font).activate
-    TextButton.new(self, {:x => MAIN_MENU_BUTTON_OFFSET[:x], :y => MAIN_MENU_BUTTON_OFFSET[:y], :z => ZOrder::MODAL_BUTTONS, :dx => 348, :dy => 44, :image => :game_loader}, :main_menu, @font).activate
+    TextButton.new(self, {:x => SHOW_CREDITS_BUTTON_OFFSET[:x], :y => SHOW_CREDITS_BUTTON_OFFSET[:y], :z => ZOrder::MODAL_BUTTONS, :dx => 348, :dy => 44, :image => :game_loader}, :show_credits, font).activate
+    TextButton.new(self, {:x => MAIN_MENU_BUTTON_OFFSET[:x], :y => MAIN_MENU_BUTTON_OFFSET[:y], :z => ZOrder::MODAL_BUTTONS, :dx => 348, :dy => 44, :image => :game_loader}, :main_menu, font).activate
+    @version = ActionMessage.new(font, width/2, VERSION_Y_OFFSET)
+    @thanks = ActionMessage.new(font, width/2, TITLE_Y_OFFSET)
+    @version.message VERSION, 0xff222222
+    @thanks.message TITLE, 0xff222222
   end
   
   def show_credits
@@ -71,7 +79,8 @@ Bakery is a free and open source game. I created Bakery
   
   def draw
     @background.draw(BG_OFFSET[:x], BG_OFFSET[:y], 0)
-    @font.draw(TITLE, TITLE_OFFSET[:x], TITLE_OFFSET[:y], 1, 1.0, 1.0, 0xff222222)
+    @version.draw
+    @thanks.draw
     @message_parts.each_with_index do |message_part, index|
       @message_font.draw(message_part, MESSAGE_OFFSET[:x], MESSAGE_OFFSET[:y] + (MESSAGE_LINE_GAP + @message_font.height)*index, 1, 1.0, 1.0, 0xff000000)
     end

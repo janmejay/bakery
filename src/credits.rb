@@ -3,10 +3,10 @@ class Credits < BakeryWizard::Window
   include Publisher
   include Subscriber
   
+  TITLE = "Credits..."
+  
   CREDITS = <<-CREDITS
-    Credits:
-    
-    Bakery is a GNU GPL3 software. I hacked it together, both code and artwork.
+  Bakery is a GNU GPL3 software. I hacked it together, both code and artwork.
     
     Special thanks to Gosu team(http://code.google.com/p/gosu/) for comming up with 
     the sweet little SDL that Bakery uses, GIMP team(without GIMP i couldn't have 
@@ -26,11 +26,11 @@ class Credits < BakeryWizard::Window
   
   WIDTH, HEIGHT = 620, 768
   
-  MESSAGE_OFFSET = REL :x => 15, :y => 20
+  MESSAGE_OFFSET = REL :x => 15, :y => 80
   
-  MODAL_BOX_OFFSET = REL :x => 110, :y => 640
-  SHOW_CREDITS_BUTTON_OFFSET = REL :x => 136, :y => 650
-  MAIN_MENU_BUTTON_OFFSET = REL :x => 136, :y => 705
+  MODAL_BOX_OFFSET = REL :x => 110, :y => 610
+  SHOW_CREDITS_BUTTON_OFFSET = REL :x => 136, :y => 620
+  MAIN_MENU_BUTTON_OFFSET = REL :x => 136, :y => 675
   
   MESSAGE_LINE_GAP = 3
   
@@ -50,6 +50,8 @@ class Credits < BakeryWizard::Window
     @message_font = Gosu::Font.new(self.window, 'media/hand.ttf', 28)
     TextButton.new(self, {:x => SHOW_CREDITS_BUTTON_OFFSET[:x], :y => SHOW_CREDITS_BUTTON_OFFSET[:y], :z => ZOrder::MODAL_BUTTONS, :dx => 348, :dy => 44, :image => :game_loader}, :show_about, font).activate
     TextButton.new(self, {:x => MAIN_MENU_BUTTON_OFFSET[:x], :y => MAIN_MENU_BUTTON_OFFSET[:y], :z => ZOrder::MODAL_BUTTONS, :dx => 348, :dy => 44, :image => :game_loader}, :main_menu, font).activate
+    @title = ActionMessage.new font, width/2, 20
+    @title.message TITLE, 0xff222222
   end
   
   def show_about
@@ -71,6 +73,7 @@ class Credits < BakeryWizard::Window
   
   def draw
     @background.draw(BG_OFFSET[:x], BG_OFFSET[:y], 0)
+    @title.draw
     @message_parts.each_with_index do |message_part, index|
       @message_font.draw(message_part, MESSAGE_OFFSET[:x], MESSAGE_OFFSET[:y] + (MESSAGE_LINE_GAP + @message_font.height)*index, 1, 1.0, 1.0, 0xff000000)
     end
