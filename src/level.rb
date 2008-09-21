@@ -78,6 +78,10 @@ class Level
     LEVELS_CONFIG[level_id]
   end
   
+  def self.is_last_level? level_id
+    LEVELS_CONFIG[level_id][:last]
+  end
+  
   def initialize player_context
     @level = self.class.level_details_for(player_context[:level])
     @level_timeout = @level[:timeout]

@@ -11,6 +11,8 @@ require 'save_load'
 require 'story_player'
 require 'shop'
 require 'warehouse'
+require 'about'
+require 'credits'
 require 'serialization_defaulter'
 
 $wizard = BakeryWizard.new
@@ -20,4 +22,6 @@ $wizard.add SaveLoad
 $wizard.add StoryPlayer
 $wizard.add Shop
 $wizard.add Warehouse
+$wizard.add About
+$wizard.add Credits
 $wizard.go_to PlayerLoader

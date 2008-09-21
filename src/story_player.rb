@@ -30,8 +30,10 @@ class StoryPlayer < BakeryWizard::Window
   
   def next_slide
     (@current_story_slide = @story_series_images.shift) && return
-    (@context[:level] > 1) && File.exists?(Util.last_played_file_name(@context)) && $wizard.go_to(Warehouse, :pre_params => {:level_context => @context})
-    $wizard.go_to(Shop, :pre_params => {:level_context => @context})
+    Level.is_last_level?(@context[:level]) && $wizard.go_to(About) && return
+    (@context[:level] > 1) && File.exists?(Util.last_played_file_name(@context)) && 
+        $wizard.go_to(Warehouse, :pre_params => {:level_context => @context})
+    (@context[:level] == 1) && $wizard.go_to(Shop, :pre_params => {:level_context => @context})
   end
   
   def update
