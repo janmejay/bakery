@@ -47,6 +47,7 @@ class PlayerLoader < BakeryWizard::Window
     @name_field.text.empty? && return 
     @context[:name] = @name_field.text
     FileUtils.mkdir_p(Util.base_data_dir_path(@context))
+    FileUtils.mkdir_p(Util.saved_games_dir_name(@context))
     $wizard.go_to(WelcomeMenu)
   end
   
