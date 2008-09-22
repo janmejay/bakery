@@ -48,10 +48,6 @@ class Shop < BakeryWizard::Window
     @show_message_upto = Time.now
   end
   
-  def ready_for_setting_window
-    dump_shop
-  end
-  
   def assets
     @assets
   end
@@ -85,6 +81,7 @@ class Shop < BakeryWizard::Window
   
   def ready_for_update_and_render
     @level.window = self
+    dump_shop
   end
 
   def update
@@ -115,9 +112,10 @@ class Shop < BakeryWizard::Window
   end
   
   def dump_shop
-    drop_non_recoverable_resources
-    File.open(Util.last_played_file_name(@context), "w") do |handle|
-      handle.write(Marshal.dump(self))
+    execute_ignoring_non_serializable_associations do
+      File.open(Util.last_played_file_name(@context), "w") do |handle|
+        handle.write(Marshal.dump(self))
+      end
     end
   end
 
@@ -205,11 +203,15 @@ class Shop < BakeryWizard::Window
     self.class.module_eval("::#{class_name}", __FILE__, __LINE__)
   end
 
-  def drop_non_recoverable_resources
+  def execute_ignoring_non_serializable_associations
     to_be_unregistered = []
+    removed_renderables = @renderables
     for_each_subscriber { |subscriber| subscriber.kind_of?(Button) && (to_be_unregistered << subscriber) }
     for_each_subscriber { |subscriber| subscriber.kind_of?(Oven::Button) && (to_be_unregistered << subscriber) }
     unregister *to_be_unregistered
-    @renderables.clear
+    @renderables = []
+    yield
+    register *to_be_unregistered
+    @renderables = removed_renderables
   end
 end

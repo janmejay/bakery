@@ -13,8 +13,7 @@ module SerializationDefaulter
     end
   end
 end
-
-Gosu::Window.send(:include, SerializationDefaulter)
+BakeryWizard::BaseWindow.send(:include, SerializationDefaulter)
 Gosu::Image.send(:include, SerializationDefaulter)
 Gosu::Sample.send(:include, SerializationDefaulter)
 Gosu::Font.send(:include, SerializationDefaulter)
