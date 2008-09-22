@@ -21,6 +21,11 @@ class Level
       @grouping_probablity = level_data[:grouping_probablity]
       @min_free_slot_limit = level_data[:min_free_slot_limit]
       @min_slot_respecting_probablity = level_data[:min_slot_respecting_probablity]
+      @never_had_customers = true
+    end
+    
+    def never_had_customers
+      @never_had_customers
     end
     
     def window= shop_window
@@ -44,6 +49,7 @@ class Level
     end
     
     def << new_customer
+      @never_had_customers = false
       @queue << new_customer
     end
     
@@ -92,17 +98,18 @@ class Level
   
   def window= shop_window
     @shop_window = shop_window
-    @customer_types = {}
-    @level[:customer_types].each do |percentage, customer_type| 
-      OrderBuilder.can_support?(Customer.cost_inclination_for(customer_type), @shop_window.assets) && @customer_types[percentage] = customer_type
-    end
-    @earning_oppourtunity_ensured = 0
-    while @earning_oppourtunity_ensured < @possible_earning 
-      @earning_oppourtunity_ensured += add_customer
+    if @customer_queue.never_had_customers
+      @customer_types = {}
+      @level[:customer_types].each do |percentage, customer_type| 
+        OrderBuilder.can_support?(Customer.cost_inclination_for(customer_type), @shop_window.assets) && @customer_types[percentage] = customer_type
+      end
+      @earning_oppourtunity_ensured = 0
+      while @earning_oppourtunity_ensured < @possible_earning 
+        @earning_oppourtunity_ensured += add_customer
+      end
+      @required_total_money = @level[:required_earning] + @shop_window.baker.money
     end
     @customer_queue.window = @shop_window
-    
-    @required_total_money = @level[:required_earning] + @shop_window.baker.money
   end
   
   def update
