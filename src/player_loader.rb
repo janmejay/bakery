@@ -44,7 +44,10 @@ class PlayerLoader < BakeryWizard::Window
   end
   
   def get_baking
-    @name_field.text.empty? || (@context[:name] = @name_field.text) && $wizard.go_to(WelcomeMenu) 
+    @name_field.text.empty? && return 
+    @context[:name] = @name_field.text
+    FileUtils.mkdir_p(Util.base_data_dir_path(@context))
+    $wizard.go_to(WelcomeMenu)
   end
   
   def draw

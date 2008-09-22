@@ -8,4 +8,8 @@ module Util
   def self.last_played_file_name context
     $LAST_PLAYED_GAME_PATH.gsub(/#name#/, context[:name])
   end
+  
+  def self.base_data_dir_path context
+    $PLAYER_DATA_BASE_PATH.gsub(/#name#/, context[:name])
+  end
 end
