@@ -1,11 +1,12 @@
 require File.join(File.dirname(__FILE__), 'test_helper')
 
+require File.join(File.dirname(__FILE__), '..', 'src', 'bakery_wizard')
 require File.join(File.dirname(__FILE__), '..', 'src', 'serialization_defaulter')
 
 class SerializationDefaulterTest < Test::Unit::TestCase
   context "Serialization defaulting" do
     setup do
-      @window = Gosu::Window.new 10, 10, false
+      @window = BakeryWizard::BaseWindow.new 10, 10, false
     end
     
     should "work for Window" do

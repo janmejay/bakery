@@ -15,19 +15,22 @@ class Util::Animator
   def window= window
     @slides = Gosu::Image::load_tiles(window, @strip_file_name, @tile_width, @tile_heights, true)
     create_animated_sequence
-    @current_anim_sequence = []
+    @running ? start : (@current_anim_sequence = [])
   end
 
   def start
     @current_anim_sequence = @animated_sequence.dup
+    @running = true
   end
 
   def stop
     @current_anim_sequence = []
+    @running = false
   end
 
   def slide
-    @current_anim_sequence.empty? ? @slides[0] : current_slide
+    @current_anim_sequence.empty? && stop
+    @running ? current_slide : @slides[0]
   end
 
   private

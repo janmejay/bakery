@@ -1,5 +1,7 @@
 require File.join(File.dirname(__FILE__), 'test_helper')
+require File.join(File.dirname(__FILE__), '..', 'src', 'util', 'actions')
 require File.join(File.dirname(__FILE__), '..', 'src', 'level')
+
 
 class OrderBuilderTest < Test::Unit::TestCase
   class ::Oven
@@ -76,8 +78,9 @@ class OrderBuilderTest < Test::Unit::TestCase
     oven.expects(:build_sample_on).with(nil).returns(plate_with_cake = 'plate_with_cake')
     second_asset = combination[:builder_sequence].last == Froster ? froster : topping_oven
     second_asset.expects(:build_sample_on).with(plate_with_cake).returns(final_sample = 'final_sample')
+    OrderBuilder::Order.expects(:new).with(final_sample, sailor).returns(final_order = 'final_order')
     order, cost = OrderBuilder.build_for(sailor, assets)
-    assert_equal(final_sample, order)
+    assert_equal(final_order, order)
     assert_equal(combination[:cost], cost)
   end
   
