@@ -91,14 +91,15 @@ class Baker
 
   def update
     @plate && @plate.update_position(*offset(PLATE_HOLDING_OFFSET_ANGLE, PLATE_HOLDING_OFFSET, Oven::Plate::PLATE_LENGTH_AND_WIDTH, Oven::Plate::PLATE_LENGTH_AND_WIDTH))
-    return if almost_there
+    if almost_there
+      @walking_anim.stop
+      @trigger_when_reached && @trigger_on.send(@trigger_when_reached, self)
+      @trigger_when_reached = false
+    end
+    almost_there && return
     @angle = Gosu::angle(@x, @y, @target_x, @target_y)
     @x += Gosu::offset_x(@angle, @velocity)
     @y += Gosu::offset_y(@angle, @velocity)
-    if (almost_there)
-      @walking_anim.stop
-      @trigger_when_reached && @trigger_on.send(@trigger_when_reached, self)
-    end
   end
 
   def draw
