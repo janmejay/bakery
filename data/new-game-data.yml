@@ -6,8 +6,6 @@
 :level: 1
 :has_asset_ids:
 - :simple_oven
-- :simple_froster
-- :cookie_oven
 :dustbin:
   :inactive:
     :x: 865

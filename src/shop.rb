@@ -72,7 +72,9 @@ class Shop < BakeryWizard::Window
     @background_image = Gosu::Image.new(self.window, @context[:floor_view], true)
     @success_message = Gosu::Image.new(self.window, 'media/bakers_goal_achived.png')
     @failure_message = Gosu::Image.new(self.window, 'media/baker_failed.png')
+    @font = Gosu::Font.new(self.window, 'media/hand.ttf', 35)
     for_each_subscriber { |subscriber| subscriber.window = self unless subscriber == self }
+    TextButton.new(self, {:x => 0, :y => 0, :z => ZOrder::MODAL_BUTTONS, :dx => 117, :dy => 37}, :menu, @font).activate
     @dead_entities.each { |entity| entity.window = self }
     @alive_entities.each { |entity| entity.window = self }
     @no_ui_entities.each { |entity| entity.window = self }
@@ -82,6 +84,10 @@ class Shop < BakeryWizard::Window
   def ready_for_update_and_render
     @level.window = self
     dump_shop
+  end
+  
+  def menu
+    $wizard.go_to(WelcomeMenu)
   end
 
   def update

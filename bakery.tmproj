@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>src/player_loader.rb</string>
+	<string>bakery</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -26,9 +26,9 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>19</integer>
+				<integer>47</integer>
 				<key>line</key>
-				<integer>9</integer>
+				<integer>4</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
@@ -40,9 +40,9 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>21</integer>
+				<integer>20</integer>
 				<key>line</key>
-				<integer>2</integer>
+				<integer>7</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
@@ -54,9 +54,9 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>9</integer>
+				<integer>0</integer>
 				<key>line</key>
-				<integer>5</integer>
+				<integer>8</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
@@ -82,14 +82,14 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>0</integer>
+				<integer>14</integer>
 				<key>line</key>
-				<integer>0</integer>
+				<integer>15</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>0</integer>
+			<integer>15</integer>
 		</dict>
 		<key>src/common/action_message.rb</key>
 		<dict>
@@ -99,20 +99,6 @@
 				<integer>0</integer>
 				<key>line</key>
 				<integer>4</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>src/common/button.rb</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>70</integer>
-				<key>line</key>
-				<integer>12</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
@@ -207,34 +193,6 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
-		<key>src/customer.rb</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>26</integer>
-				<key>line</key>
-				<integer>48</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>23</integer>
-		</dict>
-		<key>src/froster.rb</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>116</integer>
-				<key>line</key>
-				<integer>58</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>28</integer>
-		</dict>
 		<key>src/init.rb</key>
 		<dict>
 			<key>caret</key>
@@ -248,20 +206,6 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
-		</dict>
-		<key>src/level.rb</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>38</integer>
-				<key>line</key>
-				<integer>102</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>87</integer>
 		</dict>
 		<key>src/oven.rb</key>
 		<dict>
@@ -277,20 +221,6 @@
 			<key>firstVisibleLine</key>
 			<integer>230</integer>
 		</dict>
-		<key>src/player_loader.rb</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>47</integer>
-				<key>line</key>
-				<integer>49</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>17</integer>
-		</dict>
 		<key>src/save_load.rb</key>
 		<dict>
 			<key>caret</key>
@@ -304,20 +234,6 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>58</integer>
-		</dict>
-		<key>src/serialization_defaulter.rb</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>16</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
 		</dict>
 		<key>src/shoe.rb</key>
 		<dict>
@@ -338,30 +254,14 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>13</integer>
+				<integer>29</integer>
 				<key>line</key>
-				<integer>99</integer>
+				<integer>89</integer>
 			</dict>
-			<key>columnSelection</key>
-			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>63</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>6</integer>
-				<key>line</key>
-				<integer>99</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>19</integer>
-				<key>line</key>
-				<integer>99</integer>
-			</dict>
+			<integer>68</integer>
 		</dict>
 		<key>src/showcase.rb</key>
 		<dict>
@@ -385,20 +285,6 @@
 				<integer>73</integer>
 				<key>line</key>
 				<integer>27</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>src/util/animator.rb</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>29</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
@@ -440,52 +326,40 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>0</integer>
+				<integer>147</integer>
 				<key>line</key>
-				<integer>0</integer>
+				<integer>31</integer>
 			</dict>
+			<key>columnSelection</key>
+			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>5</integer>
+			<integer>0</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>138</integer>
+				<key>line</key>
+				<integer>31</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>149</integer>
+				<key>line</key>
+				<integer>31</integer>
+			</dict>
 		</dict>
 		<key>src/zorder.rb</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>84</integer>
+				<integer>69</integer>
 				<key>line</key>
 				<integer>5</integer>
 			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>test/order_builder_test.rb</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>11</integer>
-				<key>line</key>
-				<integer>96</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>55</integer>
-		</dict>
-		<key>test/util/actions_test.rb</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>40</integer>
-				<key>line</key>
-				<integer>4</integer>
-			</dict>
 			<key>columnSelection</key>
 			<false/>
 			<key>firstVisibleColumn</key>
@@ -495,64 +369,28 @@
 			<key>selectFrom</key>
 			<dict>
 				<key>column</key>
-				<integer>0</integer>
+				<integer>63</integer>
 				<key>line</key>
-				<integer>0</integer>
+				<integer>5</integer>
 			</dict>
 			<key>selectTo</key>
 			<dict>
 				<key>column</key>
-				<integer>40</integer>
+				<integer>76</integer>
 				<key>line</key>
-				<integer>4</integer>
-			</dict>
-		</dict>
-		<key>test/util/position_animation_test.rb</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>107</integer>
-				<key>line</key>
-				<integer>10</integer>
-			</dict>
-			<key>columnSelection</key>
-			<false/>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>49</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>46</integer>
-				<key>line</key>
-				<integer>10</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>107</integer>
-				<key>line</key>
-				<integer>10</integer>
+				<integer>5</integer>
 			</dict>
 		</dict>
 	</dict>
 	<key>openDocuments</key>
 	<array>
 		<string>bakery</string>
-		<string>src/level.rb</string>
-		<string>src/warehouse.rb</string>
-		<string>src/player_loader.rb</string>
-		<string>src/welcome_menu.rb</string>
-		<string>src/credits.rb</string>
-		<string>src/init.rb</string>
-		<string>src/about.rb</string>
+		<string>data/new-game-data.yml</string>
+		<string>data/customers.yml</string>
 		<string>src/bakery_wizard.rb</string>
-		<string>src/serialization_defaulter.rb</string>
 		<string>src/shop.rb</string>
-		<string>src/common/title.rb</string>
-		<string>src/common/action_message.rb</string>
+		<string>src/zorder.rb</string>
+		<string>src/welcome_menu.rb</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>

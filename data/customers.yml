@@ -5,7 +5,7 @@
   :cost_inclination: :low_cost
   :max_time_to_decide_order: 15
 :rich_businessman:
-  :patience_count: 1
+  :patience_count: 8
   :patience_factor: 10
   :cost_inclination: :medium_cost
   :max_time_to_decide_order: 10
