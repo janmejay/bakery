@@ -14,17 +14,17 @@ class SerializationDefaulterTest < Test::Unit::TestCase
     end
     
     should "work for Image" do
-      img = Gosu::Image.new(@window, "test_media/foo_strip.png", true)
+      img = Gosu::Image.new(@window, File.dirname(__FILE__) + "/test_media/foo_strip.png", true)
       assert_nil Marshal.load(Marshal.dump(img))
     end
     
     should "work for Font" do
-      font = Gosu::Font.new(@window, 'test_media/hand.ttf', 35)
+      font = Gosu::Font.new(@window, File.dirname(__FILE__) + '/test_media/hand.ttf', 35)
       assert_nil Marshal.load(Marshal.dump(font))
     end
     
     should "work for Sample" do
-      sample = Gosu::Sample.new(@window, 'test_media/sound.ogg')
+      sample = Gosu::Sample.new(@window, File.dirname(__FILE__) + '/test_media/sound.ogg')
       assert_nil Marshal.load(Marshal.dump(sample))
     end
   end
