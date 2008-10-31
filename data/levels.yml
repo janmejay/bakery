@@ -12,7 +12,7 @@
 2:
   :customer_types:
     100:  :brave_sailor
-    90:  :rich_businessman
+    50:   :surgeon
   :required_earning: 30
   :factor_of_safty: 0.4
   :grouping_probablity: 0
@@ -22,12 +22,30 @@
 3:
   :customer_types:
     100: :brave_sailor
-    60: :rich_businessman
-    20: :busy_lady
+    60:  :rich_businessman
+    20:  :busy_lady
   :required_earning: 40
   :factor_of_safty: 0.3
   :grouping_probablity: 40000
   :min_free_slot_limit: 3
   :min_slot_respecting_probablity: 99500
   :story_dir: 'mar'
+4:
+5:
+6:
+7:
+8:
+9:
+10:
+11:
+12:
   :last: true
+  :customer_types:
+    100:  :brave_sailor
+    50:   :surgeon
+  :required_earning: 30
+  :factor_of_safty: 0.05
+  :grouping_probablity: 90000
+  :min_free_slot_limit: 1
+  :min_slot_respecting_probablity: 99910
+  :story_dir: 'dec'    

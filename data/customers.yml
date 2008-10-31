@@ -1,16 +1,101 @@
 ---
+:alien:
+  :patience_count: 3
+  :patience_factor: 20
+  :cost_inclination: :high_cost
+  :max_time_to_decide_order: 2
+:astronaut:
+  :patience_count: 5
+  :patience_factor: 7
+  :cost_inclination: :high_cost
+  :max_time_to_decide_order: 4
 :brave_sailor:
-  :patience_count: 10
-  :patience_factor: 10
-  :cost_inclination: :low_cost
-  :max_time_to_decide_order: 15
-:rich_businessman:
   :patience_count: 8
   :patience_factor: 10
-  :cost_inclination: :medium_cost
-  :max_time_to_decide_order: 10
+  :cost_inclination: :low_cost
+  :max_time_to_decide_order: 12
+:business_tycoon:
+  :patience_count: 4
+  :patience_factor: 10
+  :cost_inclination: :high_cost
+  :max_time_to_decide_order: 4
 :busy_lady:
   :patience_count: 8
   :patience_factor: 9
   :cost_inclination: :high_cost
   :max_time_to_decide_order: 7
+:by_headed_alien:
+  :patience_count: 2
+  :patience_factor: 25
+  :cost_inclination: :medium_cost
+  :max_time_to_decide_order: 30
+:college_girl:
+  :patience_count: 7
+  :patience_factor: 9
+  :cost_inclination: :medium_cost
+  :max_time_to_decide_order: 13
+:cop:
+  :patience_count: 8
+  :patience_factor: 8
+  :cost_inclination: :low_cost
+  :max_time_to_decide_order: 9
+:cowboy:
+  :patience_count: 5
+  :patience_factor: 7
+  :cost_inclination: :medium_cost
+  :max_time_to_decide_order: 5
+:footballer_kid:
+  :patience_count: 8
+  :patience_factor: 7
+  :cost_inclination: :low_cost
+  :max_time_to_decide_order: 10
+:high_ranked_officer:
+  :patience_count: 5
+  :patience_factor: 10
+  :cost_inclination: :high_cost
+  :max_time_to_decide_order: 8
+:local_worker:
+  :patience_count: 10
+  :patience_factor: 10
+  :cost_inclination: :low_cost
+  :max_time_to_decide_order: 16
+:rich_businessman:
+  :patience_count: 8
+  :patience_factor: 7
+  :cost_inclination: :medium_cost
+  :max_time_to_decide_order: 10
+:rich_wife:
+  :patience_count: 9
+  :patience_factor: 5
+  :cost_inclination: :high_cost
+  :max_time_to_decide_order: 20
+:school_girl:
+  :patience_count: 6
+  :patience_factor: 8
+  :cost_inclination: :medium_cost
+  :max_time_to_decide_order: 12
+:school_kid:
+  :patience_count: 4
+  :patience_factor: 8
+  :cost_inclination: :low_cost
+  :max_time_to_decide_order: 5
+:super_model:
+  :patience_count: 11
+  :patience_factor: 3
+  :cost_inclination: :high_cost
+  :max_time_to_decide_order: 18
+:surgeon:
+  :patience_count: 8
+  :patience_factor: 6
+  :cost_inclination: :medium_cost
+  :max_time_to_decide_order: 7
+:tattoed_drummer:
+  :patience_count: 4
+  :patience_factor: 5
+  :cost_inclination: :medium_cost
+  :max_time_to_decide_order: 4
+:traveller:
+  :patience_count: 6
+  :patience_factor: 7
+  :cost_inclination: :medium_cost
+  :max_time_to_decide_order: 11

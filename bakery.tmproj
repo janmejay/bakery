@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>bakery</string>
+	<string>data/levels.yml</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -42,14 +42,28 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>20</integer>
+				<integer>21</integer>
 				<key>line</key>
-				<integer>7</integer>
+				<integer>63</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
+		</dict>
+		<key>data/levels.yml</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>2</integer>
+				<key>line</key>
+				<integer>32</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>7</integer>
 		</dict>
 		<key>data/new-game-data.yml</key>
 		<dict>
@@ -401,10 +415,12 @@
 	<key>openDocuments</key>
 	<array>
 		<string>bakery</string>
+		<string>data/levels.yml</string>
+		<string>data/customers.yml</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{210, 46}, {1230, 832}}</string>
+	<string>{{210, 51}, {1053, 827}}</string>
 </dict>
 </plist>
