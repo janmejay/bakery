@@ -2,6 +2,7 @@ require 'rubygems'
 require 'rake'
 require File.join(File.dirname(__FILE__), 'src', 'init')
 require 'customer'
+require 'level'
 
 namespace :bakery do
   desc "Run all the tests"
@@ -29,7 +30,7 @@ namespace :bakery do
       end
       
       def task_for display_name, *sorted_on
-        desc "Show customers sorted on #{display_name}[#{sorted_on.join("*")}]"
+        desc "Shows customers sorted on #{display_name}[#{sorted_on.join("*")}]"
         task display_name do
           print_sort_on(sorted_on.length > 1 ? sorted_on : sorted_on[0])
         end
@@ -42,6 +43,22 @@ namespace :bakery do
       task_for :patience, :patience_factor, :patience_count
       
       task_for :cost_inclination, :cost_inclination
+    end
+    
+    namespace :levels do
+      desc "Shows customer distribution across levels"
+      task :customer_distribution do
+        customer_level_map = {}
+        Customer::CUSTOMER_CONFIG.each_key do |customer|
+          Level::LEVELS_CONFIG.each_value do |level_details|
+            customer_level_map[customer] ||= []
+            level_details[:customer_types].values.include?(customer) && (customer_level_map[customer] << level_details[:story_dir])
+          end
+        end
+        customer_level_map.each do |customer, level_names|
+          puts "#{customer} -> #{level_names.join(', ')}"
+        end
+      end
     end
   end
 end
