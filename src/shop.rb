@@ -118,6 +118,7 @@ class Shop < BakeryWizard::Window
   end
   
   def dump_shop
+    @baker.update_context @context
     execute_ignoring_non_serializable_associations do
       File.open(Util.last_played_file_name(@context), "w") do |handle|
         handle.write(Marshal.dump(self))

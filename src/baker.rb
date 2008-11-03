@@ -38,6 +38,10 @@ class Baker
     @money = context[:money]
   end
   
+  def update_context context
+    context[:money] = @money
+  end
+  
   def money
     @money
   end
