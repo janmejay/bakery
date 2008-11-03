@@ -2,50 +2,158 @@
 #grouping_probablity & min_slot_respecting_probablity are on 100000
 1:
   :customer_types:
-    100: :brave_sailor
-  :required_earning: 20
-  :factor_of_safty: 0.5
-  :grouping_probablity: 0
+    100: :local_worker
+    50:  :brave_sailor
+  :required_earning: 400
+  :factor_of_safty: 0.45
+  :grouping_probablity: 20000
   :min_free_slot_limit: 1
-  :min_slot_respecting_probablity: 00000
+  :min_slot_respecting_probablity: 99400
   :story_dir: 'jan'
 2:
   :customer_types:
     100:  :brave_sailor
-    50:   :surgeon
-  :required_earning: 30
-  :factor_of_safty: 0.4
-  :grouping_probablity: 0
-  :min_free_slot_limit: 1
-  :min_slot_respecting_probablity: 00000
+    50:   :cop
+  :required_earning: 400
+  :factor_of_safty: 0.35
+  :grouping_probablity: 40000
+  :min_free_slot_limit: 3
+  :min_slot_respecting_probablity: 99600
   :story_dir: 'feb'
 3:
   :customer_types:
-    100: :brave_sailor
-    60:  :rich_businessman
-    20:  :busy_lady
-  :required_earning: 40
-  :factor_of_safty: 0.3
-  :grouping_probablity: 40000
+    100: :school_kid
+    70:  :cop
+    50:  :rich_businessman
+  :required_earning: 400
+  :factor_of_safty: 0.30
+  :grouping_probablity: 60000
   :min_free_slot_limit: 3
-  :min_slot_respecting_probablity: 99500
+  :min_slot_respecting_probablity: 99800
   :story_dir: 'mar'
 4:
+  :customer_types:
+    100: :school_kid
+    80:  :brave_sailor
+    60:  :local_worker
+    40:  :traveller
+    20:  :rich_businessman
+  :required_earning: 400
+  :factor_of_safty: 0.32
+  :grouping_probablity: 42000
+  :min_free_slot_limit: 2
+  :min_slot_respecting_probablity: 99500
+  :story_dir: 'apr'
 5:
+  :customer_types:
+    100: :brave_sailor
+    90:  :local_worker
+    60:  :surgeon
+    30:  :local_worker
+    40:  :traveller
+    20:  :rich_businessman
+  :required_earning: 400
+  :factor_of_safty: 0.3
+  :grouping_probablity: 45000
+  :min_free_slot_limit: 2
+  :min_slot_respecting_probablity: 99500
+  :story_dir: 'may'
 6:
+  :customer_types:
+    100: :footballer_kid
+    70:  :school_kid
+    60:  :cop
+    50:  :busy_lady
+    20:  :rich_businessman
+  :required_earning: 400
+  :factor_of_safty: 0.27
+  :grouping_probablity: 55000
+  :min_free_slot_limit: 2
+  :min_slot_respecting_probablity: 99600
+  :story_dir: 'jun'
 7:
+  :customer_types:
+    100: :cop
+    90:  :school_girl
+    60:  :college_girl
+    30:  :busy_lady
+    20:  :rich_businessman
+  :required_earning: 400
+  :factor_of_safty: 0.24
+  :grouping_probablity: 60000
+  :min_free_slot_limit: 2
+  :min_slot_respecting_probablity: 99700
+  :story_dir: 'jul'
 8:
+  :customer_types:
+    100: :footballer_kid
+    90:  :school_girl
+    60:  :school_kid
+    30:  :traveller
+    20:  :local_worker
+  :required_earning: 400
+  :factor_of_safty: 0.21
+  :grouping_probablity: 75000
+  :min_free_slot_limit: 2
+  :min_slot_respecting_probablity: 99800
+  :story_dir: 'aug'
 9:
+  :customer_types:
+    100: :local_worker
+    90:  :tattoed_drummer
+    75:  :astronaut
+    60:  :business_tycoon
+    40:  :alien
+    20:  :rich_wife
+  :required_earning: 400
+  :factor_of_safty: 0.18
+  :grouping_probablity: 85000
+  :min_free_slot_limit: 2
+  :min_slot_respecting_probablity: 99900
+  :story_dir: 'sep'
 10:
+  :customer_types:
+    100: :local_worker
+    90:  :tattoed_drummer
+    75:  :astronaut
+    60:  :business_tycoon
+    45:  :by_headed_alien
+    30:  :rich_wife
+    15:  :super_model
+  :required_earning: 400
+  :factor_of_safty: 0.15
+  :grouping_probablity: 80000
+  :min_free_slot_limit: 1
+  :min_slot_respecting_probablity: 99900
+  :story_dir: 'oct'
 11:
+  :customer_types:
+    100: :footballer_kid
+    90:  :high_ranked_officer
+    60:  :astronaut
+    40:  :cowboy
+  :required_earning: 400
+  :factor_of_safty: 0.13
+  :grouping_probablity: 70000
+  :min_free_slot_limit: 1
+  :min_slot_respecting_probablity: 99800
+  :story_dir: 'nov'
 12:
   :last: true
   :customer_types:
-    100:  :brave_sailor
-    50:   :surgeon
-  :required_earning: 30
+    100: :school_kid
+    90:  :super_model
+    80:  :astronaut
+    70:  :business_tycoon
+    60:  :rich_wife
+    50:  :by_headed_alien
+    40:  :high_ranked_officer
+    30:  :tattoed_drummer
+    20:  :cowboy
+    10:  :alien
+  :required_earning: 400
   :factor_of_safty: 0.05
-  :grouping_probablity: 90000
+  :grouping_probablity: 95000
   :min_free_slot_limit: 1
-  :min_slot_respecting_probablity: 99910
-  :story_dir: 'dec'    
+  :min_slot_respecting_probablity: 99980
+  :story_dir: 'dec'
