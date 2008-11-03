@@ -4,7 +4,7 @@
   :customer_types:
     100: :local_worker
     50:  :brave_sailor
-  :required_earning: 400
+  :required_earning: 40
   :factor_of_safty: 0.45
   :grouping_probablity: 20000
   :min_free_slot_limit: 1

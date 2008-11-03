@@ -18,9 +18,10 @@ require File.join(File.dirname(__FILE__), "common", "game_button")
 require 'set'
 require 'order_builder'
 require 'level'
+require 'info_pane'
 
 class Shop < BakeryWizard::Window
-  attr_reader :baker
+  attr_reader :baker, :level
   include Actions
   include Publisher
   include Subscriber
@@ -42,6 +43,7 @@ class Shop < BakeryWizard::Window
     @dead_entities << Cursor.new
     @dead_entities << Table.new(context[:table])
     @alive_entities = []
+    @alive_entities << InfoPane.new(self)
     @no_ui_entities = []
     @alive_entities << @baker = Baker.new(context)
     @context[:assets].each { |asset_data| add_asset(asset_data) }

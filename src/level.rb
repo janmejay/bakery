@@ -96,6 +96,10 @@ class Level
     @customer_queue = CustomerQueue.new @level.dup
   end
   
+  def required_earnings
+    @required_total_money
+  end
+  
   def window= shop_window
     @shop_window = shop_window
     if @customer_queue.never_had_customers
