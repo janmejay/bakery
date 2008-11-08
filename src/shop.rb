@@ -41,7 +41,7 @@ class Shop < BakeryWizard::Window
     @renderables = Set.new
     @dead_entities = []
     @dead_entities << Cursor.new
-    @dead_entities << Table.new(context[:table])
+    @dead_entities << Table.new
     @alive_entities = []
     @alive_entities << InfoPane.new(self)
     @no_ui_entities = []
@@ -75,7 +75,7 @@ class Shop < BakeryWizard::Window
   
   def window= window
     @window = window
-    @background_image = Gosu::Image.new(self.window, @context[:floor_view], true)
+    @background_image = Gosu::Image.new(self.window, @level.bg_image, true)
     @success_message = Gosu::Image.new(self.window, 'media/bakers_goal_achived.png')
     @failure_message = Gosu::Image.new(self.window, 'media/baker_failed.png')
     @font = Gosu::Font.new(self.window, 'media/hand.ttf', 35)

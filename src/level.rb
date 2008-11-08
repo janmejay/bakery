@@ -96,6 +96,14 @@ class Level
     @customer_queue = CustomerQueue.new @level.dup
   end
   
+  def bg_image
+    @level[:bg_image] || 'media/floor.png'
+  end
+  
+  def table_image
+    @level[:table_image] || 'media/table.png'
+  end
+  
   def required_earnings
     @required_total_money
   end
