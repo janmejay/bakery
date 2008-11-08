@@ -50,6 +50,10 @@ class Shop < BakeryWizard::Window
     @show_message_upto = Time.now
   end
   
+  def has_tv?
+    @dead_entities.find {|asset| asset.kind_of?(Television) }
+  end
+  
   def assets
     @assets
   end

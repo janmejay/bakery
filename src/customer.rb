@@ -75,10 +75,14 @@ class Customer
   def initialize name
     @name = name
     @cost_inclination = CUSTOMER_CONFIG[@name][:cost_inclination]
-    @patience_factor = CUSTOMER_CONFIG[@name][:patience_factor]
-    @patience_timeout = @patience_factor*CUSTOMER_CONFIG[@name][:patience_count]
+    set_patience(CUSTOMER_CONFIG[@name][:patience_count])
     @hasnt_ordered_yet = true
     @body_angle = 0
+  end
+  
+  def feel_entertained!
+    @patience_factor *= 1.5
+    set_patience((CUSTOMER_CONFIG[@name][:patience_count]*1.5).ceil)
   end
   
   def cost_inclination
@@ -189,6 +193,11 @@ class Customer
     @patience_timeout -= 1
     @going_to_order_after && (@going_to_order_after -= 1)
     @last_updated_on = time_now
+  end
+  
+  def set_patience magnitude
+    @patience_factor ||= CUSTOMER_CONFIG[@name][:patience_factor]
+    @patience_timeout = @patience_factor*magnitude
   end
   
   def leave_the_shop

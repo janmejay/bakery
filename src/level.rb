@@ -100,20 +100,20 @@ class Level
     @required_total_money
   end
   
-  def window= shop_window
-    @shop_window = shop_window
+  def window= shop
+    @shop = shop
     if @customer_queue.never_had_customers
       @customer_types = {}
       @level[:customer_types].each do |percentage, customer_type| 
-        OrderBuilder.can_support?(Customer.cost_inclination_for(customer_type), @shop_window.assets) && @customer_types[percentage] = customer_type
+        OrderBuilder.can_support?(Customer.cost_inclination_for(customer_type), @shop.assets) && @customer_types[percentage] = customer_type
       end
       @earning_oppourtunity_ensured = 0
       while @earning_oppourtunity_ensured < @possible_earning 
         @earning_oppourtunity_ensured += add_customer
       end
-      @required_total_money = @level[:required_earning] + @shop_window.baker.money
+      @required_total_money = @level[:required_earning] + @shop.baker.money
     end
-    @customer_queue.window = @shop_window
+    @customer_queue.window = @shop
   end
   
   def update
@@ -133,7 +133,7 @@ class Level
   end
   
   def required_earning_surpassed?
-    @required_total_money < @shop_window.baker.money
+    @required_total_money < @shop.baker.money
   end
   
   def add_customer
@@ -143,8 +143,9 @@ class Level
       (random_number > probablity_percentage) && next
       (customer = Customer.new(@customer_types[probablity_percentage])) && break
     end
-    customer.order, price = OrderBuilder.build_for(customer, @shop_window.assets)
+    customer.order, price = OrderBuilder.build_for(customer, @shop.assets)
     customer.payment = price
+    @shop.has_tv? && customer.feel_entertained!
     @customer_queue << customer
     price
   end
