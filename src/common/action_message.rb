@@ -15,7 +15,7 @@ class ActionMessage
     @message_x_offset = - @print_font.text_width(@message)/2
   end
   
-  def draw
-    @message && @print_font.draw(@message, @about_x + @message_x_offset, @at_y, 0, 1.0, 1.0, @message_color)
+  def draw(z_index = 0)
+    @message && @print_font.draw(@message, @about_x + @message_x_offset, @at_y, z_index, 1.0, 1.0, @message_color)
   end
 end

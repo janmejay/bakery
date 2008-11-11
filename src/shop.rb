@@ -80,7 +80,7 @@ class Shop < BakeryWizard::Window
     @failure_message = Gosu::Image.new(self.window, 'media/baker_failed.png')
     @font = Gosu::Font.new(self.window, 'media/hand.ttf', 35)
     for_each_subscriber { |subscriber| subscriber.window = self unless subscriber == self }
-    TextButton.new(self, {:x => 0, :y => 0, :z => ZOrder::MODAL_BUTTONS, :dx => 117, :dy => 37}, :menu, @font).activate
+    TextButton.new(self, {:x => 22, :y => 10, :z => ZOrder::MODAL_BUTTONS, :dx => 117, :dy => 37}, :menu, @font).activate
     @dead_entities.each { |entity| entity.window = self }
     @alive_entities.each { |entity| entity.window = self }
     @no_ui_entities.each { |entity| entity.window = self }
