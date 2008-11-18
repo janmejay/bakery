@@ -23,7 +23,6 @@ class StoryPlayer < BakeryWizard::Window
   
   def current_context= context
     @context = context
-    puts @context.inspect
     @level = Level.level_details_for @context[:level]
     story_dir = File.join(STORY_BASE_DIR, @level[:story_dir])
     @story_file_names = Dir.entries(story_dir).select { |file_name| file_name =~ /^\d+\.png$/ }.map { |file_name| "#{File.join(story_dir, file_name)}"}

@@ -14,16 +14,19 @@ module OrderBuilder
     include Actions::ActiveRectangleSubscriber
 
     SAMPLE_PLATE_OFFSET = {:x => 28, :y => 20}
+    MIN_SECONDS_BETWEEN_CONSECUTIVE_DESCRIPTIONS = 2
     
     def initialize plate, customer
       @plate = plate
       @customer = customer
+      @last_described_at = Time.now
     end
     
     def window= shop_window
       @shop_window = shop_window
       @order_bubble = Gosu::Image.new(@shop_window.window, 'media/order_bubble.png')
       @plate.window = @shop_window
+      @describer_animation = Util::FontAnimator.new(@shop_window, 200, :z => ZOrder::MESSAGES, :color => '3B1111', :font_size => 32, :font_name =>  File.join(File.dirname(__FILE__), '..', 'media', 'hand.ttf'))
     end
     
     def update_position x, y
@@ -63,9 +66,11 @@ module OrderBuilder
     
     def satisfy_order baker
       @customer.left_the_shop? && return
-      baker.has_plate? || return
-      baker.is_plate_equal_to?(@plate) || puts("Fuck.. you brought something else... :-)") || return
-      baker.give_plate_to(self)
+      baker.has_plate? && baker.is_plate_equal_to?(@plate) && baker.give_plate_to(self) && return
+      
+      (@last_described_at + MIN_SECONDS_BETWEEN_CONSECUTIVE_DESCRIPTIONS < Time.now) || return
+      @plate.describe_using(@describer_animation)
+      @last_described_at = Time.now
     end
     
     protected

@@ -32,8 +32,10 @@ class Util::FontAnimator
     x, y, z = get(:x, options), get(:y, options), get(:z, options)
     y_displacement = get(:y_displacement, options)
     x_as_y = get(:x_as_y, options)
-    coordinates = build_slide_details(y_displacement, x_as_y, x, y)
-    @shop_window.keep_rendering_until_returns_nil(Animation.new(@shop_window, text, @font, @color, coordinates, z))
+    Array(text).each_with_index do |text_frag, index|
+      coordinates = build_slide_details(y_displacement, x_as_y, x, y + (@font.height + 5)*index)
+      @shop_window.keep_rendering_until_returns_nil(Animation.new(@shop_window, text_frag, @font, @color, coordinates, z))
+    end
   end
   
   private

@@ -66,6 +66,10 @@ class Oven
       (@topping_type == other.instance_variable_get('@topping_type'))
     end
     
+    def description
+      topped? ? [name_for(@decoration_type, :decoration), name_for(@top_icing_type, :frosting), name_for(@topping_type, :toping_cake), name_for(@icing_type, :frosting), name_for(@cake_name)] : [name_for(@decoration_type, :decoration), name_for(@icing_type, :frosting), name_for(@cake_name)]
+    end
+    
     def render(z_index = ZOrder::CAKE)
       if @angle
         @body.draw_rot(@x, @y, z_index, @angle)
@@ -75,6 +79,18 @@ class Oven
         @body.draw(@x, @y, z_index)
         @topping && @topping.draw(@x, @y, z_index)
         @decoration && @decoration.draw(@x, @y, z_index)
+      end
+    end
+    
+    private
+    def name_for entity_id, type = :cake
+      entity_id.nil? && return
+      entity_id = entity_id.to_s
+      case type
+      when :cake: entity_id.gsub(/_/, ' ').capitalize + "."
+      when :frosting: entity_id.capitalize + " frosted..."
+      when :decoration: entity_id.capitalize + " decoration over..."
+      when :toping_cake: entity_id.gsub(/_toping_/, ' ').capitalize + " on top of..."
       end
     end
   end
@@ -135,6 +151,10 @@ class Oven
     
     def == other
       (self.class == other.class) && (content == other.content)
+    end
+    
+    def describe_using animator
+      animator.start_anim(content.description.compact, {:x => @x + 100, :y => @y})
     end
     
     protected

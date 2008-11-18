@@ -14,7 +14,7 @@
   :customer_types:
     100:  :brave_sailor
     50:   :cop
-  :required_earning: 400
+  :required_earning: 40
   :factor_of_safty: 0.35
   :grouping_probablity: 40000
   :min_free_slot_limit: 3
@@ -25,7 +25,7 @@
     100: :school_kid
     70:  :cop
     50:  :rich_businessman
-  :required_earning: 400
+  :required_earning: 40
   :factor_of_safty: 0.30
   :grouping_probablity: 60000
   :min_free_slot_limit: 3
@@ -38,7 +38,7 @@
     60:  :local_worker
     40:  :traveller
     20:  :rich_businessman
-  :required_earning: 400
+  :required_earning: 40
   :factor_of_safty: 0.32
   :grouping_probablity: 42000
   :min_free_slot_limit: 2
@@ -52,7 +52,7 @@
     30:  :local_worker
     40:  :traveller
     20:  :rich_businessman
-  :required_earning: 400
+  :required_earning: 40
   :factor_of_safty: 0.3
   :grouping_probablity: 45000
   :min_free_slot_limit: 2
@@ -65,7 +65,7 @@
     60:  :cop
     50:  :busy_lady
     20:  :rich_businessman
-  :required_earning: 400
+  :required_earning: 40
   :factor_of_safty: 0.27
   :grouping_probablity: 55000
   :min_free_slot_limit: 2
@@ -78,7 +78,7 @@
     60:  :college_girl
     30:  :busy_lady
     20:  :rich_businessman
-  :required_earning: 400
+  :required_earning: 40
   :factor_of_safty: 0.24
   :grouping_probablity: 60000
   :min_free_slot_limit: 2
@@ -91,7 +91,7 @@
     60:  :school_kid
     30:  :traveller
     20:  :local_worker
-  :required_earning: 400
+  :required_earning: 40
   :factor_of_safty: 0.21
   :grouping_probablity: 75000
   :min_free_slot_limit: 2
@@ -105,7 +105,7 @@
     60:  :business_tycoon
     40:  :alien
     20:  :rich_wife
-  :required_earning: 400
+  :required_earning: 40
   :factor_of_safty: 0.18
   :grouping_probablity: 85000
   :min_free_slot_limit: 2
