@@ -25,3 +25,5 @@ $wizard.add Warehouse
 $wizard.add About
 $wizard.add Credits
 $wizard.go_to PlayerLoader
+
+$wizard.window_changer.join

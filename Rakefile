@@ -12,6 +12,11 @@ namespace :bakery do
     end
   end
   
+  desc "clears bakery.log"
+  task :clear do
+    File.open($BAKERY_LOG_FILE, 'w') { |h| h.write('') }
+  end
+  
   namespace :reporting do
     namespace :customers do
       

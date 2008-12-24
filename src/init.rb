@@ -25,5 +25,5 @@ require 'util/actions'
 require 'logger'
 require File.join('util', 'util')
 
-$logger = Logger.new(File.join($BAKERY_HOME, 'tmp', 'bakery.log'))
+$logger = Logger.new($BAKERY_LOG_FILE = File.join($BAKERY_HOME, 'tmp', 'bakery.log'))
 $logger.level = Logger::DEBUG
