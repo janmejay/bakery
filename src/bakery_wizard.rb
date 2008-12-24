@@ -88,7 +88,7 @@ class BakeryWizard
         @window_change_request || next
         @go_to_semaphore.synchronize do
           $logger.debug("[#{@window_change_request.inspect}] -> Attempting to change screen to #{@window_change_request}")
-          @current_screen && @current_screen.stop
+          @current_screen && @current_screen.close
           arguments = [@context, @window] + @window_change_request.arguments
           @current_screen = @screens.find { |screen| screen == @window_change_request.requested_screen }.build(*arguments)
           Thread.new { @current_screen.show }
