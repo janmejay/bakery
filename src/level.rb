@@ -81,7 +81,10 @@ class Level
   end
   
   def self.level_details_for level_id
-    LEVELS_CONFIG[level_id]
+    $logger.debug("Loading level details for `#{level_id}`")
+    level_details = LEVELS_CONFIG[level_id]
+    $logger.debug("Level details are => #{level_details.inspect}")
+    level_details
   end
   
   def self.is_last_level? level_id
@@ -104,8 +107,8 @@ class Level
     @level[:table_image] || 'media/table.png'
   end
   
-  def required_earnings
-    @required_total_money
+  def required_earning
+    @level[:required_earning]
   end
   
   def window= shop
@@ -119,7 +122,6 @@ class Level
       while @earning_oppourtunity_ensured < @possible_earning 
         @earning_oppourtunity_ensured += add_customer
       end
-      @required_total_money = @level[:required_earning] + @shop.baker.money
     end
     @customer_queue.window = @shop
   end
@@ -141,7 +143,7 @@ class Level
   end
   
   def required_earning_surpassed?
-    @required_total_money < @shop.baker.money
+    @level[:required_earning] < @shop.money_drawer.money
   end
   
   def add_customer

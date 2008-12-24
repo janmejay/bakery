@@ -7,8 +7,7 @@ class StoryPlayer < BakeryWizard::Window
   
   BUTTON_OFFSET = {:x => 930, :y => 680}
   
-  def initialize context
-    self.current_context = context
+  def initialize *ignore
     @cursor = Cursor.new
   end
 
@@ -22,6 +21,7 @@ class StoryPlayer < BakeryWizard::Window
   end
   
   def current_context= context
+    $logger.debug("Creating StoryPlayer with #{context.inspect}")
     @context = context
     @level = Level.level_details_for @context[:level]
     story_dir = File.join(STORY_BASE_DIR, @level[:story_dir])

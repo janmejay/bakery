@@ -21,7 +21,31 @@ require 'level'
 require 'info_pane'
 
 class Shop < BakeryWizard::Window
-  attr_reader :baker, :level
+  class MoneyBag
+    attr_reader :money
+    
+    def initialize
+      @money = 0
+    end
+    
+    def deposit amount
+      @money += amount
+    end
+    
+    def withdraw amount
+      @money -= amount
+    end
+    
+    def merge_into another_money_bag
+      another_money_bag.money += @money
+    end
+    
+    private
+    attr_writer :money
+  end
+  
+  
+  attr_reader :baker, :level, :money_drawer, :bank_account
   include Actions
   include Publisher
   include Subscriber
@@ -112,10 +136,10 @@ class Shop < BakeryWizard::Window
   def level_context= context
     @context = context
     @level = Level.new(@context)
+    prepare_money_bags
   end
   
-  def warehouse_context= context
-    @context = context
+  def warehouse_context= *ignore
     @context.delete(:newly_shipped).each do |asset_id, asset_data|
       @context[:has_asset_ids] << asset_id
       @context[:assets] << asset_data
@@ -124,7 +148,8 @@ class Shop < BakeryWizard::Window
   end
   
   def dump_shop
-    @baker.update_context @context
+    @money_drawer.merge_into(@bank_account)
+    @context[:money] = @bank_account.money
     execute_ignoring_non_serializable_associations do
       File.open(Util.last_played_file_name(@context), "w") do |handle|
         handle.write(Marshal.dump(self))
@@ -169,6 +194,12 @@ class Shop < BakeryWizard::Window
   end
   
   private
+  
+  def prepare_money_bags
+    @money_drawer, @bank_account = MoneyBag.new, MoneyBag.new
+    $logger.debug("created a new bank_account with balance => #{@bank_account.money}, will load it with #{@context[:money]}")
+    @bank_account.deposit @context[:money]
+  end
   
   def display_success_result
     @show_success_message || set_message_time

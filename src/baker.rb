@@ -35,15 +35,6 @@ class Baker
     @velocity = 2
     @x, @y, @target_x, @target_y, @angle = 600, 400, 600, 400, 180
     @sane_walking_area = LimitingRectangle.new(384, 170, 835, 550)
-    @money = context[:money]
-  end
-  
-  def update_context context
-    context[:money] = @money
-  end
-  
-  def money
-    @money
   end
   
   def wear_shoes shoes
@@ -114,12 +105,12 @@ class Baker
   
   def pay bucks
     @loss_anim.start_anim bucks.to_s, :x => @x, :y => @y
-    @money -= (@money < bucks ? @money : bucks)
+    @shop_window.money_drawer.withdraw(bucks)
   end
   
   def accept_payment bucks
     @profit_anim.start_anim bucks.to_s, :x => @x, :y => @y
-    @money += bucks
+    @shop_window.money_drawer.deposit(bucks)
   end
 
   private

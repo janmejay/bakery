@@ -23,6 +23,7 @@ class BakeryWizard
     
     module Buildable
       def build context, window, options = {}
+        $logger.debug("Building window #{window.inspect} with options => #{options.inspect} and context => #{context.inspect}")
         options[:params] ||= []
         options[:pre_params] ||= []
         instance = options.has_key?(:from_file) ? Marshal.load(File.open(options[:from_file], 'r').read) : new(context)
@@ -33,6 +34,7 @@ class BakeryWizard
         window.listner = instance
         options[:params].each { |option_name, option_value| instance.respond_to?("#{option_name}=") && instance.send("#{option_name}=", option_value) }
         instance.respond_to?(:ready_for_update_and_render) && instance.ready_for_update_and_render
+        $logger.debug("Window build was successful")
         instance
       end
     end

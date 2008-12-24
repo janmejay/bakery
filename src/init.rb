@@ -16,8 +16,14 @@ $PLAYER_DATA_BASE_PATH = File.join(File.dirname(__FILE__), '..', 'tmp', '#name#'
 $SAVED_GAMES_DIR = File.join(File.dirname(__FILE__), '..', 'tmp', '#name#', 'saved_games')
 $LAST_PLAYED_GAME_PATH = File.join(File.dirname(__FILE__), '..', 'tmp', '#name#', 'last_played')
 
+$BAKERY_HOME = File.expand_path(File.join(File.dirname(__FILE__), '..'))
+
 require "rubygems"
 require 'gosu'
 require 'yaml'
 require 'util/actions'
+require 'logger'
 require File.join('util', 'util')
+
+$logger = Logger.new(File.join($BAKERY_HOME, 'tmp', 'bakery.log'))
+$logger.level = Logger::DEBUG
