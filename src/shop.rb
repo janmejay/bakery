@@ -22,6 +22,12 @@ require 'info_pane'
 
 class Shop < BakeryWizard::Window
   class MoneyBag
+    module Precision
+      def self.induced_from(amount)
+        (amount*100).round.to_f/100
+      end
+    end
+    
     attr_reader :money
     
     def initialize
@@ -30,10 +36,12 @@ class Shop < BakeryWizard::Window
     
     def deposit amount
       @money += amount
+      enforce_precision!
     end
     
     def withdraw amount
       @money -= amount
+      enforce_precision!
     end
     
     def merge_into another_money_bag
@@ -42,6 +50,17 @@ class Shop < BakeryWizard::Window
     
     private
     attr_writer :money
+    
+    def enforce_precision!
+      @money = @money.prec(Precision)
+    end
+  end
+  
+  module PriceCalculator
+    MAX_PROFIT_MARGIN = 0.25
+    def self.cost_price_for item
+      item.selling_price*(1 - MAX_PROFIT_MARGIN*rand(0)).prec(MoneyBag::Precision)
+    end
   end
   
   

@@ -21,12 +21,12 @@ class Dustbin
 
   def perform_updates
     @x, @y = @throwing_anim.hop
-    @cake && @cake.update_position(@x + 30, @y + 60, @cake_throwing_angle)
+    @content && @content.update_position(@x + 30, @y + 60, @content_throwing_angle)
   end
   
   def render
     @image.draw(@x, @y, zindex)
-    @cake && @cake.render(ZOrder::CAKE_IN_DUSTBIN)
+    @content && @content.render(ZOrder::CAKE_IN_DUSTBIN)
   end
   
   def handle(event)
@@ -44,7 +44,8 @@ class Dustbin
   
   def accept_plate plate
     @shop_window.unregister(plate)
-    @cake = plate.content
+    @content = plate.content
+    @shop_window.baker.pay(Shop::PriceCalculator.cost_price_for(@content))
   end
   
   protected
@@ -64,10 +65,10 @@ class Dustbin
   
   def ask_for_waste_cake *ignore
     @shop_window.baker.give_plate_to(self)
-    @cake_throwing_angle = rand(360)
+    @content_throwing_angle = rand(360)
   end
   
   def discard_the_cake *ignore
-    @cake = nil
+    @content = nil
   end
 end

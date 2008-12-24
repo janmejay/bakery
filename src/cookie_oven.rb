@@ -25,6 +25,10 @@ class CookieOven
       @cookies_name.to_s.gsub(/_/, ' ').capitalize
     end
     
+    def selling_price
+      CookieOven::COST
+    end
+    
     def render(z_index = ZOrder::CAKE)
       @angle ? @body.draw_rot(@x, @y, z_index, @angle) : @body.draw(@x, @y, z_index)
     end

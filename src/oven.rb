@@ -82,6 +82,10 @@ class Oven
       end
     end
     
+    def selling_price
+      Oven::COST + (iced? ? Froster::COST : 0) + (decorated? ? Decorator::COST : 0) + (topped? ? (ToppingOven::COST + (@top_icing_type ? Froster::COST : 0)) : 0)
+    end
+    
     private
     def name_for entity_id, type = :cake
       entity_id.nil? && return
@@ -261,7 +265,6 @@ class Oven
   end
   
   def bake(cake)
-    # @shop_window.baker.pay(-30)
     @cake = cake
     @baking_process.start unless baking?
   end

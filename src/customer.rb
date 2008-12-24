@@ -7,7 +7,7 @@ class Customer
     
     def initialize customer
       @customer = customer
-      @amount = @customer.payment + @customer.tip_amount
+      @amount = (@customer.payment + @customer.tip_amount).prec(Shop::MoneyBag::Precision)
       @x = MONEY_OFFSET[:x] + @customer.x
       perform_updates
       self.window = customer.shop_window

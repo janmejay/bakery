@@ -50,7 +50,7 @@ class WelcomeMenu < BakeryWizard::Window
     warehouse_catlog = YAML.load_file(File.join(File.dirname(__FILE__), '..', 'data', 'warehouse-stock.yml'))
     @context[:assets] = []
     @context[:has_asset_ids].each { |asset_id| @context[:assets] << warehouse_catlog[asset_id] }
-    $wizard.go_to(StoryPlayer, :pre_params => {:current_context => @context.merge(:level => @context[:level] + 1)})
+    $wizard.go_to(StoryPlayer, :pre_params => {:current_context => @context})
   end
   
   def go_back

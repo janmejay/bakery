@@ -8,9 +8,9 @@ class InfoPane
   end
   
   def update
-    @overall_holdings.message "Bank balance: #{@shop.bank_account.money}", 0xfff3dfbc
-    @baker_goal_message.message "Goal: #{@shop.level.required_earning}", 0xfff3dfbc
-    @earning_message.message "Earning: #{@shop.money_drawer.money}", 0xfff3dfbc
+    @overall_holdings.message "Bank balance: #{@shop.bank_account.money.to_i}", 0xfff3dfbc
+    @baker_goal_message.message "Goal: #{@shop.level.required_earning.to_i}", 0xfff3dfbc
+    @earning_message.message "Earning: #{@shop.money_drawer.money.to_i}", 0xfff3dfbc
   end
   
   def window= shop
