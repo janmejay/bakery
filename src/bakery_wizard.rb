@@ -87,13 +87,13 @@ class BakeryWizard
         sleep(UN_NOTICABLE_WAIT_TIME)
         @window_change_request || next
         @go_to_semaphore.synchronize do
-          $logger.debug("[#{@window_change_request.inspect}] -> Attempting to change screen to #{@window_change_request.requested_screen}")
+          $logger.debug("[#{@window_change_request.inspect}] -> Attempting to change screen to #{@window_change_request}")
           @current_screen && @current_screen.stop
           arguments = [@context, @window] + @window_change_request.arguments
           @current_screen = @screens.find { |screen| screen == @window_change_request.requested_screen }.build(*arguments)
-          @current_screen.show
+          Thread.new { @current_screen.show }
           @window_change_request = nil
-          $logger.debug("[#{@window_change_request}] -> Changed screen to #{@window_change_request.requested_screen} successfully")
+          $logger.debug("[#{@window_change_request}] -> Changed screen to #{@window_change_request} successfully")
         end
       end
     end
