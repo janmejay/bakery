@@ -25,3 +25,4 @@ $wizard.add Warehouse
 $wizard.add About
 $wizard.add Credits
 $wizard.go_to PlayerLoader
+$wizard.maintain_active_display!

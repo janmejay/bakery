@@ -92,7 +92,7 @@ class BakeryWizard
   
   def go_to requested_screen, *args
     window_change_req = WindowChangeRequest.new(requested_screen, args)
-    @window_change_request && $logger.debug("Ignoring window change request#{window_change_request}. Another request#{@window_change_request} is in progress.") && return
+    @window_change_request && $logger.debug("Ignoring window change request#{window_change_req}. Another request#{@window_change_request} is in progress.") && return
     $logger.debug("Will try to add a new window change request#{window_change_req} NOW.")
     @window_change_in_pregress.synchronize do
       $logger.debug("Adding Window change request for #{window_change_req}")
@@ -101,19 +101,30 @@ class BakeryWizard
     Process.kill("USR1", Process.pid)
   end
   
+  def maintain_active_display!
+    loop do
+      @active_display_thread = Thread.new { @current_screen.show }
+      @active_display_thread.join
+    end
+  end
+  
   private 
   def process_window_change_req
     @window_change_in_pregress.synchronize do 
-      $logger.debug("[#{@window_change_request.inspect}] -> Attempting to change screen to #{@window_change_request}")
-      @current_screen && @current_screen.close
-      arguments = [@context, @window] + @window_change_request.arguments
-      @current_screen = @screens.find { |screen| screen == @window_change_request.requested_screen }.build(*arguments)
-      $logger.debug("[#{@window_change_request.inspect}] -> Killing active_display_thread(if there)")
-      @active_display_thread && @active_display_thread.kill
-      @active_display_thread = Thread.new { @current_screen.show }
-      @window_change_request = nil
-      $logger.debug("[#{@window_change_request}] -> Changed screen to #{@window_change_request} successfully")
+      resurrect_active_display
     end
-    @active_display_thread.join
+    $logger.debug("Returning the stack(was waiting for thread #{@active_display_thread.inspect}).")
+  end
+  
+  def resurrect_active_display
+    request_id = "[#{@window_change_request.inspect}] -> "
+    $logger.debug("#{request_id}Display resurrection initiated")
+    @current_screen && @current_screen.close
+    $logger.debug("#{request_id}Existing display refresh loop stoped")
+    arguments = [@context, @window] + @window_change_request.arguments
+    @current_screen = @screens.find { |screen| screen == @window_change_request.requested_screen }.build(*arguments)
+    @active_display_thread && @active_display_thread.kill
+    $logger.debug("#{request_id} Killed active display.")
+    @window_change_request = nil
   end
 end
