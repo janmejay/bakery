@@ -97,7 +97,7 @@ class BakeryWizard
       $logger.debug("Adding Window change request for #{window_change_req}")
       @window_change_request = window_change_req
     end
-    # sleep(UN_NOTICABLE_WAIT_TIME)
+    sleep(UN_NOTICABLE_WAIT_TIME)
     Process.kill("USR1", Process.pid)
   end
   
@@ -114,5 +114,6 @@ class BakeryWizard
       @window_change_request = nil
       $logger.debug("[#{@window_change_request}] -> Changed screen to #{@window_change_request} successfully")
     end
+    sleep(10)
   end
 end
