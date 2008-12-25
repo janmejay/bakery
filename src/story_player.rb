@@ -46,7 +46,7 @@ class StoryPlayer < BakeryWizard::Window
   
   def draw
     @cursor.draw
-    @current_story_slide.draw(0, 0, 0)
+    @current_story_slide && @current_story_slide.draw(0, 0, 0)
     for_each_subscriber {|sub| sub.render }
   end
 end
