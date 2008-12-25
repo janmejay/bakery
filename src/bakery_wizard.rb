@@ -92,12 +92,12 @@ class BakeryWizard
   
   def go_to requested_screen, *args
     window_change_req = WindowChangeRequest.new(requested_screen, args)
+    @window_change_request && $logger.debug("Ignoring window change request#{window_change_request}. Another request#{@window_change_request} is in progress.") && return
     $logger.debug("Will try to add a new window change request#{window_change_req} NOW.")
     @window_change_in_pregress.synchronize do
       $logger.debug("Adding Window change request for #{window_change_req}")
       @window_change_request = window_change_req
     end
-    sleep(UN_NOTICABLE_WAIT_TIME)
     Process.kill("USR1", Process.pid)
   end
   
@@ -114,6 +114,6 @@ class BakeryWizard
       @window_change_request = nil
       $logger.debug("[#{@window_change_request}] -> Changed screen to #{@window_change_request} successfully")
     end
-    sleep(10)
+    @active_display_thread.join
   end
 end

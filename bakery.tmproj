@@ -28,9 +28,9 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>33</integer>
+				<integer>23</integer>
 				<key>line</key>
-				<integer>15</integer>
+				<integer>7</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
@@ -66,34 +66,6 @@
 				<key>line</key>
 				<integer>19</integer>
 			</dict>
-		</dict>
-		<key>data/levels.yml</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>22</integer>
-				<key>line</key>
-				<integer>107</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>67</integer>
-		</dict>
-		<key>data/returns.yml</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>11</integer>
-				<key>line</key>
-				<integer>4</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
 		</dict>
 		<key>data/warehouse-stock.yml</key>
 		<dict>
@@ -139,19 +111,19 @@
 			<key>firstVisibleLine</key>
 			<integer>16</integer>
 		</dict>
-		<key>src/baker.rb</key>
+		<key>src/bakery_wizard.rb</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>66</integer>
+				<integer>12</integer>
 				<key>line</key>
-				<integer>60</integer>
+				<integer>116</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>49</integer>
+			<integer>74</integer>
 		</dict>
 		<key>src/common/text_field.rb</key>
 		<dict>
@@ -213,20 +185,6 @@
 				<integer>7</integer>
 			</dict>
 		</dict>
-		<key>src/cookie_oven.rb</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>24</integer>
-				<key>line</key>
-				<integer>24</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>9</integer>
-		</dict>
 		<key>src/credits.rb</key>
 		<dict>
 			<key>caret</key>
@@ -255,28 +213,14 @@
 			<key>firstVisibleLine</key>
 			<integer>6</integer>
 		</dict>
-		<key>src/dustbin.rb</key>
+		<key>src/init.rb</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>31</integer>
+				<integer>27</integer>
 				<key>line</key>
-				<integer>22</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>src/froster.rb</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>13</integer>
-				<key>line</key>
-				<integer>9</integer>
+				<integer>27</integer>
 			</dict>
 			<key>columnSelection</key>
 			<false/>
@@ -287,59 +231,17 @@
 			<key>selectFrom</key>
 			<dict>
 				<key>column</key>
-				<integer>2</integer>
+				<integer>22</integer>
 				<key>line</key>
-				<integer>9</integer>
+				<integer>27</integer>
 			</dict>
 			<key>selectTo</key>
 			<dict>
 				<key>column</key>
-				<integer>19</integer>
+				<integer>37</integer>
 				<key>line</key>
-				<integer>9</integer>
+				<integer>27</integer>
 			</dict>
-		</dict>
-		<key>src/init.rb</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>21</integer>
-				<key>line</key>
-				<integer>21</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>src/order_builder.rb</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>87</integer>
-				<key>line</key>
-				<integer>70</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>43</integer>
-		</dict>
-		<key>src/oven.rb</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>104</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>83</integer>
 		</dict>
 		<key>src/save_load.rb</key>
 		<dict>
@@ -354,20 +256,6 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>58</integer>
-		</dict>
-		<key>src/shoe.rb</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>20</integer>
-				<key>line</key>
-				<integer>8</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
 		</dict>
 		<key>src/showcase.rb</key>
 		<dict>
@@ -391,20 +279,6 @@
 				<integer>16</integer>
 				<key>line</key>
 				<integer>0</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>src/topping_oven.rb</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>73</integer>
-				<key>line</key>
-				<integer>27</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
@@ -483,25 +357,31 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
+		<key>tmp/bakery.log</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>7</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
 	</dict>
 	<key>openDocuments</key>
 	<array>
 		<string>bakery</string>
-		<string>src/dustbin.rb</string>
-		<string>src/order_builder.rb</string>
-		<string>src/baker.rb</string>
-		<string>src/util/font_animator.rb</string>
-		<string>src/cookie_oven.rb</string>
-		<string>src/oven.rb</string>
-		<string>data/levels.yml</string>
-		<string>data/warehouse-stock.yml</string>
-		<string>src/decorator.rb</string>
-		<string>data/returns.yml</string>
-		<string>src/froster.rb</string>
+		<string>src/bakery_wizard.rb</string>
+		<string>tmp/bakery.log</string>
+		<string>src/init.rb</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{0, 46}, {1230, 832}}</string>
+	<string>{{0, 48}, {1230, 830}}</string>
 </dict>
 </plist>
