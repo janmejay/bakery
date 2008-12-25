@@ -73,31 +73,17 @@ class BakeryWizard
     end
   end
   
-  attr_reader :window_changer
-  
-  UN_NOTICABLE_WAIT_TIME = 0.2
+  UN_NOTICABLE_WAIT_TIME = 0.4 #seconds
   
   def initialize
     @screens = []
     @current_screen = nil
     @context = {}
     @window = BaseWindow.new(1024, 768, false)
-    @window_changer = Thread.new do
-      loop do
-        sleep(UN_NOTICABLE_WAIT_TIME)
-        @window_change_request || next
-        @go_to_semaphore.synchronize do
-          $logger.debug("[#{@window_change_request.inspect}] -> Attempting to change screen to #{@window_change_request}")
-          @current_screen && @current_screen.close
-          arguments = [@context, @window] + @window_change_request.arguments
-          @current_screen = @screens.find { |screen| screen == @window_change_request.requested_screen }.build(*arguments)
-          Thread.new { @current_screen.show }
-          @window_change_request = nil
-          $logger.debug("[#{@window_change_request}] -> Changed screen to #{@window_change_request} successfully")
-        end
-      end
+    Signal.trap('USR1') do
+      @window_change_request && process_window_change_req
     end
-    @go_to_semaphore = Mutex.new
+    @window_change_in_pregress = Mutex.new
   end
   
   def add screen
@@ -107,10 +93,26 @@ class BakeryWizard
   def go_to requested_screen, *args
     window_change_req = WindowChangeRequest.new(requested_screen, args)
     $logger.debug("Will try to add a new window change request#{window_change_req} NOW.")
-    @go_to_semaphore.synchronize do
+    @window_change_in_pregress.synchronize do
       $logger.debug("Adding Window change request for #{window_change_req}")
       @window_change_request = window_change_req
     end
-    sleep(UN_NOTICABLE_WAIT_TIME)
+    # sleep(UN_NOTICABLE_WAIT_TIME)
+    Process.kill("USR1", Process.pid)
+  end
+  
+  private 
+  def process_window_change_req
+    @window_change_in_pregress.synchronize do 
+      $logger.debug("[#{@window_change_request.inspect}] -> Attempting to change screen to #{@window_change_request}")
+      @current_screen && @current_screen.close
+      arguments = [@context, @window] + @window_change_request.arguments
+      @current_screen = @screens.find { |screen| screen == @window_change_request.requested_screen }.build(*arguments)
+      $logger.debug("[#{@window_change_request.inspect}] -> Killing active_display_thread(if there)")
+      @active_display_thread && @active_display_thread.kill
+      @active_display_thread = Thread.new { @current_screen.show }
+      @window_change_request = nil
+      $logger.debug("[#{@window_change_request}] -> Changed screen to #{@window_change_request} successfully")
+    end
   end
 end
