@@ -27,3 +27,5 @@ require File.join('util', 'util')
 
 $logger = Logger.new($BAKERY_LOG_FILE = File.join($BAKERY_HOME, 'tmp', 'bakery.log'))
 $logger.level = Logger::DEBUG
+
+$death_trace_file = File.join($BAKERY_HOME, 'tmp', 'death_stack_trace')

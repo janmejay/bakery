@@ -103,9 +103,14 @@ class BakeryWizard
   
   def maintain_active_display!
     loop do
+      $logger.debug("Display Maintainer: (re)enabling display window...")
       @active_display_thread = Thread.new { @current_screen.show }
       @active_display_thread.join
     end
+  rescue
+    $logger.error("Display Maintainer: Unexpected: The display maintainer died. Dumping killing stack's trace to #{$death_trace_file}")
+    File.open($death_trace_file, 'w') { |h| h.write($!.backtrace.join("\n")) }
+    raise $!
   end
   
   private 
@@ -124,7 +129,7 @@ class BakeryWizard
     arguments = [@context, @window] + @window_change_request.arguments
     @current_screen = @screens.find { |screen| screen == @window_change_request.requested_screen }.build(*arguments)
     @active_display_thread && @active_display_thread.kill
-    $logger.debug("#{request_id} Killed active display.")
+    $logger.debug("#{request_id} Killed active display")
     @window_change_request = nil
   end
 end
