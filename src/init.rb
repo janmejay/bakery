@@ -12,11 +12,12 @@ end
 
 $LOAD_PATH << File.dirname(__FILE__)
 
-$PLAYER_DATA_BASE_PATH = File.join(File.dirname(__FILE__), '..', 'tmp', '#name#')
-$SAVED_GAMES_DIR = File.join(File.dirname(__FILE__), '..', 'tmp', '#name#', 'saved_games')
-$LAST_PLAYED_GAME_PATH = File.join(File.dirname(__FILE__), '..', 'tmp', '#name#', 'last_played')
-
 $BAKERY_HOME = File.expand_path(File.join(File.dirname(__FILE__), '..'))
+$BAKERY_TMP = File.join($BAKERY_HOME, 'tmp')
+
+$PLAYER_DATA_BASE_PATH = File.join($BAKERY_TMP, '#name#')
+$SAVED_GAMES_DIR = File.join($BAKERY_TMP, '#name#', 'saved_games')
+$LAST_PLAYED_GAME_PATH = File.join($BAKERY_TMP, '#name#', 'last_played')
 
 require "rubygems"
 require 'gosu'
@@ -24,6 +25,8 @@ require 'yaml'
 require 'util/actions'
 require 'logger'
 require File.join('util', 'util')
+require 'fileutils'
+FileUtils.mkdir_p($BAKERY_TMP)
 
 $logger = Logger.new($BAKERY_LOG_FILE = File.join($BAKERY_HOME, 'tmp', 'bakery.log'))
 $logger.level = Logger::DEBUG
