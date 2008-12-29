@@ -12,11 +12,21 @@ class BakeryWizard
   
     def draw
       draw_quad(0, 0, 0xffffffff, WIDTH, 0, 0xffffffff, 0, HEIGHT, 0xffffffff, WIDTH, HEIGHT, 0xffffffff)
-      @listner && @listner.draw
+      @stop_display || (@listner && @listner.draw)
     end
     
     def update
-      @listner && @listner.update
+      @stop_display || (@listner && @listner.update)
+    end
+    
+    def show
+      @stop_display = false
+      super
+    end
+    
+    def close
+      @stop_display = true
+      super
     end
     
   end
