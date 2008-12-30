@@ -62,6 +62,8 @@ class Customer
   MENU_CARD_OFFSET = {:x => 60, :y => -20}
   
   X_INCREMENT_WHEN_READING_MENU = 30
+
+  LOSS_ON_CUSTOMER_DISSATISFACTION_RATIO = 0.25 
   
   def self.cost_inclination_for type
     CUSTOMER_CONFIG[type][:cost_inclination]
@@ -207,7 +209,7 @@ class Customer
     @leaving_the_shop = true
     @body_angle = 0
     @has_menu_card = false
-    @order_sample.satisfied? && put_money_on_the_table
+    @order_sample.satisfied? ? put_money_on_the_table : @shop_window.baker.pay(payment*LOSS_ON_CUSTOMER_DISSATISFACTION_RATIO)
   end
   
   def free_place_in_the_queue *ignore
