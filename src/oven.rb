@@ -115,6 +115,7 @@ class Oven
       @shop_window = shop_window
       @plate_view = Gosu::Image.new(@shop_window.window, 'media/plate.png', false)
       @content.window = shop_window
+      @shop_window.unaccounted_for(self)
     end
     
     def update_position(x, y)

@@ -57,6 +57,7 @@ module OrderBuilder
       plate && plate.holder = self
       @shop_window.unregister plate
       @shop_window.unregister self
+      @shop_window.accounted_for(plate)
       @satisfied = true
     end
     

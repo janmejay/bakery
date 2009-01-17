@@ -119,7 +119,7 @@ class BakeryWizard
     end
   rescue
     $logger.error("Display Maintainer: Unexpected: The display maintainer died. Dumping killing stack's trace to #{$death_trace_file}")
-    File.open($death_trace_file, 'w') { |h| h.write($!.backtrace.join("\n")) }
+    File.open($death_trace_file, 'w') { |h| h.write($!.message + "\n" + $!.backtrace.join("\n")) }
     raise $!
   end
   

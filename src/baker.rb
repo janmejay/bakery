@@ -104,13 +104,16 @@ class Baker
   end
   
   def pay bucks
+    $logger.debug("Baker is going to pay -> #{bucks}")
     @loss_anim.start_anim bucks.to_s, :x => @x, :y => @y
     @shop_window.money_drawer.withdraw(bucks)
+    $logger.debug("Baker paid #{bucks}... left with #{@shop_window.money_drawer.money}.")
   end
   
   def accept_payment bucks
     @profit_anim.start_anim bucks.to_s, :x => @x, :y => @y
     @shop_window.money_drawer.deposit(bucks)
+    $logger.debug("Baker got #{bucks}... left with #{@shop_window.money_drawer.money}.")
   end
 
   private

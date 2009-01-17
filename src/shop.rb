@@ -91,6 +91,7 @@ class Shop < BakeryWizard::Window
     @alive_entities << @baker = Baker.new(context)
     @context[:assets].each { |asset_data| add_asset(asset_data) }
     @show_message_upto = Time.now
+    @unaccounted_for_plates = Set.new
   end
   
   def has_tv?
@@ -127,7 +128,6 @@ class Shop < BakeryWizard::Window
     @dead_entities.each { |entity| entity.window = self }
     @alive_entities.each { |entity| entity.window = self }
     @no_ui_entities.each { |entity| entity.window = self }
-    @show_success_message = @show_failure_message = false
   end
   
   def ready_for_update_and_render
@@ -139,6 +139,14 @@ class Shop < BakeryWizard::Window
     $wizard.go_to(WelcomeMenu)
   end
 
+  def unaccounted_for plate
+    @unaccounted_for_plates << plate
+  end
+
+  def accounted_for plate
+    @unaccounted_for_plates.delete(plate)
+  end
+
   def update
     case true
     when button_down?(Gosu::Button::MsLeft): publish(Event.new(:left_click, mouse_x, mouse_y))
@@ -148,7 +156,7 @@ class Shop < BakeryWizard::Window
     @alive_entities.each {|entity| entity.update}
     for_each_subscriber {|subscriber| subscriber.perform_updates}
     @level.update
-    @level.required_earning_surpassed? ? display_success_result : (@level.out_of_customers? && display_failure_result)
+    display_appropriate_result_message
     terminate_once_message_displayed
   end
   
@@ -220,28 +228,56 @@ class Shop < BakeryWizard::Window
     @bank_account.deposit @context[:money]
   end
   
-  def display_success_result
-    @show_success_message || set_message_time
-    @show_success_message = true
+  def display_result succcess
+    @showing_message || set_message_time
+    @showing_message = true
+    @result_slide = succcess ? @success_message : @failure_message
     @level.clear_remaining_customers!
   end
   
-  def display_failure_result
-    @show_failure_message || set_message_time
-    @show_failure_message = true
+  def display_appropriate_result_message
+    @showing_message && return
+    unless @level.required_earning_surpassed?
+      @level.out_of_customers? && display_result(false)
+      return
+    else
+      display_result(true)
+    end
+  end
+
+  def reset_and_redisplay_appropriate_message_if_unsold_cakes_matter
+    earning_target_status = @level.required_earning_surpassed?
+    $logger.debug("Level -> #{@context[:level]} required earning status before accounting for unsold cakes.... #{earning_target_status}")
+    account_for_unsold_cakes
+    if (@level.required_earning_surpassed? != earning_target_status)
+      $logger.debug("Level -> #{@context[:level]} required minimum earning status changed....")
+      @showing_message = false
+      display_appropriate_result_message
+    end
+  end
+
+  def account_for_unsold_cakes
+    $logger.debug("Level -> #{@context[:level]} accounting for #{@unaccounted_for_plates.length} unsold cakes....")
+    @unaccounted_for_plates.each do |accountable_plate| 
+      @baker.pay PriceCalculator.cost_price_for(accountable_plate.content)
+    end
+    $logger.debug("Level -> #{@context[:level]} Paid up for unsold cakes...")
+    @unaccounted_for_plates = Set.new
   end
   
   def terminate_once_message_displayed
+    @termination_done && return
     ((Time.now > @show_message_upto) && @level.out_of_customers?) || return
+    reset_and_redisplay_appropriate_message_if_unsold_cakes_matter
+    @termination_done = true
     @show_success_message && dump_shop && $wizard.go_to(StoryPlayer, :pre_params => {:current_context => @context.merge(:level => @context[:level] + 1)}) && return
-    @show_failure_message && show_retry_option
+    show_retry_option
   end
   
   def show_retry_option
-    @show_retry_box = Gosu::Image.new(window, 'media/modal_box.png')
-    font = Gosu::Font.new(self.window, 'media/hand.ttf', 35)
-    TextButton.new(self, {:x => RETRY_BUTTON_OFFSET[:x], :y => RETRY_BUTTON_OFFSET[:y], :z => ZOrder::MODAL_BUTTONS, :dx => 348, :dy => 44, :image => :game_loader}, :retry_level, font).activate
-    TextButton.new(self, {:x => MENU_BUTTON_OFFSET[:x], :y => MENU_BUTTON_OFFSET[:y], :z => ZOrder::MODAL_BUTTONS, :dx => 348, :dy => 44, :image => :game_loader}, :go_to_main_menu, font).activate
+    @show_retry_box ||= Gosu::Image.new(window, 'media/modal_box.png')
+    @retry_level_button ||= TextButton.new(self, {:x => RETRY_BUTTON_OFFSET[:x], :y => RETRY_BUTTON_OFFSET[:y], :z => ZOrder::MODAL_BUTTONS, :dx => 348, :dy => 44, :image => :game_loader}, :retry_level, @font).activate
+    @show_main_menu_button ||= TextButton.new(self, {:x => MENU_BUTTON_OFFSET[:x], :y => MENU_BUTTON_OFFSET[:y], :z => ZOrder::MODAL_BUTTONS, :dx => 348, :dy => 44, :image => :game_loader}, :go_to_main_menu, @font).activate
   end
   
   def retry_level
@@ -258,8 +294,7 @@ class Shop < BakeryWizard::Window
   
   def show_game_message_if_needed
     (@show_message_upto < Time.now) && return
-    @show_success_message && @success_message.draw(SUCCESS_MESSAGE_OFFSET[:x], SUCCESS_MESSAGE_OFFSET[:y], ZOrder::MESSAGES)
-    @show_failure_message && @failure_message.draw(FAILURE_MESSAGE_OFFSET[:x], FAILURE_MESSAGE_OFFSET[:y], ZOrder::MESSAGES)
+    @result_slide.draw(SUCCESS_MESSAGE_OFFSET[:x], SUCCESS_MESSAGE_OFFSET[:y], ZOrder::MESSAGES)
   end
   
   def class_for class_name

@@ -46,6 +46,7 @@ class Dustbin
     @shop_window.unregister(plate)
     @content = plate.content
     @shop_window.baker.pay(Shop::PriceCalculator.cost_price_for(@content))
+    @shop_window.accounted_for(plate)
   end
   
   protected
