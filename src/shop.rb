@@ -128,6 +128,7 @@ class Shop < BakeryWizard::Window
     @dead_entities.each { |entity| entity.window = self }
     @alive_entities.each { |entity| entity.window = self }
     @no_ui_entities.each { |entity| entity.window = self }
+    @flow_control_flags = Set.new
   end
   
   def ready_for_update_and_render
@@ -223,6 +224,19 @@ class Shop < BakeryWizard::Window
   end
   
   private
+
+  def reset_flow_control_flags
+    @flow_control_flags.each do |flag|
+      instance_variable_set("@#{flag}", nil)
+    end
+    @flow_control_flags = Set.new
+  end
+
+  def flow_control_flag key, value = nil
+    @flow_control_flags << key
+    val = instance_variable_get("@#{key}")
+    val ||= instance_variable_set("@#{key}", value)
+  end
   
   def prepare_money_bags
     @money_drawer, @bank_account = MoneyBag.new, MoneyBag.new
@@ -231,14 +245,14 @@ class Shop < BakeryWizard::Window
   end
   
   def display_result succcess
-    @showing_message || set_message_time
-    @showing_message = true
+    flow_control_flag(:showing_message) || set_message_time
+    flow_control_flag(:showing_message, true)
     @result_slide = succcess ? @success_message : @failure_message
     @level.clear_remaining_customers!
   end
   
   def display_appropriate_result_message
-    @showing_message && return
+    flow_control_flag(:showing_message) && return
     unless @level.required_earning_surpassed?
       @level.out_of_customers? && display_result(false)
       return
@@ -267,11 +281,11 @@ class Shop < BakeryWizard::Window
   end
   
   def terminate_once_message_displayed
-    @termination_done && return
+    flow_control_flag(:termination_done) && return
     ((Time.now > @show_message_upto) && @level.out_of_customers?) || return
     reset_and_redisplay_appropriate_message_if_unsold_cakes_matter
-    @termination_done = true
-    @level.required_earning_surpassed? && dump_shop && $wizard.go_to(StoryPlayer, :pre_params => {:current_context => @context.merge(:level => @context[:level] + 1)}) && return
+    flow_control_flag(:termination_done, true)
+    @level.required_earning_surpassed? && reset_flow_control_flags && dump_shop && $wizard.go_to(StoryPlayer, :pre_params => {:current_context => @context.merge(:level => @context[:level] + 1)}) && return
     show_retry_option
   end
   
