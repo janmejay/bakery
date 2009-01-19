@@ -70,7 +70,7 @@ class CookieOven
   end
   
   def build_sample_on *ignore
-    plate = Oven::Plate.new(Cookies.new(@cookie_names[rand(@cookie_names.length)]))
+    plate = Oven::AbstractPlate.new(Cookies.new(@cookie_names[rand(@cookie_names.length)]))
     plate.window = window
     plate
   end

@@ -81,7 +81,7 @@ class Baker
   end
   
   def is_plate_equal_to? this_plate
-    @plate == this_plate
+    @plate.content == this_plate.content
   end
 
   def update

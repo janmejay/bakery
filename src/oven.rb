@@ -99,7 +99,7 @@ class Oven
     end
   end
   
-  class Plate
+  class AbstractPlate
     
     include Actions::ActiveRectangleSubscriber
     attr_accessor :holder
@@ -115,7 +115,6 @@ class Oven
       @shop_window = shop_window
       @plate_view = Gosu::Image.new(@shop_window.window, 'media/plate.png', false)
       @content.window = shop_window
-      @shop_window.unaccounted_for(self)
     end
     
     def update_position(x, y)
@@ -169,6 +168,13 @@ class Oven
 
     def active_y
       return @y, @y + PLATE_LENGTH_AND_WIDTH
+    end
+  end
+
+  class Plate < AbstractPlate
+    def window= window
+      super
+      @shop_window.unaccounted_for(self)
     end
   end
 
@@ -253,7 +259,7 @@ class Oven
   end
   
   def build_sample_on *ignore
-    sample_plate = Plate.new(Cake.new(@button_names[rand(@button_names.length)]))
+    sample_plate = AbstractPlate.new(Cake.new(@button_names[rand(@button_names.length)]))
     sample_plate.window = @shop_window
     sample_plate
   end

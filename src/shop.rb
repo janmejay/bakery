@@ -140,11 +140,13 @@ class Shop < BakeryWizard::Window
   end
 
   def unaccounted_for plate
+    $logger.debug("Identified plate #{plate.object_id} as unaccounted.")
     @unaccounted_for_plates << plate
   end
 
   def accounted_for plate
     @unaccounted_for_plates.delete(plate)
+    $logger.debug("Removed plate #{plate.object_id} from unaccounted list. Now unaccounted for list has #{@unaccounted_for_plates.map { |p| p.object_id }.inspect}.")
   end
 
   def update
@@ -240,9 +242,8 @@ class Shop < BakeryWizard::Window
     unless @level.required_earning_surpassed?
       @level.out_of_customers? && display_result(false)
       return
-    else
-      display_result(true)
     end
+    display_result(true)
   end
 
   def reset_and_redisplay_appropriate_message_if_unsold_cakes_matter
@@ -270,7 +271,7 @@ class Shop < BakeryWizard::Window
     ((Time.now > @show_message_upto) && @level.out_of_customers?) || return
     reset_and_redisplay_appropriate_message_if_unsold_cakes_matter
     @termination_done = true
-    @show_success_message && dump_shop && $wizard.go_to(StoryPlayer, :pre_params => {:current_context => @context.merge(:level => @context[:level] + 1)}) && return
+    @level.required_earning_surpassed? && dump_shop && $wizard.go_to(StoryPlayer, :pre_params => {:current_context => @context.merge(:level => @context[:level] + 1)}) && return
     show_retry_option
   end
   

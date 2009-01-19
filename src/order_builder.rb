@@ -57,6 +57,7 @@ module OrderBuilder
       plate && plate.holder = self
       @shop_window.unregister plate
       @shop_window.unregister self
+      $logger.debug("Accepted plate #{plate.object_id}.")
       @shop_window.accounted_for(plate)
       @satisfied = true
     end
