@@ -7,7 +7,7 @@ class CookieOven
     
     def window= shop_window
       @shop_window = shop_window
-      @body = Gosu::Image.new(@shop_window.window, "media/#{@cookies_name}.png")
+      @body = Gosu::Image.new(@shop_window.window, res("media/#{@cookies_name}.png"))
     end
     
     def update_position(x, y, angle = nil)
@@ -60,9 +60,9 @@ class CookieOven
   def window= shop_window
     @shop_window = shop_window
     @baking_process.window = @shop_window.window
-    @body = Gosu::Image.new(@shop_window.window, @context_cookie_oven_data[:machine_view], true)
-    @base = Gosu::Image.new(@shop_window.window, @context_cookie_oven_data[:machine_base], true)
-    @hood = Gosu::Image.new(@shop_window.window, @context_cookie_oven_data[:machine_hood], true)
+    @body = Gosu::Image.new(@shop_window.window, res(@context_cookie_oven_data[:machine_view]), true)
+    @base = Gosu::Image.new(@shop_window.window, res(@context_cookie_oven_data[:machine_base]), true)
+    @hood = Gosu::Image.new(@shop_window.window, res(@context_cookie_oven_data[:machine_hood]), true)
     (@cookie_names = @context_cookie_oven_data[:buttons]).each_with_index do |button, index|
       GameButton.new(self, {:x => @x + BUTTON_OFFSETS[index][:x], :y => @y + BUTTON_OFFSETS[index][:y], 
         :z => ZOrder::TABLE_MOUNTED_CONTROLS, :dx => 28, :dy => 28}, button).activate

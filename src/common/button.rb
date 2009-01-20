@@ -10,7 +10,7 @@ class Button
     @owner = owner
     @window = @owner.is_a?(BakeryWizard::Window) ? @owner : @owner.window
     @callback = block_given? ? callback : callback_name
-    @body = Gosu::Image.new(@window.window, "media/#{view_options[:image] || callback_name}_button.png", true)
+    @body = Gosu::Image.new(@window.window, res("media/#{view_options[:image] || callback_name}_button.png"), true)
   end
   
   def activate

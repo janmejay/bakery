@@ -19,7 +19,7 @@ class Customer
     
     def window= shop_window
       @shop_window = shop_window
-      @body = Gosu::Image.new(@shop_window.window, 'media/money.png', true)
+      @body = Gosu::Image.new(@shop_window.window, res('media/money.png'), true)
     end
     
     def render
@@ -97,10 +97,10 @@ class Customer
       
   def window= shop_window
     @shop_window = shop_window
-    @body = Gosu::Image.new(@shop_window.window, "media/#{@name}.png")
+    @body = Gosu::Image.new(@shop_window.window, res("media/#{@name}.png"))
     @order_sample.window = @shop_window
-    @patience_unit = Gosu::Image.new(shop_window.window, "media/patience.png")
-    @menu_card = Gosu::Image.new(shop_window.window, "media/menu_card.png")
+    @patience_unit = Gosu::Image.new(shop_window.window, res("media/patience.png"))
+    @menu_card = Gosu::Image.new(shop_window.window, res("media/menu_card.png"))
   end
   
   def update(xy_map)

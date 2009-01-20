@@ -19,6 +19,12 @@ $PLAYER_DATA_BASE_PATH = File.join($BAKERY_TMP, '#name#')
 $SAVED_GAMES_DIR = File.join($BAKERY_TMP, '#name#', 'saved_games')
 $LAST_PLAYED_GAME_PATH = File.join($BAKERY_TMP, '#name#', 'last_played')
 
+def resource path
+  File.join($BAKERY_HOME, path)
+end
+
+alias :res :resource
+
 require "rubygems"
 require 'gosu'
 require 'yaml'

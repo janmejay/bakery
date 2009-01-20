@@ -19,9 +19,9 @@ class ToppingOven < Oven
   
   def window= shop_window
     super
-    @this_cake_is_already_topped = Gosu::Sample.new(@shop_window.window, 'media/this_cake_is_already_topped.ogg')
-    @a_decorated_cake_can_not_be_topped = Gosu::Sample.new(@shop_window.window, 'media/a_decorated_cake_can_not_be_topped.ogg')
-    @cookies_can_not_be_topped = Gosu::Sample.new(@shop_window.window, 'media/cookies_can_not_be_topped.ogg')
+    @this_cake_is_already_topped = Gosu::Sample.new(@shop_window.window, res('media/this_cake_is_already_topped.ogg'))
+    @a_decorated_cake_can_not_be_topped = Gosu::Sample.new(@shop_window.window, res('media/a_decorated_cake_can_not_be_topped.ogg'))
+    @cookies_can_not_be_topped = Gosu::Sample.new(@shop_window.window, res('media/cookies_can_not_be_topped.ogg'))
   end
   
   def build_sample_on sample_plate

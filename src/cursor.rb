@@ -3,7 +3,7 @@
 class Cursor
   def window= bakery_window
     @window = bakery_window.window
-    @tip = Gosu::Image.new(@window, "media/hand.png", true)
+    @tip = Gosu::Image.new(@window, res("media/hand.png"), true)
   end
 
   def draw

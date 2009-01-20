@@ -100,11 +100,11 @@ class Level
   end
   
   def bg_image
-    @level[:bg_image] || 'media/floor.png'
+    res @level[:bg_image] || 'media/floor.png'
   end
   
   def table_image
-    @level[:table_image] || 'media/table.png'
+    res @level[:table_image] || 'media/table.png'
   end
   
   def required_earning

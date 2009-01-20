@@ -23,9 +23,9 @@ class PlayerLoader < BakeryWizard::Window
   
   def window= window
     @window = window
-    @cake_image = Gosu::Image.new(self.window, 'media/loading-cake.png', false)
+    @cake_image = Gosu::Image.new(self.window, res('media/loading-cake.png'), false)
     @cursor.window = self
-    @print_font = Gosu::Font.new(self.window, 'media/hand.ttf', 40)
+    @print_font = Gosu::Font.new(self.window, res('media/hand.ttf'), 40)
     @name_field = TextField.new(self, @print_font, TEXT_FIELD_OFFSET[:x], TEXT_FIELD_OFFSET[:y], 'Sweta', 9, 
       :inactive_color  => 0x00ffffff, :active_color => 0x00ffffff, :selection_color => 0x00ffffff, :caret_color => MESSAGE_COLOR)
     self.text_input = @name_field

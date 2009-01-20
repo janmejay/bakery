@@ -120,9 +120,9 @@ class Shop < BakeryWizard::Window
   def window= window
     @window = window
     @background_image = Gosu::Image.new(self.window, @level.bg_image, true)
-    @success_message = Gosu::Image.new(self.window, 'media/bakers_goal_achived.png')
-    @failure_message = Gosu::Image.new(self.window, 'media/baker_failed.png')
-    @font = Gosu::Font.new(self.window, 'media/hand.ttf', 35)
+    @success_message = Gosu::Image.new(self.window, res('media/bakers_goal_achived.png'))
+    @failure_message = Gosu::Image.new(self.window, res('media/baker_failed.png'))
+    @font = Gosu::Font.new(self.window, res('media/hand.ttf'), 35)
     for_each_subscriber { |subscriber| subscriber.window = self unless subscriber == self }
     TextButton.new(self, {:x => 22, :y => 10, :z => ZOrder::MODAL_BUTTONS, :dx => 117, :dy => 37}, :menu, @font).activate
     @dead_entities.each { |entity| entity.window = self }
@@ -290,7 +290,7 @@ class Shop < BakeryWizard::Window
   end
   
   def show_retry_option
-    @show_retry_box ||= Gosu::Image.new(window, 'media/modal_box.png')
+    @show_retry_box ||= Gosu::Image.new(window, res('media/modal_box.png'))
     @retry_level_button ||= TextButton.new(self, {:x => RETRY_BUTTON_OFFSET[:x], :y => RETRY_BUTTON_OFFSET[:y], :z => ZOrder::MODAL_BUTTONS, :dx => 348, :dy => 44, :image => :game_loader}, :retry_level, @font).activate
     @show_main_menu_button ||= TextButton.new(self, {:x => MENU_BUTTON_OFFSET[:x], :y => MENU_BUTTON_OFFSET[:y], :z => ZOrder::MODAL_BUTTONS, :dx => 348, :dy => 44, :image => :game_loader}, :go_to_main_menu, @font).activate
   end

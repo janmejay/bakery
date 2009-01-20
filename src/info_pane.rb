@@ -14,8 +14,8 @@ class InfoPane
   end
   
   def window= shop
-    @font = Gosu::Font.new(shop.window, 'media/hand.ttf', 25)
-    @background = Gosu::Image.new(shop.window, 'media/info_pane.png', true)
+    @font = Gosu::Font.new(shop.window, res('media/hand.ttf'), 25)
+    @background = Gosu::Image.new(shop.window, res('media/info_pane.png'), true)
     @overall_holdings = ActionMessage.new @font, @background.width/2, 55
     @this_months_chart = ActionMessage.new @font, @background.width/2, 90
     @baker_goal_message = ActionMessage.new @font, @background.width/2, 120

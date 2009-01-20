@@ -24,7 +24,7 @@ module OrderBuilder
     
     def window= shop_window
       @shop_window = shop_window
-      @order_bubble = Gosu::Image.new(@shop_window.window, 'media/order_bubble.png')
+      @order_bubble = Gosu::Image.new(@shop_window.window, res('media/order_bubble.png'))
       @plate.window = @shop_window
       @describer_animation = Util::FontAnimator.new(@shop_window, 200, :z => ZOrder::MESSAGES, :color => '3B1111', :font_size => 32, :font_name =>  File.join(File.dirname(__FILE__), '..', 'media', 'hand.ttf'))
     end

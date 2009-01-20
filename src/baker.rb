@@ -31,7 +31,7 @@ class Baker
   attr_reader :plate
 
   def initialize context
-    @walking_anim = Util::Animator.new('media/walking_baker.png', 105, 80, :chunk_slice_width => 2, :run_indefinitly => true)
+    @walking_anim = Util::Animator.new(res('media/walking_baker.png'), 105, 80, :chunk_slice_width => 2, :run_indefinitly => true)
     @velocity = 2
     @x, @y, @target_x, @target_y, @angle = 600, 400, 600, 400, 180
     @sane_walking_area = LimitingRectangle.new(384, 170, 835, 550)
@@ -39,18 +39,17 @@ class Baker
   
   def wear_shoes shoes
     @velocity = shoes.speed
-    @walking_anim = Util::Animator.new('media/walking_baker.png', 105, 80, :chunk_slice_width => shoes.walking_anim_slice_width, :run_indefinitly => true)
+    @walking_anim = Util::Animator.new(res('media/walking_baker.png'), 105, 80, :chunk_slice_width => shoes.walking_anim_slice_width, :run_indefinitly => true)
     @walking_anim.window = @shop_window.window
   end
   
   def window= shop_window
     @shop_window = shop_window
     @walking_anim.window = @shop_window.window
-    @hat = Gosu::Image.new(@shop_window.window, 'media/baker_hat.png', false)
-    @cant_pick_two_plates_at_a_time = Gosu::Sample.new(@shop_window.window, 'media/cant_pick_two_plates_at_a_time.ogg')
-    transaction_font_path = File.join(File.dirname(__FILE__), '..', 'media', 'number.ttf')
-    @loss_anim = Util::FontAnimator.new(@shop_window, 120, :z => ZOrder::MESSAGES, :color => 'ff0000', :font_name => transaction_font_path)
-    @profit_anim = Util::FontAnimator.new(@shop_window, 120, :z => ZOrder::MESSAGES, :color => '00ff00', :font_name => transaction_font_path)
+    @hat = Gosu::Image.new(@shop_window.window, res('media/baker_hat.png'), false)
+    @cant_pick_two_plates_at_a_time = Gosu::Sample.new(@shop_window.window, res('media/cant_pick_two_plates_at_a_time.ogg'))
+    @loss_anim = Util::FontAnimator.new(@shop_window, 120, :z => ZOrder::MESSAGES, :color => 'ff0000', :font_name => res('media/number.ttf'))
+    @profit_anim = Util::FontAnimator.new(@shop_window, 120, :z => ZOrder::MESSAGES, :color => '00ff00', :font_name => res('media/number.ttf'))
     @plate && @plate.window = @shop_window
   end
   

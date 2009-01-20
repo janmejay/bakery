@@ -15,8 +15,8 @@ class Oven
     def window= shop_window
       @shop_window = shop_window
       cake_name = @icing_type ? "media/#{@icing_type}_#{@cake_name}.png" : "media/#{@cake_name}.png"
-      @body = Gosu::Image.new(@shop_window.window, cake_name)
-      @decoration_type && @decoration = Gosu::Image.new(@shop_window.window, "media/#{@decoration_type}_decoration.png")
+      @body = Gosu::Image.new(@shop_window.window, res(cake_name))
+      @decoration_type && @decoration = Gosu::Image.new(@shop_window.window, res("media/#{@decoration_type}_decoration.png"))
     end
     
     def update_position(x, y, angle = nil)
@@ -40,21 +40,21 @@ class Oven
     def put_icing icing_type
       if topped?
         @top_icing_type = icing_type
-        @topping = Gosu::Image.new(@shop_window.window, "media/#{@top_icing_type}_#{@topping_type}.png")
+        @topping = Gosu::Image.new(@shop_window.window, res("media/#{@top_icing_type}_#{@topping_type}.png"))
       else
         @icing_type = icing_type
-        @body = Gosu::Image.new(@shop_window.window, "media/#{@icing_type}_#{@cake_name}.png")
+        @body = Gosu::Image.new(@shop_window.window, res("media/#{@icing_type}_#{@cake_name}.png"))
       end
     end
     
     def put_decoration decoration_type
       @decoration_type = decoration_type
-      @decoration = Gosu::Image.new(@shop_window.window, "media/#{@decoration_type}_decoration.png")
+      @decoration = Gosu::Image.new(@shop_window.window, res("media/#{@decoration_type}_decoration.png"))
     end
     
     def put_topping topping_type
       @topping_type = topping_type
-      @topping = Gosu::Image.new(@shop_window.window, "media/#{@topping_type}.png")
+      @topping = Gosu::Image.new(@shop_window.window, res("media/#{@topping_type}.png"))
     end
     
     def == other
@@ -113,7 +113,7 @@ class Oven
     
     def window= shop_window
       @shop_window = shop_window
-      @plate_view = Gosu::Image.new(@shop_window.window, 'media/plate.png', false)
+      @plate_view = Gosu::Image.new(@shop_window.window, res('media/plate.png'), false)
       @content.window = shop_window
     end
     
@@ -187,7 +187,7 @@ class Oven
       @y = base_y + place[:y_off]
       @oven = oven
       @cake_name = name_identifier
-      @body = Gosu::Image.new(@oven.shop_window.window, "media/#{name_identifier}_button.png", true)
+      @body = Gosu::Image.new(@oven.shop_window.window, res("media/#{name_identifier}_button.png"), true)
     end
     
     def handle(event)
@@ -237,9 +237,9 @@ class Oven
   
   def window= shop_window
     @shop_window = shop_window
-    @cake_holder = Gosu::Image.new(@shop_window.window, @context_oven_data[:images][:cake_holder], true)
-    @trash_can = Gosu::Image.new(@shop_window.window, @context_oven_data[:images][:trash_can], true)
-    @oven_machine_view = Gosu::Image.new(@shop_window.window, @context_oven_data[:images][:machine_view], true)
+    @cake_holder = Gosu::Image.new(@shop_window.window, res(@context_oven_data[:images][:cake_holder]), true)
+    @trash_can = Gosu::Image.new(@shop_window.window, res(@context_oven_data[:images][:trash_can]), true)
+    @oven_machine_view = Gosu::Image.new(@shop_window.window, res(@context_oven_data[:images][:machine_view]), true)
     @baking_process.window = @shop_window.window
     (@button_names = @context_oven_data[:buttons]).each_with_index do |button, index|
       @shop_window.register self.class.const_get('BUTTON_KLASS').new(self, @x, @y, button, self.class.const_get('BUTTON_OFFSETS')[index])

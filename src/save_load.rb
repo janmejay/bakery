@@ -40,8 +40,8 @@ class SaveLoad < BakeryWizard::Window
   def window= window
     @window = window
     @cursor.window = self
-    @background = Gosu::Image.new(self.window, 'media/game_loader_bg.png', false)
-    @print_font = Gosu::Font.new(self.window, 'media/hand.ttf', 35)
+    @background = Gosu::Image.new(self.window, res('media/game_loader_bg.png'), false)
+    @print_font = Gosu::Font.new(self.window, res('media/hand.ttf'), 35)
     @action_message = ActionMessage.new(@print_font, ACTION_MESSAGE_OFFSET[:x], ACTION_MESSAGE_OFFSET[:y])
     @new_file_name_field = TextField.new(self, @print_font, TEXT_FIELD_OFFSET[:x], TEXT_FIELD_OFFSET[:y], '', 15, 
       :inactive_color  => 0x00ffffff, :active_color => 0x00ffffff, :selection_color => 0x00ffffff, :caret_color => MESSAGE_COLOR)

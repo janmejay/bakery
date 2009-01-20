@@ -3,7 +3,7 @@ class StoryPlayer < BakeryWizard::Window
   include Publisher
   include Subscriber
   
-  STORY_BASE_DIR = File.join('media', 'stories')
+  STORY_BASE_DIR = res File.join('media', 'stories')
   
   BUTTON_OFFSET = {:x => 930, :y => 680}
   
@@ -15,7 +15,7 @@ class StoryPlayer < BakeryWizard::Window
     @window = window
     @story_series_images = @story_file_names.map { |file_name| Gosu::Image.new(@window, file_name)}
     TextButton.new(self, {:x => BUTTON_OFFSET[:x], :y => BUTTON_OFFSET[:y], :z => 1, :dx => 80, :dy => 80, :image => 'arrow'}, 
-      :next_slide, Gosu::Font.new(@window, 'media/hand.ttf', 45), 0xff421111, 'GO!!!').activate
+      :next_slide, Gosu::Font.new(@window, res('media/hand.ttf'), 45), 0xff421111, 'GO!!!').activate
     @cursor.window = self
     next_slide
   end

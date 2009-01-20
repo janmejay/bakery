@@ -29,10 +29,10 @@ class Warehouse < BakeryWizard::Window
     def initialize warehouse, item_id, item_data, having = false
       @warehouse = warehouse
       @item_id, @item_data = item_id, item_data
-      @thumb_img = Gosu::Image.new(warehouse.window, @item_data[:thumbnail], false)
-      @bg_img = Gosu::Image.new(warehouse.window, having ? 'media/item_already_bought.png' : 'media/item_to_be_bought.png', false)
-      @desc_font = Gosu::Font.new(warehouse.window, 'media/hand.ttf', 25)
-      @main_font = Gosu::Font.new(warehouse.window, 'media/hand.ttf', 35)
+      @thumb_img = Gosu::Image.new(warehouse.window, res(@item_data[:thumbnail]), false)
+      @bg_img = Gosu::Image.new(warehouse.window, res(having ? 'media/item_already_bought.png' : 'media/item_to_be_bought.png'), false)
+      @desc_font = Gosu::Font.new(warehouse.window, res('media/hand.ttf'), 25)
+      @main_font = Gosu::Font.new(warehouse.window, res('media/hand.ttf'), 35)
       @x, @y = self.class.get_coordinates
       unless having 
         @buy_button = TextButton.new(warehouse, {:x => @x + BUTTON_X_PAD, :y => @y + BUTTON_Y_PAD, :z => 1, :dx => 144, :dy => 35, :image => :buy}, :buy, @main_font, 0xff000000) { buy }
@@ -43,7 +43,7 @@ class Warehouse < BakeryWizard::Window
     end
     
     def buy
-      @warehouse.try_to_buy(@item_id) && (@bg_img = Gosu::Image.new(@warehouse.window, 'media/item_already_bought.png', false)) && @buy_button.deactivate && @buy_button = nil
+      @warehouse.try_to_buy(@item_id) && (@bg_img = Gosu::Image.new(@warehouse.window, res('media/item_already_bought.png'), false)) && @buy_button.deactivate && @buy_button = nil
     end
     
     def draw
@@ -100,7 +100,7 @@ class Warehouse < BakeryWizard::Window
   
   def window= window
     @window = window
-    @print_font = Gosu::Font.new(self.window, 'media/hand.ttf', 35)
+    @print_font = Gosu::Font.new(self.window, res('media/hand.ttf'), 35)
     @action_message = ActionMessage.new(@print_font, ACTION_MESSAGE_OFFSET[:x], ACTION_MESSAGE_OFFSET[:y])
     @cash_left_message = ActionMessage.new(@print_font, CASH_LABEL_OFFSET[:x], CASH_LABEL_OFFSET[:y])
     @cursor.window = self

@@ -16,18 +16,18 @@ class Decorator
     @context_decorator_data = context_decorator_data
     @x, @y = context_decorator_data[:x], context_decorator_data[:y]
     @buttons = []
-    @action_anim = Util::Animator.new('media/cake-action-anim.png', 120, 100, :chunk_slice_width => 3, :run_indefinitly => true)
+    @action_anim = Util::Animator.new(res('media/cake-action-anim.png'), 120, 100, :chunk_slice_width => 3, :run_indefinitly => true)
     @decoration_process = Util::ProcessRunner.new(10, @x + PROCESS_RUNNER_OFFSET[:x],
                                                                @y + PROCESS_RUNNER_OFFSET[:y], :make_cake_available_after_decoration, self)
   end
   
   def window= shop_window
     @shop_window = shop_window
-    @body = Gosu::Image.new(@shop_window.window, @context_decorator_data[:machine_view], true)
+    @body = Gosu::Image.new(@shop_window.window, res(@context_decorator_data[:machine_view]), true)
     @action_anim.window = @shop_window.window
     @decoration_process.window = @shop_window.window
-    @this_cake_is_already_decorated_message = Gosu::Sample.new(@shop_window.window, 'media/this_cake_is_already_decorated.ogg')
-    @cookies_can_not_be_decorated_message = Gosu::Sample.new(@shop_window.window, 'media/cookies_can_not_be_decorated.ogg')
+    @this_cake_is_already_decorated_message = Gosu::Sample.new(@shop_window.window, res('media/this_cake_is_already_decorated.ogg'))
+    @cookies_can_not_be_decorated_message = Gosu::Sample.new(@shop_window.window, res('media/cookies_can_not_be_decorated.ogg'))
     (@decoration_types = @context_decorator_data[:buttons]).each_with_index do |button, index|
       GameButton.new(self, {:x => @x + BUTTON_OFFSETS[index][:x], :y => @y + BUTTON_OFFSETS[index][:y], 
         :z => ZOrder::TABLE_MOUNTED_CONTROLS, :dx => 28, :dy => 28}, button).activate

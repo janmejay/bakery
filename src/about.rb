@@ -48,10 +48,10 @@ Bakery is a free and open source game. I created Bakery
   def window= window
     @window = window
     @cursor.window = self
-    @background = Gosu::Image.new(self.window, 'media/game_loader_bg.png', false)
-    @modal_box = Gosu::Image.new(window, 'media/modal_box.png')
-    font = Gosu::Font.new(self.window, 'media/hand.ttf', 35)
-    @message_font = Gosu::Font.new(self.window, 'media/hand.ttf', 28)
+    @background = Gosu::Image.new(self.window, res('media/game_loader_bg.png'), false)
+    @modal_box = Gosu::Image.new(window, res('media/modal_box.png'))
+    font = Gosu::Font.new(self.window, res('media/hand.ttf'), 35)
+    @message_font = Gosu::Font.new(self.window, res('media/hand.ttf'), 28)
     TextButton.new(self, {:x => SHOW_CREDITS_BUTTON_OFFSET[:x], :y => SHOW_CREDITS_BUTTON_OFFSET[:y], :z => ZOrder::MODAL_BUTTONS, :dx => 348, :dy => 44, :image => :game_loader}, :show_credits, font).activate
     TextButton.new(self, {:x => MAIN_MENU_BUTTON_OFFSET[:x], :y => MAIN_MENU_BUTTON_OFFSET[:y], :z => ZOrder::MODAL_BUTTONS, :dx => 348, :dy => 44, :image => :game_loader}, :main_menu, font).activate
     @version = ActionMessage.new(font, width/2, VERSION_Y_OFFSET)

@@ -16,7 +16,7 @@ class Dustbin
   
   def window= shop_window
     @shop_window = shop_window
-    @image = Gosu::Image.new(@shop_window.window, @context_dustbin_data[:bin_view], true)
+    @image = Gosu::Image.new(@shop_window.window, res(@context_dustbin_data[:bin_view]), true)
   end
 
   def perform_updates

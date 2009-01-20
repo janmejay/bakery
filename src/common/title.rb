@@ -1,6 +1,6 @@
 class Title
   def initialize bakery_window, size, x, y, z = 0
-    @font = Gosu::Font.new(bakery_window.window, 'media/title.ttf', size)
+    @font = Gosu::Font.new(bakery_window.window, res('media/title.ttf'), size)
     @x, @y, @z = x, y, z
   end
   

@@ -10,7 +10,7 @@ class Television
   
   def window= shop_window
     @shop_window = shop_window
-    @tv_table = Gosu::Image.new(@shop_window.window, @context_tv_data[:top_view], true)
+    @tv_table = Gosu::Image.new(@shop_window.window, res(@context_tv_data[:top_view]), true)
   end
   
   def draw
