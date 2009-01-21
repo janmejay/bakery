@@ -14,9 +14,11 @@ class Oven
     
     def window= shop_window
       @shop_window = shop_window
-      cake_name = @icing_type ? "media/#{@icing_type}_#{@cake_name}.png" : "media/#{@cake_name}.png"
-      @body = Gosu::Image.new(@shop_window.window, res(cake_name))
-      @decoration_type && @decoration = Gosu::Image.new(@shop_window.window, res("media/#{@decoration_type}_decoration.png"))
+      @body = Gosu::Image.new(@shop_window.window, res("media/#{@cake_name}.png"))
+      @icing_type && put_base_icing(@icing_type)
+      topped? && put_topping(@topping_type)
+      @top_icing_type && put_top_icing(@top_icing_type)
+      decorated? && put_decoration(@decoration_type)
     end
     
     def update_position(x, y, angle = nil)
@@ -38,13 +40,7 @@ class Oven
     end
     
     def put_icing icing_type
-      if topped?
-        @top_icing_type = icing_type
-        @topping = Gosu::Image.new(@shop_window.window, res("media/#{@top_icing_type}_#{@topping_type}.png"))
-      else
-        @icing_type = icing_type
-        @body = Gosu::Image.new(@shop_window.window, res("media/#{@icing_type}_#{@cake_name}.png"))
-      end
+      send(topped? ? :put_top_icing : :put_base_icing, icing_type)
     end
     
     def put_decoration decoration_type
@@ -71,15 +67,11 @@ class Oven
     end
     
     def render(z_index = ZOrder::CAKE)
-      if @angle
-        @body.draw_rot(@x, @y, z_index, @angle)
-        @topping && @topping.draw_rot(@x, @y, z_index, @angle)
-        @decoration && @decoration.draw_rot(@x, @y, z_index, @angle)
-      else
-        @body.draw(@x, @y, z_index)
-        @topping && @topping.draw(@x, @y, z_index)
-        @decoration && @decoration.draw(@x, @y, z_index)
-      end
+      args = [@x, @y, z_index]
+      @angle && args << @angle
+      @body.draw(*args)
+      @topping && @topping.draw(*args)
+      @decoration && @decoration.draw(*args)
     end
     
     def selling_price
@@ -87,6 +79,16 @@ class Oven
     end
     
     private
+    def put_top_icing icing_type
+      @top_icing_type = icing_type
+      @topping = Gosu::Image.new(@shop_window.window, res("media/#{@top_icing_type}_#{@topping_type}.png"))
+    end
+
+    def put_base_icing icing_type
+      @icing_type = icing_type
+      @body = Gosu::Image.new(@shop_window.window, res("media/#{@icing_type}_#{@cake_name}.png"))
+    end
+    
     def name_for entity_id, type = :cake
       entity_id.nil? && return
       entity_id = entity_id.to_s
