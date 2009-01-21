@@ -102,6 +102,22 @@ class Oven
   end
   
   class AbstractPlate
+    module Holder
+      def give_plate_to that_thing
+        @plate || raise("can't give plate cauz there is none!!!")
+        respond_to?(:before_giving_plate) && before_giving_plate
+        that_thing.accept_plate @plate
+        @plate = nil
+      end
+
+      def accept_plate plate
+        plate || raise("can't accept nil plate!!!!!")
+        (respond_to?(:before_accepting_plate) && before_accepting_plate) || return
+        @plate = plate
+        @plate.holder = self
+        respond_to?(:after_accepting_plate) && after_accepting_plate
+      end
+    end
     
     include Actions::ActiveRectangleSubscriber
     attr_accessor :holder
@@ -133,7 +149,7 @@ class Oven
     def handle event
       @shop_window.baker.walk_down_and_trigger(event.x, event.y, :jump_into_bakers_hands, self)
     end
-    
+
     def jump_into_bakers_hands baker
       @holder.give_plate_to(baker) && @holder = nil
     end
