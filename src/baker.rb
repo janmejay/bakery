@@ -29,6 +29,7 @@ class Baker
   end
   
   attr_reader :plate
+  include Oven::Plate::Handler
 
   def initialize context
     @walking_anim = Util::Animator.new(res('media/walking_baker.png'), 105, 80, :chunk_slice_width => 2, :run_indefinitly => true)
@@ -60,23 +61,21 @@ class Baker
     @trigger_on = trigger_on
   end
   
-  def accept_plate(plate)
+  def before_accepting_plate *ignore
     @plate && @cant_pick_two_plates_at_a_time.play && return
-    @plate = plate
-    @shop_window.unregister(@plate)
-    @plate #because unless the method returns true, the caller should assume the plate was not accepted
-  end
-  
-  def give_plate_to that_thing
-    @plate || return
-    @shop_window.register(@plate)
-    that_thing.accept_plate(@plate)
-    @plate = nil
     true
   end
   
+  def after_accepting_plate
+    @shop_window.unregister(@plate)
+  end
+
+  def before_giving_plate
+    @shop_window.register(@plate)
+  end
+  
   def has_plate?
-    not @plate.nil?
+    @plate
   end
   
   def is_plate_equal_to? this_plate
