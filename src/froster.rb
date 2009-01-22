@@ -5,6 +5,7 @@ require 'util/process_runner'
 class Froster
   
   include AliveAsset
+  include Oven::Plate::Handler
   
   PROCESS_RUNNER_OFFSET = {:x => 34, :y => 27}
   CAKE_PLATE_OFFSET = {:x => 30, :y => 21}
@@ -47,14 +48,20 @@ class Froster
   end
   
   def receive_cake
-    verify_cake_is_not_iced_already || return
-    @shop_window.baker.give_plate_to(self)
-    return unless @plate && @plate.holder = self
+    @shop_window.baker.give_plate_to(self) || return
     @action_anim.start
     @icing_process.start
     @show_animation = true #REFACTOR ME!!!! put me in the animator
   end
-  
+
+  def before_accepting_plate plate
+    verify_cake_is_not_iced_already(plate) || return
+  end
+
+  def after_accepting_plate *ignore
+    @shop_window.unregister(@plate)
+  end
+
   def build_sample_on plate
     plate.cake.put_icing(@froster_button_names[rand(@froster_button_names.length)].to_s.gsub(/_frosting/, '').to_sym)
     plate
@@ -91,16 +98,7 @@ class Froster
   def caramel_frosting *ignore
     receive_cake && @plate.cake.put_icing(:caramel)
   end
-  
-  def give_plate_to baker
-    baker.accept_plate(@plate) && @plate = nil
-  end
-  
-  def accept_plate plate
-    @shop_window.unregister(plate)
-    @plate = plate
-  end
-
+    
   def draw
     @body.draw(@x, @y, ZOrder::TABLE_MOUNTED_EQUIPMENTS)
     @show_animation && @action_anim.slide.draw(@x, @y, ZOrder::ACTION_CLOWD)
@@ -115,8 +113,7 @@ class Froster
     @show_animation = false
   end
   
-  def verify_cake_is_not_iced_already
-    plate = @plate || @shop_window.baker.plate
+  def verify_cake_is_not_iced_already plate
     plate && plate.has_cookies? && @cookies_can_not_be_iced_message.play && return
     plate && plate.cake.iced? && @this_cake_is_already_iced_message.play && return
     true
