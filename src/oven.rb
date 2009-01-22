@@ -195,7 +195,7 @@ class Oven
       module Accepter
         def accept_plate plate
           plate || return
-          (respond_to?(:before_accepting_plate) && before_accepting_plate(plate)) || return
+          respond_to?(:before_accepting_plate) && (before_accepting_plate(plate) || return)
           $logger.debug("Plate #{plate.object_id} about to be received by #{self.class}:#{self.object_id}")
           @plate = plate
           @plate.holder = self
