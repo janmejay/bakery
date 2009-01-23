@@ -16,6 +16,8 @@ class ToppingOven < Oven
   BUTTON_KLASS = ToppingButton
   
   BUTTON_OFFSETS = [{:x_off => 22, :y_off => 49}, {:x_off => 52, :y_off => 49}, {:x_off => 82, :y_off => 49}, {:x_off => 113, :y_off => 49}]
+
+  include Oven::Plate::Handler::Accepter
   
   def window= shop_window
     super

@@ -1,6 +1,7 @@
 class Decorator
   
   include AliveAsset
+  include Oven::Plate::Handler
   
   PROCESS_RUNNER_OFFSET = {:x => 25, :y => 45}
   CAKE_PLATE_OFFSET = {:x => 20, :y => 39}
@@ -49,12 +50,18 @@ class Decorator
   end
 
   def receive_cake
-    verify_cake_is_not_decorated_already || return
-    @shop_window.baker.give_plate_to(self)
-    return unless @plate && @plate.holder = self
+    @shop_window.baker.give_plate_to(self) || return
     @action_anim.start
     @decoration_process.start
     @show_animation = true #REFACTOR ME!!!! put me in the animator
+  end
+
+  def before_accepting_plate plate
+    verify_cake_is_not_decorated_already(plate) || return
+  end
+
+  def after_accepting_plate *ignore
+    @shop_window.unregister(@plate)
   end
 
   def candle_decoration *ignore
@@ -93,11 +100,6 @@ class Decorator
     baker.accept_plate(@plate) && @plate = nil
   end
 
-  def accept_plate plate
-    @shop_window.unregister(plate)
-    @plate = plate
-  end
-
   def draw
     @body.draw(@x, @y, ZOrder::TABLE_MOUNTED_EQUIPMENTS)
     @show_animation && @action_anim.slide.draw(@x + ACTION_OFFSET[:x], @y + ACTION_OFFSET[:y], ZOrder::ACTION_CLOWD)
@@ -112,8 +114,7 @@ class Decorator
     @show_animation = false
   end
 
-  def verify_cake_is_not_decorated_already
-    plate = @plate || @shop_window.baker.plate
+  def verify_cake_is_not_decorated_already plate
     plate && plate.has_cookies? && @cookies_can_not_be_decorated_message.play && return
     plate && plate.cake.decorated? && @this_cake_is_already_decorated_message.play && return
     true

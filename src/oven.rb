@@ -105,9 +105,7 @@ class Oven
   end
   
   class AbstractPlate
-    
     include Actions::ActiveRectangleSubscriber
-    attr_accessor :holder
     
     PLATE_LENGTH_AND_WIDTH = 60
     
@@ -134,11 +132,7 @@ class Oven
     end
     
     def handle event
-      @shop_window.baker.walk_down_and_trigger(event.x, event.y, :jump_into_bakers_hands, self)
-    end
-    
-    def jump_into_bakers_hands baker
-      @holder.give_plate_to(baker) && @holder = nil
+      @shop_window.baker.walk_down_and_trigger(event.x, event.y, :go_to, self)
     end
     
     def cake
@@ -174,9 +168,48 @@ class Oven
     def active_y
       return @y, @y + PLATE_LENGTH_AND_WIDTH
     end
+    
+    private
+    def go_to that_thing
+      @holder.give_plate_to(that_thing)
+    end
   end
 
   class Plate < AbstractPlate
+    module Handler
+      def self.included base
+        base.send(:include, Giver)
+        base.send(:include, Accepter)
+      end
+      
+      module Giver
+        def give_plate_to that_thing
+          @plate || return
+          $logger.debug("Plate #{@plate.object_id} is about to be given to #{that_thing.class}:#{that_thing.object_id} from #{self.class}:#{self.object_id}")
+          respond_to?(:before_giving_plate) && before_giving_plate
+          that_thing.accept_plate(@plate) || return
+          $logger.debug("Plate accept for #{@plate.object_id} was successful.")
+          @plate = nil
+          respond_to?(:after_giving_plate) && after_giving_plate
+          true
+        end
+      end
+
+      module Accepter
+        def accept_plate plate
+          plate || return
+          respond_to?(:before_accepting_plate) && (before_accepting_plate(plate) || return)
+          $logger.debug("Plate #{plate.object_id} about to be received by #{self.class}:#{self.object_id}")
+          @plate = plate
+          @plate.holder = self
+          respond_to?(:after_accepting_plate) && after_accepting_plate
+          true
+        end
+      end
+    end
+
+    attr_accessor :holder
+
     def window= window
       super
       @shop_window.unaccounted_for(self)
@@ -232,6 +265,8 @@ class Oven
   include AliveAsset
   
   COST = YAML::load_file(File.join(File.dirname(__FILE__), '..', 'data', 'returns.yml'))[:cake]
+
+  include Oven::Plate::Handler::Giver
   
   def initialize context_oven_data
     @context_oven_data = context_oven_data
@@ -257,10 +292,6 @@ class Oven
     @baking_process.update
     @cake_tray_x, @cake_tray_y = @cake_plate_pos_anim.hop
     @plate && @plate.update_position(@cake_tray_x + BAKED_CAKE_PLATE_OFFSET[:x], @cake_tray_y + BAKED_CAKE_PLATE_OFFSET[:y])
-  end
-  
-  def give_plate_to(baker)
-    baker.accept_plate(@plate) && @plate = nil
   end
   
   def build_sample_on *ignore
@@ -296,6 +327,7 @@ class Oven
   end
   
   def make_plate_pickable *ignore
+    $logger.debug("Plate #{@plate.object_id} made pickable.")
     shop_window.register @plate
   end
   

@@ -35,6 +35,7 @@ class CookieOven
   end
 
   include AliveAsset
+  include Oven::Plate::Handler::Giver
   
   COST = YAML::load_file(File.join(File.dirname(__FILE__), '..', 'data', 'returns.yml'))[:cookies]
   
@@ -93,8 +94,8 @@ class CookieOven
     lift_hood
   end
 
-  def give_plate_to baker
-    baker.accept_plate(@plate) && drop_hood && @plate = nil
+  def after_giving_plate *ignore
+    drop_hood
   end
   
   def window
@@ -121,7 +122,7 @@ class CookieOven
   
   def bake cookies_named
     already_baking? && return
-    @shop_window.unregister(@plate)
+    @shop_window.unregister(@plate) #should result in loss to the baker
     drop_hood
     @baking_process.start
     @plate = Oven::Plate.new(Cookies.new(cookies_named))

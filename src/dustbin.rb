@@ -6,6 +6,7 @@ require 'util/actions'
 
 class Dustbin
   include Actions::ActiveRectangleSubscriber
+  include Oven::Plate::Handler::Accepter
   
   def initialize context_dustbin_data
     @context_dustbin_data = context_dustbin_data
@@ -42,11 +43,12 @@ class Dustbin
     ZOrder::UNDER_TABLE_EQUIPMENTS
   end
   
-  def accept_plate plate
-    @shop_window.unregister(plate)
-    @content = plate.content
+  def after_accepting_plate *ignore
+    @shop_window.unregister(@plate)
+    @content = @plate.content
     @shop_window.baker.pay(Shop::PriceCalculator.cost_price_for(@content))
-    @shop_window.accounted_for(plate)
+    @shop_window.accounted_for(@plate)
+    @plate = nil
   end
   
   protected
