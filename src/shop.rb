@@ -80,7 +80,7 @@ class Shop < BakeryWizard::Window
     self.level_context = context
     @assets = []
     register self
-    register Dustbin.new(context[:dustbin])
+    register @dustbin = Dustbin.new(context[:dustbin])
     @renderables = Set.new
     @dead_entities = []
     @dead_entities << Cursor.new
@@ -273,8 +273,8 @@ class Shop < BakeryWizard::Window
 
   def account_for_unsold_cakes
     $logger.debug("Level -> #{@context[:level]} accounting for #{@unaccounted_for_plates.length} unsold cakes....")
-    @unaccounted_for_plates.each do |accountable_plate| 
-      @baker.pay PriceCalculator.cost_price_for(accountable_plate.content)
+    @unaccounted_for_plates.each do |accountable_plate|
+      accountable_plate.holder.give_plate_to(@dustbin)
     end
     $logger.debug("Level -> #{@context[:level]} Paid up for unsold cakes...")
     @unaccounted_for_plates = Set.new

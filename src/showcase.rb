@@ -16,6 +16,7 @@ class Showcase
     @base = Gosu::Image.new(@shop_window.window, res(@context_showcase_data[:images][:base_view]), true)
     @cover = Gosu::Image.new(@shop_window.window, res(@context_showcase_data[:images][:cover_view]), true)
     @cant_put_two_cakes_in_there_message = Gosu::Sample.new(@shop_window.window, res('media/cant_put_two_cakes_in_there.ogg'))
+    @plate && @plate.window = shop_window
   end
   
   def perform_updates
