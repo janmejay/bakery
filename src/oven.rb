@@ -67,11 +67,14 @@ class Oven
     end
     
     def render(z_index = ZOrder::CAKE)
-      args = [@x, @y, z_index]
-      @angle && args << @angle
-      @body.draw(*args)
-      @topping && @topping.draw(*args)
-      @decoration && @decoration.draw(*args)
+      args, method = [@x, @y, z_index], :draw
+      if @angle
+        args << @angle
+        method = :draw_rot
+      end
+      @body.send(method, *args)
+      @topping && @topping.send(method, *args)
+      @decoration && @decoration.send(method, *args)
     end
     
     def selling_price
