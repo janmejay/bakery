@@ -1,16 +1,16 @@
 
 class ToppingOven < Oven
+
+  include OneCakeHolder
   
   class ToppingButton < Button
-    
     def trigger_to_start_baking baker
-      @oven.verify_cake_is_nither_decorated_nor_topped(baker) || return
+      (@oven.verify_cake_toping_is_possible(baker) && @oven.verify_doesnt_have_a_cake_already) || return
       baker.give_plate_to(@oven)
       @oven.bake(@cake_name) unless @oven.baking?
     end
-    
   end
-  
+
   COST = YAML::load_file(File.join(File.dirname(__FILE__), '..', 'data', 'returns.yml'))[:topping]
   
   BUTTON_KLASS = ToppingButton
@@ -41,7 +41,7 @@ class ToppingOven < Oven
     @plate = plate
   end
   
-  def verify_cake_is_nither_decorated_nor_topped baker
+  def verify_cake_toping_is_possible baker
     given_plate = @plate || baker.plate
     given_plate || return
     given_plate.has_cookies? && @cookies_can_not_be_topped.play && return

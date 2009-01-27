@@ -1,6 +1,7 @@
 class Showcase
   include Actions::ActiveRectangleSubscriber
   include Oven::Plate::Handler
+  include OneCakeHolder
   
   CAKE_PLATE_OFFSET = {:x => 10, :y => 10}
   WAIT_BEFORE_REHANDLING_PLATE_XFER = 20 #loops
@@ -15,7 +16,6 @@ class Showcase
     @shop_window = shop_window
     @base = Gosu::Image.new(@shop_window.window, res(@context_showcase_data[:images][:base_view]), true)
     @cover = Gosu::Image.new(@shop_window.window, res(@context_showcase_data[:images][:cover_view]), true)
-    @cant_put_two_cakes_in_there_message = Gosu::Sample.new(@shop_window.window, res('media/cant_put_two_cakes_in_there.ogg'))
     @plate && @plate.window = shop_window
   end
   
@@ -31,8 +31,7 @@ class Showcase
   end
   
   def before_accepting_plate *ignore
-    @plate && @cant_put_two_cakes_in_there_message.play && return
-    true
+    verify_doesnt_have_a_cake_already
   end
 
   def after_accepting_plate *ignore

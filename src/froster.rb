@@ -6,6 +6,7 @@ class Froster
   
   include AliveAsset
   include Oven::Plate::Handler
+  include OneCakeHolder
   
   PROCESS_RUNNER_OFFSET = {:x => 34, :y => 27}
   CAKE_PLATE_OFFSET = {:x => 30, :y => 21}
@@ -55,7 +56,7 @@ class Froster
   end
 
   def before_accepting_plate plate
-    verify_cake_is_not_iced_already(plate) || return
+    (verify_cake_icing_is_not_impossible(plate) && verify_doesnt_have_a_cake_already) || return
   end
 
   def after_accepting_plate *ignore
@@ -113,7 +114,7 @@ class Froster
     @show_animation = false
   end
   
-  def verify_cake_is_not_iced_already plate
+  def verify_cake_icing_is_not_impossible plate
     plate && plate.has_cookies? && @cookies_can_not_be_iced_message.play && return
     plate && plate.cake.iced? && @this_cake_is_already_iced_message.play && return
     true

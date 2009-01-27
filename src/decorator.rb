@@ -2,6 +2,7 @@ class Decorator
   
   include AliveAsset
   include Oven::Plate::Handler
+  include OneCakeHolder
   
   PROCESS_RUNNER_OFFSET = {:x => 25, :y => 45}
   CAKE_PLATE_OFFSET = {:x => 20, :y => 39}
@@ -57,7 +58,7 @@ class Decorator
   end
 
   def before_accepting_plate plate
-    verify_cake_is_not_decorated_already(plate) || return
+    (verify_cake_is_not_decorated_already(plate) && verify_doesnt_have_a_cake_already) || return
   end
 
   def after_accepting_plate *ignore
