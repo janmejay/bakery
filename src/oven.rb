@@ -321,6 +321,7 @@ class Oven
   end
   
   def put_baked_cake *ignore
+    dump_existing_cake
     @plate = Plate.new(@cake)
     @plate.window = shop_window
     @plate.holder = self
@@ -332,6 +333,11 @@ class Oven
   end
   
   private
+  def dump_existing_cake
+    @plate || return
+    give_plate_to(@shop_window.dustbin)
+  end
+  
   def render_cake_holder
     args = @cake_plate_pos_anim.hop
     @cake_holder.draw(@cake_tray_x, @cake_tray_y, ZOrder::OVEN_CAKE_HOLDER)

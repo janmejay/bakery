@@ -122,7 +122,7 @@ class CookieOven
   
   def bake cookies_named
     already_baking? && return
-    @shop_window.unregister(@plate) #should result in loss to the baker
+    @plate && give_plate_to(@shop_window.dustbin)
     drop_hood
     @baking_process.start
     @plate = Oven::Plate.new(Cookies.new(cookies_named))

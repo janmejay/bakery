@@ -64,7 +64,7 @@ class Shop < BakeryWizard::Window
   end
   
   
-  attr_reader :baker, :level, :money_drawer, :bank_account
+  attr_reader :baker, :level, :money_drawer, :bank_account, :dustbin
   include Actions
   include Publisher
   include Subscriber
@@ -274,7 +274,7 @@ class Shop < BakeryWizard::Window
   def account_for_unsold_cakes
     $logger.debug("Level -> #{@context[:level]} accounting for #{@unaccounted_for_plates.length} unsold cakes....")
     @unaccounted_for_plates.each do |accountable_plate|
-      accountable_plate.holder.give_plate_to(@dustbin)
+      accountable_plate.holder.give_plate_to(dustbin)
     end
     $logger.debug("Level -> #{@context[:level]} Paid up for unsold cakes...")
     @unaccounted_for_plates = Set.new
