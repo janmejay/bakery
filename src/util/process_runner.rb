@@ -24,6 +24,10 @@ class Util::ProcessRunner
     @animation.start
     @running = true
   end
+
+  def attach_sound sound
+    @animation.attach_sound sound
+  end
   
   def running?
     @running

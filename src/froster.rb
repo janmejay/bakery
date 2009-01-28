@@ -37,6 +37,7 @@ class Froster
         :dx => 24, :dy => 24}, button).activate
     end
     @plate && @plate.window = @shop_window
+    @icing_process.attach_sound(Gosu::Song.new(@shop_window.window, res('media/froster_sound.ogg')))
   end
   
   def window

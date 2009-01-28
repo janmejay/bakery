@@ -27,6 +27,11 @@ class Util::AnimatorTest < Test::Unit::TestCase
       should "have @animated_sequence built" do
         assert_equal @one_way_anim.instance_variable_get('@slides'), @one_way_anim.instance_variable_get('@animated_sequence')
       end
+
+      should "pick up sample(sound)" do
+        @one_way_anim.attach_sound(sample = Object.new)
+        assert_equal sample, @one_way_anim.instance_variable_get('@sample')
+      end
     end
 
     should "not start the animation on its own" do
@@ -68,6 +73,32 @@ class Util::AnimatorTest < Test::Unit::TestCase
           @one_way_anim.stop
           assert_equal @slides[0], @one_way_anim.slide
           assert_equal @slides[0], @one_way_anim.slide
+        end
+
+        context "when sound attached" do
+          setup do
+            @one_way_anim.attach_sound(@sample = Object.new)
+          end
+          
+          should "play sample when running" do
+            @sample.expects(:playing?).returns(false)
+            @sample.expects(:play)
+            @one_way_anim.slide
+            @sample.expects(:playing?).returns(true)
+            @one_way_anim.slide
+            @sample.expects(:playing?).returns(false)
+            @sample.expects(:play)
+            @one_way_anim.slide
+          end
+
+          should "not play sample when not running" do
+            @sample.expects(:stop).times(3)
+            @one_way_anim.stop
+            @sample.expects(:playing?).never
+            @sample.expects(:play).never
+            @one_way_anim.slide
+            @one_way_anim.slide
+          end
         end
       end
     end

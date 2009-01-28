@@ -18,6 +18,10 @@ class Util::Animator
     @running ? start : (@current_anim_sequence = [])
   end
 
+  def attach_sound sample
+    @sample = sample
+  end
+
   def start
     @current_anim_sequence = @animated_sequence.dup
     @running = true
@@ -25,11 +29,13 @@ class Util::Animator
 
   def stop
     @current_anim_sequence = []
+    @sample && @sample.stop
     @running = false
   end
 
   def slide
     @current_anim_sequence.empty? && stop
+    @running && @sample && (@sample.playing? || @sample.play)
     @running ? current_slide : @slides[0]
   end
 

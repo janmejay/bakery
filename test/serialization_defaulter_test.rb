@@ -23,8 +23,10 @@ class SerializationDefaulterTest < Test::Unit::TestCase
       assert_nil Marshal.load(Marshal.dump(font))
     end
     
-    should "work for Sample" do
+    should "work for Song/Sample" do
       sample = Gosu::Sample.new(@window, File.dirname(__FILE__) + '/test_media/sound.ogg')
+      assert_nil Marshal.load(Marshal.dump(sample))
+      sample = Gosu::Song.new(@window, File.dirname(__FILE__) + '/test_media/sound.ogg')
       assert_nil Marshal.load(Marshal.dump(sample))
     end
   end
