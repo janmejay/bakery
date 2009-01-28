@@ -17,6 +17,7 @@ class Showcase
     @base = Gosu::Image.new(@shop_window.window, res(@context_showcase_data[:images][:base_view]), true)
     @cover = Gosu::Image.new(@shop_window.window, res(@context_showcase_data[:images][:cover_view]), true)
     @plate && @plate.window = shop_window
+    @@showcase_sound ||= Gosu::Sample.new(@shop_window.window, res('media/showcase_sound.ogg'))
   end
   
   def perform_updates
@@ -27,6 +28,7 @@ class Showcase
   def push_or_pop_plate baker
     (@enable_handler_countdown > 0) && return
     @plate ? give_plate_to(baker) : baker.give_plate_to(self)
+    @@showcase_sound.play
     @enable_handler_countdown = WAIT_BEFORE_REHANDLING_PLATE_XFER
   end
   
