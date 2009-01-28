@@ -30,6 +30,7 @@ class Decorator
     @decoration_process.window = @shop_window.window
     @this_cake_is_already_decorated_message = Gosu::Sample.new(@shop_window.window, res('media/this_cake_is_already_decorated.ogg'))
     @cookies_can_not_be_decorated_message = Gosu::Sample.new(@shop_window.window, res('media/cookies_can_not_be_decorated.ogg'))
+    @decoration_process.attach_sound(Gosu::Song.new(@shop_window.window, res('media/decorator_sound.ogg')))
     (@decoration_types = @context_decorator_data[:buttons]).each_with_index do |button, index|
       GameButton.new(self, {:x => @x + BUTTON_OFFSETS[index][:x], :y => @y + BUTTON_OFFSETS[index][:y], 
         :z => ZOrder::TABLE_MOUNTED_CONTROLS, :dx => 28, :dy => 28}, button).activate
