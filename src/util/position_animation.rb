@@ -28,11 +28,20 @@ class Util::PositionAnimation
   end
   
   def hop
-    return @both_ways ? [@initial_x, @initial_y] : [@final_x, @final_y] if @hop_cords.empty?
+    if @hop_cords.empty?
+      @sound && @sound.stop
+      return @both_ways ? [@initial_x, @initial_y] : [@final_x, @final_y]
+    end
+    running? && @sound && (@sound.playing? || @sound.play)
     coord_map = @hop_cords.shift
     anim_left = @hop_cords.length
+    
     execute_callbacks(x = coord_map[:x], y = coord_map[:y])
     return x, y
+  end
+
+  def attach_sound sound
+    @sound = sound
   end
   
   private 

@@ -18,6 +18,29 @@ class Util::PositionAnimationTest < Test::Unit::TestCase
       assert !animation.running?
     end
 
+    should "play sound while hoping" do
+      animation = Util::PositionAnimation.new({:x => @initial_x, :y => @initial_y}, {:x => 40, :y => 60}, 2)
+      animation.attach_sound(@sound = Object.new)
+      animation.start
+      @sound.expects(:playing?).returns(false)
+      @sound.expects(:play)
+      animation.hop
+      @sound.expects(:playing?).returns(true)
+      animation.hop
+      animation.hop #should not check for playing anymore.....
+      @sound.expects(:stop)
+      animation.hop #now it shd try to stop.....
+    end
+
+    should "not play sound when not anim is not running" do
+      animation = Util::PositionAnimation.new({:x => @initial_x, :y => @initial_y}, {:x => 40, :y => 60}, 2)
+      animation.attach_sound(@sound = Object.new)
+      @sound.stubs(:stop)
+      animation.hop
+      animation.hop
+      animation.hop
+    end
+
     context "with one sides animation" do
       setup do
         @callbacks = {}
