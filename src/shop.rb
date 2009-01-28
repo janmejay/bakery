@@ -121,7 +121,7 @@ class Shop < BakeryWizard::Window
   def window= window
     @window = window
     @background_image = Gosu::Image.new(self.window, @level.bg_image, true)
-    @success_message = Gosu::Image.new(self.window, res('media/bakers_goal_achived.png'))
+    @success_message = Gosu::Image.new(self.window, res('media/bakers_goal_achieved.png'))
     @failure_message = Gosu::Image.new(self.window, res('media/baker_failed.png'))
     @font = Gosu::Font.new(self.window, res('media/hand.ttf'), 35)
     for_each_subscriber { |subscriber| subscriber.window = self unless subscriber == self }
