@@ -285,6 +285,7 @@ class Oven
       @shop_window.register self.class.const_get('BUTTON_KLASS').new(self, @x, @y, button, self.class.const_get('BUTTON_OFFSETS')[index])
     end
     @plate && @plate.window = @shop_window
+    @baking_process.attach_sound(Gosu::Song.new(@shop_window.window, res('media/oven_sound.ogg')))
     update
   end
 

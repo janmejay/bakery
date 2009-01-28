@@ -24,6 +24,7 @@ class ToppingOven < Oven
     @this_cake_is_already_topped = Gosu::Sample.new(@shop_window.window, res('media/this_cake_is_already_topped.ogg'))
     @a_decorated_cake_can_not_be_topped = Gosu::Sample.new(@shop_window.window, res('media/a_decorated_cake_can_not_be_topped.ogg'))
     @cookies_can_not_be_topped = Gosu::Sample.new(@shop_window.window, res('media/cookies_can_not_be_topped.ogg'))
+    @baking_process.attach_sound(Gosu::Song.new(@shop_window.window, res('media/toping_oven_sound.ogg')))
   end
   
   def build_sample_on sample_plate
