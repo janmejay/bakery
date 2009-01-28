@@ -101,6 +101,7 @@ class Customer
     @order_sample.window = @shop_window
     @patience_unit = Gosu::Image.new(shop_window.window, res("media/patience.png"))
     @menu_card = Gosu::Image.new(shop_window.window, res("media/menu_card.png"))
+    @@door_bell ||= Gosu::Sample.new(@shop_window.window, res('media/door_bell.ogg'))
   end
   
   def update(xy_map)
@@ -140,6 +141,7 @@ class Customer
     @entered_the_shop_at = Time.now
     @movement_anim = Util::PositionAnimation.new(ENTERANCE, go_to, 15, false, {90 => :get_ready_to_accept_menu_card}, self)
     @movement_anim.start
+    @@door_bell.play
   end
   
   def handle(event)
