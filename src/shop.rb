@@ -232,7 +232,6 @@ class Shop < BakeryWizard::Window
 
   def flow_control_flag key, value = nil
     value.nil? || (@flow_control_flags[key] = value)
-    $logger.debug("flow control flags -> #{@flow_control_flags.inspect}")
     @flow_control_flags[key]
   end
   
