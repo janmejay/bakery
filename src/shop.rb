@@ -129,7 +129,7 @@ class Shop < BakeryWizard::Window
     @dead_entities.each { |entity| entity.window = self }
     @alive_entities.each { |entity| entity.window = self }
     @no_ui_entities.each { |entity| entity.window = self }
-    @flow_control_flags = Set.new
+    reset_flow_control_flags
   end
   
   def ready_for_update_and_render
@@ -227,16 +227,13 @@ class Shop < BakeryWizard::Window
   private
 
   def reset_flow_control_flags
-    @flow_control_flags.each do |flag|
-      instance_variable_set("@#{flag}", nil)
-    end
-    @flow_control_flags = Set.new
+    @flow_control_flags = {}
   end
 
   def flow_control_flag key, value = nil
-    @flow_control_flags << key
-    val = instance_variable_get("@#{key}")
-    val ||= instance_variable_set("@#{key}", value)
+    value.nil? || (@flow_control_flags[key] = value)
+    $logger.debug("flow control flags -> #{@flow_control_flags.inspect}")
+    @flow_control_flags[key]
   end
   
   def prepare_money_bags
@@ -273,7 +270,7 @@ class Shop < BakeryWizard::Window
     account_for_unsold_cakes
     if (@level.required_earning_surpassed? != earning_target_status)
       $logger.debug("Level -> #{@context[:level]} required minimum earning status changed....")
-      @showing_message = false
+      flow_control_flag(:showing_message, false)
       display_appropriate_result_message
     end
   end
@@ -292,7 +289,7 @@ class Shop < BakeryWizard::Window
     ((Time.now > @show_message_upto) && @level.out_of_customers?) || return
     reset_and_redisplay_appropriate_message_if_unsold_cakes_matter
     flow_control_flag(:termination_done, true)
-    @level.required_earning_surpassed? && reset_flow_control_flags && dump_shop && $wizard.go_to(StoryPlayer, :pre_params => {:current_context => @context.merge(:level => @context[:level] + 1)}) && return
+    @level.required_earning_surpassed? && dump_shop && $wizard.go_to(StoryPlayer, :pre_params => {:current_context => @context.merge(:level => @context[:level] + 1)}) && return
     show_retry_option
   end
   
