@@ -51,6 +51,8 @@ class Baker
     @cant_pick_two_plates_at_a_time = Gosu::Sample.new(@shop_window.window, res('media/cant_pick_two_plates_at_a_time.ogg'))
     @loss_anim = Util::FontAnimator.new(@shop_window, 120, :z => ZOrder::MESSAGES, :color => 'ff0000', :font_name => res('media/number.ttf'))
     @profit_anim = Util::FontAnimator.new(@shop_window, 120, :z => ZOrder::MESSAGES, :color => '00ff00', :font_name => res('media/number.ttf'))
+    @profit_sound = Gosu::Sample.new(@shop_window.window, res('media/gain_sound.ogg'))
+    @loss_sound = Gosu::Sample.new(@shop_window.window, res('media/loss_sound.ogg'))
     @plate && @plate.window = @shop_window
   end
   
@@ -105,12 +107,14 @@ class Baker
     $logger.debug("Baker is going to pay -> #{bucks}")
     @loss_anim.start_anim bucks.to_s, :x => @x, :y => @y
     @shop_window.money_drawer.withdraw(bucks)
+    @loss_sound.play
     $logger.debug("Baker paid #{bucks}... left with #{@shop_window.money_drawer.money}.")
   end
   
   def accept_payment bucks
     @profit_anim.start_anim bucks.to_s, :x => @x, :y => @y
     @shop_window.money_drawer.deposit(bucks)
+    @profit_sound.play
     $logger.debug("Baker got #{bucks}... left with #{@shop_window.money_drawer.money}.")
   end
 
