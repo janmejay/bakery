@@ -248,7 +248,13 @@ class Shop < BakeryWizard::Window
   def display_result succcess
     flow_control_flag(:showing_message) || set_message_time
     flow_control_flag(:showing_message, true)
-    @result_slide = succcess ? @success_message : @failure_message
+    if succcess
+      @result_slide = @success_message
+      play_success_sound
+    else
+      @result_slide = @failure_message
+      play_failure_sound
+    end
     @level.clear_remaining_customers!
   end
   
@@ -315,6 +321,16 @@ class Shop < BakeryWizard::Window
   
   def class_for class_name
     self.class.module_eval("::#{class_name}", __FILE__, __LINE__)
+  end
+
+  def play_success_sound
+    flow_control_flag(:success_message_played) || Gosu::Sample.new(window, res('media/applause_sound.ogg')).play
+    flow_control_flag(:success_message_played, true)
+  end
+
+  def play_failure_sound
+    flow_control_flag(:failure_message_played) || Gosu::Sample.new(window, res('media/boo_sound.ogg')).play
+    flow_control_flag(:failure_message_played, true)
   end
 
   def execute_ignoring_non_serializable_associations
