@@ -99,9 +99,10 @@ class Customer
     @shop_window = shop_window
     @body = Gosu::Image.new(@shop_window.window, res("media/#{@name}.png"))
     @order_sample.window = @shop_window
-    @patience_unit = Gosu::Image.new(shop_window.window, res("media/patience.png"))
-    @menu_card = Gosu::Image.new(shop_window.window, res("media/menu_card.png"))
+    @patience_unit = Gosu::Image.new(@shop_window.window, res("media/patience.png"))
+    @menu_card = Gosu::Image.new(@shop_window.window, res("media/menu_card.png"))
     @@door_bell ||= Gosu::Sample.new(@shop_window.window, res('media/door_bell.ogg'))
+    @@customer_going_out_sound ||= Gosu::Sample.new(@shop_window.window, res('media/customer_going_out.ogg'))
   end
   
   def update(xy_map)
@@ -212,6 +213,7 @@ class Customer
     @body_angle = 0
     @has_menu_card = false
     @order_sample.satisfied? ? put_money_on_the_table : @shop_window.baker.pay(payment*LOSS_ON_CUSTOMER_DISSATISFACTION_RATIO)
+    @@customer_going_out_sound.play
   end
   
   def free_place_in_the_queue *ignore
