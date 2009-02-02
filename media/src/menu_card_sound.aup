@@ -1,0 +1,37 @@
+<?xml version="1.0" standalone="no" ?>
+<!DOCTYPE project PUBLIC "-//audacityproject-1.3.0//DTD//EN" "http://audacity.sourceforge.net/xml/audacityproject-1.3.0.dtd" >
+<project xmlns="http://audacity.sourceforge.net/xml/" projname="menu_card_sound_data" version="1.3.0" audacityversion="1.3.5d" sel0="0.0000000000" sel1="0.0000000000" vpos="0" h="0.0000000000" zoom="921.1908873538" rate="11025">
+	<tags>
+		<tag name="id3v2" value="1"/>
+		<tag name="ARTIST" value="Janmejay Singh"/>
+		<tag name="TITLE" value="Bakery Track"/>
+		<tag name="YEAR" value="1998-03-31"/>
+		<tag name="Software" value="Sound Forge 4.0"/>
+		<tag name="ALBUM" value="Bakery"/>
+	</tags>
+	<wavetrack name="menu_card" channel="2" linked="0" offset="0.00000000" rate="11025" gain="1" pan="0">
+		<waveclip offset="0.00000000">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="10051">
+				<waveblock start="0">
+					<simpleblockfile filename="e0000428.au" len="6427" min="-0.351562" max="0.414062" rms="0.008043"/>
+				</waveblock>
+				<waveblock start="6427">
+					<simpleblockfile filename="e00008d9.au" len="3624" min="-0.164062" max="0.1875" rms="0.003764"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="11">
+				<controlpoint t="0.396135535295" val="1.000000000000"/>
+				<controlpoint t="0.396226238243" val="1.000000000000"/>
+				<controlpoint t="0.502519566385" val="1.000000000000"/>
+				<controlpoint t="0.502610269333" val="1.000000000000"/>
+				<controlpoint t="0.513375079762" val="1.000000000000"/>
+				<controlpoint t="0.513465782710" val="1.000000000000"/>
+				<controlpoint t="0.582850365371" val="1.000000000000"/>
+				<controlpoint t="0.582941068319" val="1.000000000000"/>
+				<controlpoint t="0.619759110852" val="1.000000000000"/>
+				<controlpoint t="0.619849813799" val="1.000000000000"/>
+				<controlpoint t="0.911772420680" val="1.000000000000"/>
+			</envelope>
+		</waveclip>
+	</wavetrack>
+</project>

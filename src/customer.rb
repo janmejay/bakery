@@ -103,6 +103,8 @@ class Customer
     @menu_card = Gosu::Image.new(@shop_window.window, res("media/menu_card.png"))
     @@door_bell ||= Gosu::Sample.new(@shop_window.window, res('media/door_bell.ogg'))
     @@customer_going_out_sound ||= Gosu::Sample.new(@shop_window.window, res('media/customer_going_out.ogg'))
+    @@menu_card_sound ||= Gosu::Sample.new(@shop_window.window, res('media/menu_card_sound.ogg'))
+    @@decided_order_sound ||= Gosu::Sample.new(@shop_window.window, res('media/decided_order.ogg'))
   end
   
   def update(xy_map)
@@ -150,7 +152,9 @@ class Customer
   end
   
   def take_the_menu_card *ignore
+    @has_menu_card && return
     @has_menu_card = true
+    @@menu_card_sound.play
     @going_to_order_after = rand(CUSTOMER_CONFIG[@name][:max_time_to_decide_order])
     @body_angle = 270
   end
@@ -159,6 +163,7 @@ class Customer
     (@going_to_order_after == 0) || return
     @hasnt_ordered_yet = false
     @order_sample.activate
+    @@decided_order_sound.play
     @has_menu_card = false
     @shop_window.unregister self
     @body_angle = 0
