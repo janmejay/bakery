@@ -1,0 +1,56 @@
+<?xml version="1.0" standalone="no" ?>
+<!DOCTYPE project PUBLIC "-//audacityproject-1.3.0//DTD//EN" "http://audacity.sourceforge.net/xml/audacityproject-1.3.0.dtd" >
+<project xmlns="http://audacity.sourceforge.net/xml/" projname="oven_pop_sound_data" version="1.3.0" audacityversion="1.3.5d" sel0="0.0000000000" sel1="0.7669614512" vpos="0" h="0.0000000000" zoom="556.7377167630" rate="44100">
+	<tags>
+		<tag name="id3v2" value="1"/>
+		<tag name="ALBUM" value="Bakery"/>
+		<tag name="TITLE" value="Bakery Track"/>
+		<tag name="ARTIST" value="Janmejay Singh"/>
+	</tags>
+	<wavetrack name="ovendoor 1" channel="0" linked="1" offset="0.00000000" rate="44100" gain="1" pan="0">
+		<waveclip offset="2.26498037">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="0"/>
+			<envelope numpoints="1">
+				<controlpoint t="0.000000000000" val="1.000000000000"/>
+			</envelope>
+		</waveclip>
+		<waveclip offset="0.00000000">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="33823">
+				<waveblock start="0">
+					<simpleblockfile filename="e000019d.au" len="24397" min="-0.21488" max="0.249714" rms="0.022743"/>
+				</waveblock>
+				<waveblock start="24397">
+					<simpleblockfile filename="e0000945.au" len="9426" min="-0.20893" max="0.20893" rms="0.013762"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="3">
+				<controlpoint t="0.000000000000" val="1.000000000000"/>
+				<controlpoint t="0.553200126898" val="1.000000000000"/>
+				<controlpoint t="0.553222802635" val="1.000000000000"/>
+			</envelope>
+		</waveclip>
+	</wavetrack>
+	<wavetrack name="ovendoor 2" channel="1" linked="0" offset="0.00000000" rate="44100" gain="1" pan="0">
+		<waveclip offset="2.26498037">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="0"/>
+			<envelope numpoints="1">
+				<controlpoint t="0.000000000000" val="1.000000000000"/>
+			</envelope>
+		</waveclip>
+		<waveclip offset="0.00000000">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="33823">
+				<waveblock start="0">
+					<simpleblockfile filename="e00005c6.au" len="24397" min="-0.16013" max="0.150493" rms="0.015701"/>
+				</waveblock>
+				<waveblock start="24397">
+					<simpleblockfile filename="e0000b01.au" len="9426" min="-0.171651" max="0.20893" rms="0.009899"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="3">
+				<controlpoint t="0.000000000000" val="1.000000000000"/>
+				<controlpoint t="0.553200126898" val="1.000000000000"/>
+				<controlpoint t="0.553222802635" val="1.000000000000"/>
+			</envelope>
+		</waveclip>
+	</wavetrack>
+</project>

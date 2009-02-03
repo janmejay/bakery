@@ -271,7 +271,7 @@ class Oven
   def initialize context_oven_data
     @context_oven_data = context_oven_data
     @x, @y = @context_oven_data[:x], @context_oven_data[:y]
-    @cake_plate_pos_anim = Util::PositionAnimation.new({:x => @x, :y => @y}, {:x => @x, :y => @y-80}, 40, true, {49 => :put_baked_cake, 99 => :make_plate_pickable}, self)
+    @cake_plate_pos_anim = Util::PositionAnimation.new({:x => @x, :y => @y}, {:x => @x, :y => @y-80}, 60, true, {49 => :put_baked_cake, 99 => :make_plate_pickable}, self)
     @baking_process = Util::ProcessRunner.new(10, @x + PROCESS_RUNNER_OFFSET[:x], @y + PROCESS_RUNNER_OFFSET[:y], :eject_baked_cake, self)
   end
   
@@ -286,6 +286,7 @@ class Oven
     end
     @plate && @plate.window = @shop_window
     @baking_process.attach_sound(Gosu::Song.new(@shop_window.window, res('media/oven_sound.ogg')))
+    @cake_plate_pos_anim.attach_sound(Gosu::Song.new(@shop_window.window, res('media/oven_pop_sound.ogg')))
     update
   end
 
