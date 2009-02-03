@@ -32,7 +32,8 @@ class Baker
   include Oven::Plate::Handler
 
   def initialize context
-    @walking_anim = Util::Animator.new(res('media/walking_baker.png'), 105, 80, :chunk_slice_width => 2, :run_indefinitly => true)
+    @walk_amin_options = {:run_indefinitly => true, :callback_map => {25 => :play_step, 75 => :play_step}, :callback_receiver => self}
+    @walking_anim = Util::Animator.new(res('media/walking_baker.png'), 105, 80, {:chunk_slice_width => 2}.merge(@walk_amin_options))
     @velocity = 2
     @x, @y, @target_x, @target_y, @angle = 600, 400, 600, 400, 180
     @sane_walking_area = LimitingRectangle.new(384, 170, 835, 550)
@@ -40,7 +41,7 @@ class Baker
   
   def wear_shoes shoes
     @velocity = shoes.speed
-    @walking_anim = Util::Animator.new(res('media/walking_baker.png'), 105, 80, :chunk_slice_width => shoes.walking_anim_slice_width, :run_indefinitly => true)
+    @walking_anim = Util::Animator.new(res('media/walking_baker.png'), 105, 80, {:chunk_slice_width => shoes.walking_anim_slice_width}.merge(@walk_amin_options))
     @walking_anim.window = @shop_window.window
   end
   
@@ -54,6 +55,7 @@ class Baker
     @profit_sound = Gosu::Sample.new(@shop_window.window, res('media/gain_sound.ogg'))
     @loss_sound = Gosu::Sample.new(@shop_window.window, res('media/loss_sound.ogg'))
     @plate && @plate.window = @shop_window
+    @step_sound = Gosu::Sample.new(@shop_window.window, res('media/baker_walk.ogg'))
   end
   
   def walk_down_and_trigger(x_cord, y_cord, trigger_when_reached = nil, trigger_on = nil)
@@ -116,6 +118,10 @@ class Baker
     @shop_window.money_drawer.deposit(bucks)
     @profit_sound.play
     $logger.debug("Baker got #{bucks}... left with #{@shop_window.money_drawer.money}.")
+  end
+
+  def play_step
+    @step_sound.play
   end
 
   private

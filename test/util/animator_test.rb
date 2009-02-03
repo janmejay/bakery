@@ -11,7 +11,8 @@ class Util::AnimatorTest < Test::Unit::TestCase
 
     setup do
       @window = Gosu::Window.new(120, 30, false)
-      @one_way_anim = Util::Animator.new(ANIM_FILE_NAME, 30, 30)
+      @one_way_anim = Util::Animator.new(ANIM_FILE_NAME, 30, 30, {:callback_map => @callback_map = {50 => :foo}, :callback_receiver => @callback_receiver = Object.new})
+      @callback_receiver.stubs(:foo)
       @one_way_anim.window = @window
     end
 
@@ -32,6 +33,10 @@ class Util::AnimatorTest < Test::Unit::TestCase
         @one_way_anim.attach_sound(sample = Object.new)
         assert_equal sample, @one_way_anim.instance_variable_get('@sample')
       end
+
+      should "pick up callback hooks" do
+        assert_equal @callback_map, @one_way_anim.instance_variable_get('@callback_map')
+      end
     end
 
     should "not start the animation on its own" do
@@ -39,6 +44,12 @@ class Util::AnimatorTest < Test::Unit::TestCase
       @one_way_anim.expects(:update_chunk_state).never
       @one_way_anim.instance_variable_get('@slides').expects(:[]).with(0).returns(:foo)
       assert_equal :foo, @one_way_anim.slide
+    end
+
+    should "reset the progress on start" do
+      @one_way_anim.instance_variable_set('@progress', 20)
+      @one_way_anim.start
+      assert_equal 0, @one_way_anim.instance_variable_get('@progress')
     end
 
     context "when played one way" do
@@ -57,6 +68,23 @@ class Util::AnimatorTest < Test::Unit::TestCase
       context "while running" do
         setup do
           @one_way_anim.start
+        end
+
+        should "not bomb when no callback_receiver given even if callback_map is there" do
+          @one_way_anim.instance_variable_set('@callback_receiver', nil)
+          assert_nothing_raised do
+            @one_way_anim.slide
+            @one_way_anim.slide
+            @one_way_anim.slide
+          end
+        end
+
+        should "invoke callbacks if callback_receiver is given" do
+          @one_way_anim.slide
+          @callback_receiver.expects(:foo)
+          @one_way_anim.slide
+          @callback_receiver.expects(:foo).never
+          @one_way_anim.slide
         end
 
         should "cycle through all the slides" do
@@ -253,7 +281,7 @@ class Util::AnimatorTest < Test::Unit::TestCase
 
     context "marked for infinite running" do
       setup do
-        @anim_with_infinite_length = Util::Animator.new(ANIM_FILE_NAME, 30, 30, :run_indefinitly => true)
+        @anim_with_infinite_length = Util::Animator.new(ANIM_FILE_NAME, 30, 30, :run_indefinitly => true, :callback_map => {10 => :foo, 40 => :bar}, :callback_receiver => @callback_receiver)
         @anim_with_infinite_length.window = @window
         @slides = @anim_with_infinite_length.instance_variable_get('@slides')
       end
@@ -270,7 +298,20 @@ class Util::AnimatorTest < Test::Unit::TestCase
           @anim_with_infinite_length.start
         end
 
+        should "invoke the callback @ the correct time" do
+          3.times do
+            @callback_receiver.expects(:foo)
+            @anim_with_infinite_length.slide
+            @callback_receiver.expects(:foo).never
+            @callback_receiver.expects(:bar)
+            @anim_with_infinite_length.slide
+            @callback_receiver.expects(:bar).never
+            @anim_with_infinite_length.slide
+          end
+        end
+
         should "run infinitely" do
+          @callback_receiver.stubs(:bar)
           assert_equal @slides[0], @anim_with_infinite_length.slide
           assert_equal @slides[1], @anim_with_infinite_length.slide
           assert_equal @slides[2], @anim_with_infinite_length.slide

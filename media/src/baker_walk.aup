@@ -1,0 +1,22 @@
+<?xml version="1.0" standalone="no" ?>
+<!DOCTYPE project PUBLIC "-//audacityproject-1.3.0//DTD//EN" "http://audacity.sourceforge.net/xml/audacityproject-1.3.0.dtd" >
+<project xmlns="http://audacity.sourceforge.net/xml/" projname="baker_walk_data" version="1.3.0" audacityversion="1.3.5d" sel0="0.1850697757" sel1="0.1850697757" vpos="0" h="0.0000000000" zoom="1059.0600183262" rate="11025">
+	<tags>
+		<tag name="id3v2" value="1"/>
+		<tag name="ARTIST" value="Janmejay Singh"/>
+		<tag name="TITLE" value="Bakery Track"/>
+		<tag name="YEAR" value="1997-02-03"/>
+		<tag name="Software" value="Sound Forge 4.0"/>
+		<tag name="ALBUM" value="Bakery"/>
+	</tags>
+	<wavetrack name="step" channel="2" linked="0" offset="0.00000000" rate="11025" gain="1" pan="0">
+		<waveclip offset="0.00000000">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="1637">
+				<waveblock start="0">
+					<simpleblockfile filename="e0000985.au" len="1637" min="-0.195888" max="0.215127" rms="0.005249"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+	</wavetrack>
+</project>
