@@ -71,6 +71,7 @@ class CookieOven
     @hood_lift_sound = Gosu::Sample.new(@shop_window.window, res('media/cookie_oven_hood_lift.ogg'))
     @hood_drop_sound = Gosu::Sample.new(@shop_window.window, res('media/cookie_oven_hood_drop.ogg'))
     @plate && @plate.window = @shop_window
+    @baking_process.attach_sound(Gosu::Song.new(@shop_window.window, res('media/cookie_oven_sound.ogg')))
   end
   
   def build_sample_on *ignore

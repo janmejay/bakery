@@ -1,0 +1,30 @@
+<?xml version="1.0" standalone="no" ?>
+<!DOCTYPE project PUBLIC "-//audacityproject-1.3.0//DTD//EN" "http://audacity.sourceforge.net/xml/audacityproject-1.3.0.dtd" >
+<project xmlns="http://audacity.sourceforge.net/xml/" projname="cookie_oven_sound_data" version="1.3.0" audacityversion="1.3.5d" sel0="1.6253968254" sel1="1.6253968254" vpos="0" h="0.0000000000" zoom="86.1328125000" rate="44100">
+	<tags>
+		<tag name="id3v2" value="1"/>
+		<tag name="ARTIST" value="Janmejay Singh"/>
+		<tag name="TITLE" value="Bakery Track"/>
+		<tag name="ALBUM" value="Bakery"/>
+	</tags>
+	<wavetrack name="ovendoor 1" channel="0" linked="1" offset="0.00000000" rate="44100" gain="1" pan="0">
+		<waveclip offset="0.00000000">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="101707">
+				<waveblock start="0">
+					<simpleblockfile filename="e0000af2.au" len="101707" min="-0.093605" max="0.088942" rms="0.008671"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+	</wavetrack>
+	<wavetrack name="ovendoor 2" channel="1" linked="0" offset="0.00000000" rate="44100" gain="1" pan="0">
+		<waveclip offset="0.00000000">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="101707">
+				<waveblock start="0">
+					<simpleblockfile filename="e0000020.au" len="101707" min="-0.069934" max="0.058795" rms="0.007586"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+	</wavetrack>
+</project>
