@@ -55,7 +55,7 @@ class CookieOven
     @context_cookie_oven_data = context_cookie_oven_data
     @x, @y = context_cookie_oven_data[:x], context_cookie_oven_data[:y]
     @baking_process = Util::ProcessRunner.new(10, @x + PROCESS_RUNNER_OFFSET[:x], @y + PROCESS_RUNNER_OFFSET[:y], :make_cookies_available_when_baked, self)
-    drop_hood
+    drop_hood(false)
   end
   
   def window= shop_window
@@ -68,6 +68,9 @@ class CookieOven
       GameButton.new(self, {:x => @x + BUTTON_OFFSETS[index][:x], :y => @y + BUTTON_OFFSETS[index][:y], 
         :z => ZOrder::TABLE_MOUNTED_CONTROLS, :dx => 28, :dy => 28}, button).activate
     end
+    @hood_lift_sound = Gosu::Sample.new(@shop_window.window, res('media/cookie_oven_hood_lift.ogg'))
+    @hood_drop_sound = Gosu::Sample.new(@shop_window.window, res('media/cookie_oven_hood_drop.ogg'))
+    @plate && @plate.window = @shop_window
   end
   
   def build_sample_on *ignore
@@ -113,6 +116,7 @@ class CookieOven
   private
   
   def lift_hood
+    @hood_lift_sound.play
     @show_hood = false
   end
   
@@ -130,7 +134,8 @@ class CookieOven
     @plate.holder = self
   end
   
-  def drop_hood
+  def drop_hood play_sound = true
+    play_sound && @hood_drop_sound.play
     @show_hood = true
   end
 end

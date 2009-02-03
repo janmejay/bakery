@@ -19,6 +19,7 @@ class Dustbin
     @shop_window = shop_window
     @image = Gosu::Image.new(@shop_window.window, res(@context_dustbin_data[:bin_view]), true)
     @throwing_anim.attach_sound(Gosu::Song.new(@shop_window.window, res('media/dustbin_sound.ogg')))
+    @content && @content.window = @shop_window
   end
 
   def perform_updates
