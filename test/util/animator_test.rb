@@ -21,6 +21,10 @@ class Util::AnimatorTest < Test::Unit::TestCase
         assert_equal 3, @one_way_anim.instance_variable_get('@slides').length
       end
 
+      should "not be running" do
+        assert_nil @one_way_anim.running?
+      end
+
       should "have set @play_both_ways to false(for one way anim)" do
         assert !@one_way_anim.instance_variable_get('@play_both_ways')
       end
@@ -68,6 +72,15 @@ class Util::AnimatorTest < Test::Unit::TestCase
       context "while running" do
         setup do
           @one_way_anim.start
+        end
+
+        should "be running" do
+          assert @one_way_anim.running?
+        end
+
+        should "not be running post stop" do
+          @one_way_anim.stop
+          assert !@one_way_anim.running?
         end
 
         should "not bomb when no callback_receiver given even if callback_map is there" do

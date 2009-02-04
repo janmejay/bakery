@@ -29,6 +29,10 @@ class Util::Animator
     @progress = 0
   end
 
+  def running?
+    @running
+  end
+
   def stop
     @current_anim_sequence = []
     @sample && @sample.stop
