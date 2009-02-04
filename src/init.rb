@@ -17,8 +17,11 @@ $BAKERY_HOME = File.expand_path(File.join(File.dirname(__FILE__), '..'))
 $BAKERY_TMP = File.join($BAKERY_HOME, 'tmp')
 
 $PLAYER_DATA_BASE_PATH = File.join($BAKERY_TMP, '#name#')
+$LAST_PLAYER_FILE_PATH = File.join($BAKERY_TMP, 'last_played_by')
 $SAVED_GAMES_DIR = File.join($BAKERY_TMP, '#name#', 'saved_games')
 $LAST_PLAYED_GAME_PATH = File.join($BAKERY_TMP, '#name#', 'last_played')
+
+File.exist?($LAST_PLAYER_FILE_PATH) || File.open($LAST_PLAYER_FILE_PATH, 'w') { |h| h.write('Sweta') }
 
 def resource path
   File.join($BAKERY_HOME, path)

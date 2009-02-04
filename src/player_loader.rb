@@ -26,7 +26,7 @@ class PlayerLoader < BakeryWizard::Window
     @cake_image = Gosu::Image.new(self.window, res('media/loading-cake.png'), false)
     @cursor.window = self
     @print_font = Gosu::Font.new(self.window, res('media/hand.ttf'), 40)
-    @name_field = TextField.new(self, @print_font, TEXT_FIELD_OFFSET[:x], TEXT_FIELD_OFFSET[:y], 'Sweta', 9, 
+    @name_field = TextField.new(self, @print_font, TEXT_FIELD_OFFSET[:x], TEXT_FIELD_OFFSET[:y], File.open($LAST_PLAYER_FILE_PATH, 'r').readline, 9, 
       :inactive_color  => 0x00ffffff, :active_color => 0x00ffffff, :selection_color => 0x00ffffff, :caret_color => MESSAGE_COLOR)
     self.text_input = @name_field
     @get_baking_button = TextButton.new(self, {:x => BUTTON_OFFSET[:x], :y => BUTTON_OFFSET[:y], :z => 1, :dx => 120, :dy => 120}, :get_baking, @print_font)
@@ -46,6 +46,7 @@ class PlayerLoader < BakeryWizard::Window
   def get_baking
     @name_field.text.empty? && return 
     @context[:name] = @name_field.text
+    File.open($LAST_PLAYER_FILE_PATH, 'w') { |h| h.write(@context[:name]) }
     FileUtils.mkdir_p(Util.base_data_dir_path(@context))
     FileUtils.mkdir_p(Util.saved_games_dir_name(@context))
     $wizard.go_to(WelcomeMenu)
