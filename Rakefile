@@ -11,6 +11,11 @@ namespace :bakery do
       require file_path
     end
   end
+
+  desc "reset game data"
+  task :reset do
+    `rm -rf #{$BAKERY_HOME}/tmp/*`
+  end
   
   desc "clears bakery.log"
   task :clear do
