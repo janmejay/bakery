@@ -65,11 +65,13 @@ class Dustbin
   private
 
   def open
-    @throwing_anim.start
+    @throwing_anim.running? || @throwing_anim.start
   end
   
   def ask_for_waste_cake *ignore
+    $logger.debug("Going to ask baker for waste plate...")
     @shop_window.baker.give_plate_to(self)
+    $logger.info("Accepted waste content as => #{@content.class}:#{@content.object_id}.")
     @content_throwing_angle = rand(360)
   end
   
