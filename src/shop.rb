@@ -138,7 +138,7 @@ class Shop < BakeryWizard::Window
   end
   
   def menu
-    $wizard.go_to(WelcomeMenu)
+    dump_shop && $wizard.go_to(WelcomeMenu)
   end
 
   def unaccounted_for plate
@@ -155,7 +155,7 @@ class Shop < BakeryWizard::Window
     case true
     when button_down?(Gosu::Button::MsLeft): publish(Event.new(:left_click, mouse_x, mouse_y))
     when button_down?(Gosu::Button::MsRight): publish(Event.new(:right_click, mouse_x, mouse_y))
-    when button_down?(Gosu::Button::KbEscape): dump_shop && $wizard.go_to(WelcomeMenu)
+    when button_down?(Gosu::Button::KbEscape): menu
     end
     @alive_entities.each {|entity| entity.update}
     for_each_subscriber {|subscriber| subscriber.perform_updates}
