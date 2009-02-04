@@ -293,9 +293,10 @@ class Shop < BakeryWizard::Window
   end
   
   def show_retry_option
-    @show_retry_box ||= Gosu::Image.new(window, res('media/modal_box.png'))
-    @retry_level_button ||= TextButton.new(self, {:x => RETRY_BUTTON_OFFSET[:x], :y => RETRY_BUTTON_OFFSET[:y], :z => ZOrder::MODAL_BUTTONS, :dx => 348, :dy => 44, :image => :game_loader}, :retry_level, @font).activate
-    @show_main_menu_button ||= TextButton.new(self, {:x => MENU_BUTTON_OFFSET[:x], :y => MENU_BUTTON_OFFSET[:y], :z => ZOrder::MODAL_BUTTONS, :dx => 348, :dy => 44, :image => :game_loader}, :go_to_main_menu, @font).activate
+    @show_retry_box && return
+    @show_retry_box = Gosu::Image.new(window, res('media/modal_box.png'))
+    @retry_level_button = TextButton.new(self, {:x => RETRY_BUTTON_OFFSET[:x], :y => RETRY_BUTTON_OFFSET[:y], :z => ZOrder::MODAL_BUTTONS, :dx => 348, :dy => 44, :image => :game_loader}, :retry_level, @font).activate
+    @show_main_menu_button = TextButton.new(self, {:x => MENU_BUTTON_OFFSET[:x], :y => MENU_BUTTON_OFFSET[:y], :z => ZOrder::MODAL_BUTTONS, :dx => 348, :dy => 44, :image => :game_loader}, :go_to_main_menu, @font).activate
   end
   
   def retry_level
