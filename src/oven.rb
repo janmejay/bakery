@@ -152,10 +152,6 @@ class Oven
       ZOrder::PLATE
     end
     
-    def == other
-      (self.class == other.class) && (content == other.content)
-    end
-    
     def describe_using animator
       animator.start_anim(content.description.compact, {:x => @x + 100, :y => @y})
     end
