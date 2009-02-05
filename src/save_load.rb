@@ -55,13 +55,12 @@ class SaveLoad < BakeryWizard::Window
   
   def list_loadables
     @saved_game_names = Dir.glob(File.join(Util.saved_games_dir_name(@context), '*' + $BAKERY_FILE_EXT + $SAVED_FILE_EXT))
-    @saved_game_names = @saved_game_names[0...MAX_FILES_HONORED]
+    @saved_game_names = @saved_game_names[0...MAX_FILES_HONORED].map {|name| File.basename(name)[0...-($BAKERY_FILE_EXT + $SAVED_FILE_EXT).length] }
     @load_save_buttons ||= []
     @load_save_buttons.map { |button| button.deactivate }
     @load_save_buttons = []
     @saved_game_names.each_with_index do |name, index|
       dy = index*(V_PAD + V_SPAN)
-      name = name[0...-($BAKERY_FILE_EXT + $SAVED_FILE_EXT).length]
       save_button = TextButton.new(self, {:x => SAVE_BUTTON_OFFSET[:x], :y => SAVE_BUTTON_OFFSET[:y] + dy, :z => 1, :dx => 96, :dy => 44, 
         :image => :game_loader_small}, :save, @print_font) { save_game name }
       save_button.activate

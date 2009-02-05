@@ -178,11 +178,11 @@ class Shop < BakeryWizard::Window
     end
   end
   
-  def dump_shop
+  def dump_shop to_file = Util.last_played_file_name(@context)
     @money_drawer.merge_into(@bank_account)
     @context[:money] = @bank_account.money
     execute_ignoring_non_serializable_associations do
-      File.open(Util.last_played_file_name(@context), "w") do |handle|
+      File.open(to_file, "w") do |handle|
         handle.write(Marshal.dump(self))
       end
     end
@@ -225,7 +225,7 @@ class Shop < BakeryWizard::Window
   end
 
   def dump_shop_for_retry
-    dump_shop Util
+    dump_shop Util.last_played_level_file_name(@context)
   end
   
   private
