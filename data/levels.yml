@@ -1,6 +1,7 @@
 ---
 #grouping_probablity & min_slot_respecting_probablity are on 100000
 1:
+  :first: true
   :customer_types:
     100: :local_worker
     50:  :brave_sailor

@@ -100,6 +100,14 @@ class Level
     @possible_earning = @required_earning*(1 + @level[:factor_of_safty])
     @customer_queue = CustomerQueue.new @level.dup
   end
+
+  def first?
+    @level[:first]
+  end
+
+  def last?
+    @level[:last]
+  end
   
   def bg_image
     res @level[:bg_image] || 'media/floor.png'

@@ -77,6 +77,11 @@ class Warehouse < BakeryWizard::Window
   def level_context= context
     @context = context
     @context[:newly_shipped] = {}
+    @load_from_file = Util.last_played_file_name(@context)
+  end
+
+  def load_from_file= file_name
+    @load_from_file = file_name
   end
   
   def ready_for_update_and_render
@@ -108,7 +113,7 @@ class Warehouse < BakeryWizard::Window
   end
   
   def get_baking
-    $wizard.go_to(Shop, :from_file => Util.last_played_file_name(@context), :params => {:warehouse_context => @context}, :pre_params => {:level_context => @context})
+    $wizard.go_to(Shop, :from_file => @load_from_file, :params => {:warehouse_context => @context}, :pre_params => {:level_context => @context})
   end
   
   def update

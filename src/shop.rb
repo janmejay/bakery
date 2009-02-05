@@ -292,8 +292,17 @@ class Shop < BakeryWizard::Window
     ((Time.now > @show_message_upto) && @level.out_of_customers?) || return
     reset_and_redisplay_appropriate_message_if_unsold_cakes_matter
     flow_control_flag(:termination_done, true)
-    @level.required_earning_surpassed? && dump_shop && $wizard.go_to(StoryPlayer, :pre_params => {:current_context => @context.merge(:level => @context[:level] + 1)}) && return
+    if @level.required_earning_surpassed?
+      go_to_the_next_lvl
+      return
+    end
     show_retry_option
+  end
+
+  def go_to_the_next_lvl
+    dump_shop
+    dump_shop_for_retry
+    $wizard.go_to(StoryPlayer, :pre_params => {:current_context => @context.merge(:level => @context[:level] + 1)})
   end
   
   def show_retry_option
@@ -304,7 +313,8 @@ class Shop < BakeryWizard::Window
   end
   
   def retry_level
-    $wizard.go_to Shop, {:from_file => Util.last_played_file_name(@context)}
+    file = Util.last_played_level_file_name(@context)
+    @level.first? ? $wizard.go_to(Shop, :from_file => file) : $wizard.go_to(Warehouse, :pre_params => {:level_context => @context}, :params => {:load_from_file => file})
   end
   
   def go_to_main_menu
