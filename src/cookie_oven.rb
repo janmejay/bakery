@@ -22,7 +22,7 @@ class CookieOven
     end
     
     def description
-      @cookies_name.to_s.gsub(/_/, ' ').capitalize
+      [@cookies_name.to_s.gsub(/_/, ' ').capitalize]
     end
     
     def selling_price
