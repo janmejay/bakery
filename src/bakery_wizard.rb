@@ -36,8 +36,9 @@ class BakeryWizard
     module Buildable
       def build context, window, options = {}
         $logger.debug("Building window #{window.inspect} with options => #{options.inspect} and context => #{context.inspect}")
-        options[:params] ||= []
-        options[:pre_params] ||= []
+        options[:params] ||= {}
+        options[:pre_params] ||= {}
+        options[:callbacks] ||= []
         instance = options.has_key?(:from_file) ? Marshal.load(File.open(options[:from_file], 'r').read) : new(context)
         options[:pre_params].each { |option_name, option_value| instance.respond_to?("#{option_name}=") && instance.send("#{option_name}=", option_value) }
         instance.respond_to?(:ready_for_setting_window) && instance.ready_for_setting_window
@@ -45,8 +46,9 @@ class BakeryWizard
         window.caption = options[:caption] || 'Bakery'
         window.listner = instance
         options[:params].each { |option_name, option_value| instance.respond_to?("#{option_name}=") && instance.send("#{option_name}=", option_value) }
+        Array(options[:callbacks]).each { |callback_name| instance.respond_to?(callback_name) && instance.send(callback_name) }
         instance.respond_to?(:ready_for_update_and_render) && instance.ready_for_update_and_render
-        $logger.debug("Window build was successful")
+        $logger.info("Window build was successful")
         instance
       end
     end

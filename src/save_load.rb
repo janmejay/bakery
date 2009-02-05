@@ -54,10 +54,8 @@ class SaveLoad < BakeryWizard::Window
   end
   
   def list_loadables
-    @saved_game_names = Dir.entries(Util.saved_games_dir_name(@context))
-    @saved_game_names.delete '.'
-    @saved_game_names.delete '..'
-    @saved_game_names = @saved_game_names[0...MAX_FILES_HONORED]
+    @saved_game_names = Dir.glob(File.join(Util.saved_games_dir_name(@context), '*' + $BAKERY_FILE_EXT + $SAVED_FILE_EXT))
+    @saved_game_names = @saved_game_names[0...MAX_FILES_HONORED].map {|name| File.basename(name)[0...-($BAKERY_FILE_EXT + $SAVED_FILE_EXT).length] }
     @load_save_buttons ||= []
     @load_save_buttons.map { |button| button.deactivate }
     @load_save_buttons = []
@@ -78,27 +76,33 @@ class SaveLoad < BakeryWizard::Window
     end
   end
   
-  def save_game to_file = nil
-    to_file.nil? && (@saved_game_names.length >= MAX_FILES_HONORED) && 
+  def save_game to_name = nil
+    to_name.nil? && (@saved_game_names.length >= MAX_FILES_HONORED) && 
       (@action_message.message("You can't save more files, please overwrite on an existing file.", ActionMessage::NEGETIVE_MESSAGE_COLOR)) && return
     FileUtils.mkdir_p dir_path = Util.saved_games_dir_name(@context)
-    FileUtils.cp Util.last_played_file_name(@context), File.join(dir_path, to_file || file_name_requested)
+    copy_level_files Util.last_played_game_name(@context), File.join(dir_path, to_name || file_name_requested)
     list_loadables
     @action_message.message "The game has been saved."
   end
   
-  def load_game from_file
-    $wizard.go_to Shop, {:from_file => File.join(Util.saved_games_dir_name(@context), from_file)}
+  def load_game from_name
+    copy_level_files File.join(Util.saved_games_dir_name(@context), from_name), Util.last_played_game_name(@context)
+    $wizard.go_to Shop, :from_file => Util.last_played_file_name(@context)
   end
   
   def file_name_requested
     @new_file_name_field.text.empty? ? "saved_game@#{Time.now.strftime('%m-%d-%y(%H:%M)')}" : @new_file_name_field.text.gsub('/', '_')
   end
   
-  def delete_game from_file
-    FileUtils.rm_rf File.join(Util.saved_games_dir_name(@context), from_file)
+  def delete_game named
+    FileUtils.rm_rf Util.game_dump_files_for(Util.game_dump_for(File.join(Util.saved_games_dir_name(@context), named)))
     list_loadables
-    @action_message.message "Save file '#{from_file}' deleted."
+    @action_message.message "Save file '#{named}' deleted."
+  end
+
+  def copy_level_files from, to
+    from_to_list = Util.game_dump_files_for(Util.game_dump_for(from)).zip(Util.game_dump_files_for(Util.game_dump_for(to)))
+    from_to_list.each { |from_to| FileUtils.cp(from_to.first, from_to.last) }
   end
   
   def go_back
