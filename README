@@ -1,5 +1,21 @@
+Bakery is a 2D single player game.
+
+What does it need to run??? : Mac. It runs on linux, but the fonts don't look good, and the reason for that is Gosu(http://code.google.com/p/gosu/) which doesn't
+                              have very good font support in linux. Im yet to figure out a solution for the bad fonts problem.
+
+Status: It is not release ready yet, but functionally it is almost ready for the first release. I have to add some background music and stuff.... 
+        and fix things up on linux. 
+
+Is is ready for TEST-drive??? : Yes, but the difficulty of levels is very minimal, I have kept it this way because its easier to do test. Before releasing, i will
+                                do some difficulty tuning and try to bring it to sane levels(to make the game exciting).
+
+How to try: 
+    1. Clone the codebase.... | $ git clone git://github.com/janmejay/bakery.git
+    2. Start the game....     | $ cd bakery
+                              | $ ./bakery
+
 Ideas for the next release:
-1. Support purchasing of Raw Material.
-2. Support multiple Bakers.
-3. Support Inventory upgrade.
-4. Support map of establishments... game should go to one after another(Map can have Community Center, Shopping Mall, Multiplex with one establishment each... etc).
+      1. Support purchasing of Raw Material.
+      2. Support multiple Bakers.
+      3. Support Inventory upgrade.
+      4. Support map of establishments... game should go to one after another(Map can have Community Center, Shopping Mall, Multiplex with one establishment each... etc).
