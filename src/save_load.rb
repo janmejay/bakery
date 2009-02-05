@@ -97,7 +97,7 @@ class SaveLoad < BakeryWizard::Window
   def delete_game named
     FileUtils.rm_rf Util.game_dump_files_for(Util.game_dump_for(File.join(Util.saved_games_dir_name(@context), named)))
     list_loadables
-    @action_message.message "Save file '#{from_file}' deleted."
+    @action_message.message "Save file '#{named}' deleted."
   end
 
   def copy_level_files from, to
