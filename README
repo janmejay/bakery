@@ -2,7 +2,7 @@ Bakery is a 2D single player game.
 
 What does it need to run??? : Mac. It runs on linux, but the fonts don't look good, and the reason for that is Gosu(http://code.google.com/p/gosu/) which doesn't have very good font support in linux. Im yet to figure out a solution for the bad fonts problem.
 
-Status: It is not release ready yet, but functionally it is almost ready for the first release. I have to add some background music and stuff.... and fix things up on linux. 
+Status: It is not release ready yet, but functionally is almost done for the first release. I have to add some background music and stuff.... and fix things up for linux. 
 
 Is is ready for TEST-drive??? : Yes, but the difficulty of levels is very minimal, I have kept it this way because its easier to do test. Before releasing, i will do some difficulty tuning and try to bring it to sane levels(to make the game exciting).
 
