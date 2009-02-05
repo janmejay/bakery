@@ -223,6 +223,10 @@ class Shop < BakeryWizard::Window
   def zindex
     ZOrder::BACKGROUND
   end
+
+  def dump_shop_for_retry
+    dump_shop Util
+  end
   
   private
 
