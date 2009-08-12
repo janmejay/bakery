@@ -1,38 +1,38 @@
 require 'timeout'
 
 class BakeryWizard
-  
+
   class BaseWindow < Gosu::Window
-    
+
     WIDTH, HEIGHT = 1024, 768
-    
+
     def listner= listner
       @listner = listner
     end
-  
+
     def draw
       draw_quad(0, 0, 0xffffffff, WIDTH, 0, 0xffffffff, 0, HEIGHT, 0xffffffff, WIDTH, HEIGHT, 0xffffffff)
       @stop_display || (@listner && @listner.draw)
     end
-    
+
     def update
       @stop_display || (@listner && @listner.update)
     end
-    
+
     def show
       @stop_display = false
       super
     end
-    
+
     def close
       @stop_display = true
       super
     end
-    
+
   end
-  
+
   class Window
-    
+
     module Buildable
       def build context, window, options = {}
         $logger.debug("Building window #{window.inspect} with options => #{options.inspect} and context => #{context.inspect}")
@@ -56,37 +56,37 @@ class BakeryWizard
     def self.REL map
       {:x => (BaseWindow::WIDTH - self::WIDTH)/2 + map[:x], :y => (BaseWindow::HEIGHT - self::HEIGHT)/2 + map[:y]}
     end
-    
+
     def self.inherited subclass
       subclass.extend Buildable
     end
-    
+
     def update; end
     def draw; end
-    
+
     def window
       @window
     end
-    
+
     def method_missing *args
       @window.send(*args)
     end
   end
-  
+
   class WindowChangeRequest
     attr_reader :requested_screen, :arguments
     def initialize requested_screen, arguments
       @requested_screen = requested_screen
       @arguments = arguments
     end
-    
+
     def to_s
       "(requested_screen => #{requested_screen.inspect}, arguments => #{arguments.inspect})"
     end
   end
-  
+
   UN_NOTICABLE_WAIT_TIME = 0.4 #seconds
-  
+
   def initialize
     @screens = []
     @current_screen = nil
@@ -97,11 +97,11 @@ class BakeryWizard
     end
     @window_change_in_pregress = Mutex.new
   end
-  
+
   def add screen
     @screens << screen
   end
-  
+
   def go_to requested_screen, *args
     window_change_req = WindowChangeRequest.new(requested_screen, args)
     @window_change_request && $logger.debug("Ignoring window change request#{window_change_req}. Another request#{@window_change_request} is in progress.") && return
@@ -112,35 +112,26 @@ class BakeryWizard
     end
     Process.kill("USR1", Process.pid)
   end
-  
+
   def maintain_active_display!
-    loop do
-      $logger.debug("Display Maintainer: (re)enabling display window...")
-      @active_display_thread = Thread.new { @current_screen.show }
-      @active_display_thread.join
-    end
-  rescue
-    $logger.error("Display Maintainer: Unexpected: The display maintainer died. Dumping killing stack's trace to #{$death_trace_file}")
-    File.open($death_trace_file, 'w') { |h| h.write($!.message + "\n" + $!.backtrace.join("\n")) }
-    raise $!
+    $logger.debug("Display Maintainer: enabling display window...")
+    @current_screen.show
   end
-  
-  private 
+
+  private
   def process_window_change_req
-    @window_change_in_pregress.synchronize do 
+    @window_change_in_pregress.synchronize do
       resurrect_active_display
     end
     $logger.debug("Returning the stack(was waiting for thread #{@active_display_thread.inspect}).")
   end
-  
+
   def resurrect_active_display
     request_id = "[#{@window_change_request.inspect}] -> "
     $logger.debug("#{request_id}Display resurrection initiated")
-    @current_screen && @current_screen.close
     $logger.debug("#{request_id}Existing display refresh loop stoped")
     arguments = [@context, @window] + @window_change_request.arguments
     @current_screen = @screens.find { |screen| screen == @window_change_request.requested_screen }.build(*arguments)
-    @active_display_thread && @active_display_thread.kill
     $logger.debug("#{request_id} Killed active display")
     @window_change_request = nil
   end
