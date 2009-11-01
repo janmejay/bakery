@@ -1,28 +1,7 @@
-#!/usr/bin/env ruby
+#!/usr/bin/env python
 # User: janmejay.singh
-# Time: 16 Jun, 2008 8:20:18 PM
+# Time: 31 Oct, 2009 02:07:18 AM
 
-require File.join(File.dirname(__FILE__), 'src', 'init')
+import pygame
 
-require 'bakery_wizard'
-require 'player_loader'
-require 'welcome_menu'
-require 'save_load'
-require 'story_player'
-require 'shop'
-require 'warehouse'
-require 'about'
-require 'credits'
-require 'serialization_defaulter'
-
-$wizard = BakeryWizard.new
-$wizard.add PlayerLoader
-$wizard.add WelcomeMenu
-$wizard.add SaveLoad
-$wizard.add StoryPlayer
-$wizard.add Shop
-$wizard.add Warehouse
-$wizard.add About
-$wizard.add Credits
-$wizard.go_to PlayerLoader
-$wizard.maintain_active_display!
+from src import init
