@@ -1,12 +1,18 @@
 from util import callable
-from os import path
 import config
+import pygame
+from pygame.compat import geterror
+from os import path
+import logging
 
-def resource(path):
-    path.join(config.BAKERY_HOME, path)
+logger = logging.getLogger('game_util')
+logger.setLevel(logging.DEBUG)
 
-def media(path):
-    path.join(config.BAKERY_HOME, 'media')
+def resource(file_name):
+    return path.join(config.BAKERY_HOME, file_name)
+
+def media(file_name):
+    return path.join(config.BAKERY_HOME, 'media', file_name)
 
 
 class LastPlayer():
@@ -21,3 +27,18 @@ class LastPlayer():
             h.write(player)
     get_name = callable.Callable(get_name)
     set_name = callable.Callable(set_name)
+
+
+def load_image(name, colorkey=None):
+    fullname = media(name)
+    try:
+        image = pygame.image.load(fullname)
+    except pygame.error:
+        print ('Cannot load image:', fullname)
+        raise SystemExit(str(geterror()))
+    image = image.convert()
+    if colorkey is not None:
+        if colorkey is -1:
+            colorkey = image.get_at((0,0))
+        image.set_colorkey(colorkey, RLEACCEL)
+    return image

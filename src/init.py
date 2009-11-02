@@ -1,5 +1,6 @@
-import sys, config, os, logging
+import sys, config, os, logging, pygame
 sys.path.append(os.path.join(config.BAKERY_SRC))
+from player_loader import PlayerLoader
 
 logger = logging.getLogger("config")
 logger.setLevel(logging.DEBUG)
@@ -11,4 +12,12 @@ logger.addHandler(file_handler)
 logger.info("Logger initialized.")
 
 from util import game_util
+
+screen = pygame.display.set_mode((1024, 768))
+
+player_loader = PlayerLoader()
+player_loader.load(screen)
+while True:
+    player_loader.draw()
+    pygame.display.flip()
 
