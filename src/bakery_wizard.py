@@ -1,6 +1,22 @@
-# class BaseWindow():
-#     def __init__(self):
-#         self = 
+import pygame
+
+class BaseWindow():
+    def __init__(self):
+        self.sprites = pygame.sprite.RenderPlain()
+
+    def load(self, screen):
+        self.screen = screen
+        self.__bg = pygame.Surface(screen.get_size())
+        self.__bg.fill((255, 255, 255))
+
+    def center_xy(self, surface):
+        width, height = self.screen.get_size()
+        surface_width, surface_height = surface.get_size()
+        return (width - surface_width)/2, (height - surface_height)/2
+
+    def draw(self):
+        self.screen.blit(self.__bg, (0, 0))
+
     
 
 # class BakeryWizard():

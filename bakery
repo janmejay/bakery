@@ -5,3 +5,13 @@
 import pygame
 
 from src import init
+from player_loader import PlayerLoader
+
+screen = pygame.display.set_mode((1024, 768))
+
+player_loader = PlayerLoader()
+player_loader.load(screen)
+while True:
+    player_loader.draw()
+    pygame.display.flip()
+

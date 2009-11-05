@@ -1,16 +1,19 @@
 from util import game_util
-from pygame import sprite
+import bakery_wizard
+import pygame
 
-class PlayerLoader():
+class PlayerLoader(bakery_wizard.BaseWindow):
     
     def __init__(self):
-        self.__sprites = sprite.RenderPlain()
+        bakery_wizard.BaseWindow.__init__(self)
         
     def load(self, screen):
-        self.__screen = screen
-        self.__bg = game_util.load_image('loading-cake.png')
-
+        bakery_wizard.BaseWindow.load(self, screen)
+        self.__bg_center = game_util.load_image('loading-cake.png')
+        self.__bg_center_coordinates = self.center_xy(self.__bg_center)
+        
     def draw(self):
-        self.__screen.blit(self.__bg, (100, 100))
+        bakery_wizard.BaseWindow.draw(self)
+        self.screen.blit(self.__bg_center, self.__bg_center_coordinates)
         
         
