@@ -5,7 +5,7 @@ class Action():
         self.__macro = macro
         self.__x = x
         self.__y = y
-        self.__propagatable = True
+        self.propagatable = True
         self.__consumers = []
 
     def subscribed_by(self, subscriber):
@@ -13,8 +13,25 @@ class Action():
 
 class Subscriber():
     def consume(self, action):
-        action.subscribed_by(self)
-        self.handle(action)
+        if self.can_consume(action):
+            action.subscribed_by(self)
+            self.handle(action)
+            action.propagatable = self.allow_propagation(action)
+
+    def can_consume(self, action):
+        return False
+
+    def allow_propagation(self, action):
+        return True
+    
+    def __cmp__(self, other):
+        return other.zindex() - self.zindex()
+
+    def zindex(self):
+        return 0
+
+    def __eq__(self, other):
+        id(self) == id(other)
 
 class Publisher():
     def __init__(self):
