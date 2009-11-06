@@ -28,6 +28,12 @@ class SampleSubscriber(actions.Subscriber):
     def zindex(self):
         return self.__zindex
         
+class NonPropagatingSampleSubscriber(SampleSubscriber):
+    def allow_propagation(self, action):
+        return False
+
+    def can_consume(self, action):
+        return action.propagatable
 
 class PublisherTest(unittest.TestCase):
     def setUp(self):
@@ -61,6 +67,20 @@ class PublisherTest(unittest.TestCase):
         self.mock_factory.ReplayAll()
         self.publisher.publish(self.action)
         self.mock_factory.VerifyAll()
+
+    def test_offers_action_for_consumption_in_order_of_subscriber_z_index(self):
+        subscriber_1 = NonPropagatingSampleSubscriber(10)
+        subscriber_2 = NonPropagatingSampleSubscriber(20)
+        subscriber_3 = NonPropagatingSampleSubscriber(30)
+        self.publisher.register(subscriber_2, subscriber_1, subscriber_3)
+        self.mock_factory.StubOutWithMock(subscriber_1, 'handle')
+        self.mock_factory.StubOutWithMock(subscriber_2, 'handle')
+        self.mock_factory.StubOutWithMock(subscriber_3, 'handle')
+        subscriber_3.handle(self.action)
+        self.mock_factory.ReplayAll()
+        self.publisher.publish(self.action)
+        self.mock_factory.VerifyAll()
+
 
 class SubscriberTest(unittest.TestCase):
     def setUp(self):
@@ -100,11 +120,43 @@ class SubscriberTest(unittest.TestCase):
         subscriber = SampleSubscriber(10)
         self.assertNotEqual(self.subscriber, subscriber)
 
+class SampleActiveRectangleSubscriber(actions.ActiveRectangleSubscriber):
+    def __init__(self, x_range, y_range):
+        self.__x = x_range[0]
+        self.__dx = x_range[1]
+        self.__y = y_range[0]
+        self.__dy = y_range[1]
+    
+    def x(self):
+        return self.__x;
+
+    def y(self):
+        return self.__y;
+
+    def dx(self):
+        return self.__dx;
+
+    def dy(self):
+        return self.__dy;
+
+class ActiveRectangleSubscriberTest(unittest.TestCase):
+    def test_can_consume_understands_events_within_active_x_and_y(self):
+        subscriber = SampleActiveRectangleSubscriber((10, 10), (30, 10))
+        action_within = actions.Action(actions.LEFT_CLICK, 15, 35)
+        action_out_on_x = actions.Action(actions.LEFT_CLICK, 25, 35)
+        action_out_on_y = actions.Action(actions.LEFT_CLICK, 15, 15)
+        action_out_on_both = actions.Action(actions.LEFT_CLICK, 30, 5)
+        self.assertTrue(subscriber.can_consume(action_within))
+        self.assertFalse(subscriber.can_consume(action_out_on_x))
+        self.assertFalse(subscriber.can_consume(action_out_on_y))
+        self.assertFalse(subscriber.can_consume(action_out_on_both))
+
 class All(unittest.TestSuite):
     def __init__(self):
         self.add(ActionTest)
         self.add(SubscriberTest)
         self.add(PublisherTest)
+        self.add(ActiveRectangleSubscriberTest)
 
 if __name__ == '__main__':
     unittest.main()

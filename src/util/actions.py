@@ -11,6 +11,12 @@ class Action():
     def subscribed_by(self, subscriber):
         self.__consumers.append(subscriber)
 
+    def x(self):
+        return self.__x
+
+    def y(self):
+        return self.__y
+
 class Subscriber():
     def consume(self, action):
         if self.can_consume(action):
@@ -41,8 +47,19 @@ class Publisher():
         for subscriber in subscribers:
             if subscriber not in self.__subscribers:
                 self.__subscribers.append(subscriber)
+        self.__subscribers.sort()
         
     def publish(self, action): 
         for subscriber in self.__subscribers:
             subscriber.consume(action) 
 
+class ActiveRectangleSubscriber(Subscriber):
+    def can_consume(self, action):
+        return (self.x() <= action.x() <= self.__x_end()) and \
+            (self.y() <= action.y() <= self.__y_end())
+            
+    def __x_end(self):
+        return self.x() + self.dx()
+
+    def __y_end(self):
+        return self.y() + self.dy()
