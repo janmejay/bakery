@@ -48,18 +48,33 @@ class Publisher():
             if subscriber not in self.__subscribers:
                 self.__subscribers.append(subscriber)
         self.__subscribers.sort()
+
+    def unregister(self, *subscribers):
+        for subscriber in subscribers:
+            if subscriber in self.__subscribers:
+                self.__subscribers.remove(subscriber)
         
     def publish(self, action): 
         for subscriber in self.__subscribers:
-            subscriber.consume(action) 
+            subscriber.consume(action)
 
 class ActiveRectangleSubscriber(Subscriber):
-    def can_consume(self, action):
-        return (self.x() <= action.x() <= self.__x_end()) and \
-            (self.y() <= action.y() <= self.__y_end())
-            
-    def __x_end(self):
-        return self.x() + self.dx()
+    def __init__(self, x, y, dx, dy):
+        self.__x, self.__y, self.__dx, self.__dy = x, y, dx, dy
 
-    def __y_end(self):
-        return self.y() + self.dy()
+    def can_consume(self, action):
+        return (self.x() <= action.x() <= (self.x() + self.dx())) and \
+            (self.y() <= action.y() <= (self.y() + self.dy()))
+            
+    def x(self):
+        return self.__x;
+
+    def y(self):
+        return self.__y;
+
+    def dx(self):
+        return self.__dx;
+
+    def dy(self):
+        return self.__dy;
+

@@ -50,6 +50,13 @@ class PublisherTest(unittest.TestCase):
         self.publisher.publish(self.action)
         self.mock_factory.VerifyAll()
 
+    def test_unregistered_subscriber_does_not_get_messages(self):
+        self.publisher.register(self.subscriber)
+        self.publisher.unregister(self.subscriber)
+        self.mock_factory.ReplayAll()
+        self.publisher.publish(self.action)
+        self.mock_factory.VerifyAll()
+
     def test_same_subscriber_registered_twice_should_not_be_made_to_consume_action_twice(self):
         self.subscriber.consume(self.action)
         self.publisher.register(self.subscriber)
@@ -119,29 +126,10 @@ class SubscriberTest(unittest.TestCase):
     def test_should_consider_nothing_but_same_instance_equal(self):
         subscriber = SampleSubscriber(10)
         self.assertNotEqual(self.subscriber, subscriber)
-
-class SampleActiveRectangleSubscriber(actions.ActiveRectangleSubscriber):
-    def __init__(self, x_range, y_range):
-        self.__x = x_range[0]
-        self.__dx = x_range[1]
-        self.__y = y_range[0]
-        self.__dy = y_range[1]
     
-    def x(self):
-        return self.__x;
-
-    def y(self):
-        return self.__y;
-
-    def dx(self):
-        return self.__dx;
-
-    def dy(self):
-        return self.__dy;
-
 class ActiveRectangleSubscriberTest(unittest.TestCase):
     def test_can_consume_understands_events_within_active_x_and_y(self):
-        subscriber = SampleActiveRectangleSubscriber((10, 10), (30, 10))
+        subscriber = actions.ActiveRectangleSubscriber(10, 30, 10, 10)
         action_within = actions.Action(actions.LEFT_CLICK, 15, 35)
         action_out_on_x = actions.Action(actions.LEFT_CLICK, 25, 35)
         action_out_on_y = actions.Action(actions.LEFT_CLICK, 15, 15)
@@ -150,13 +138,6 @@ class ActiveRectangleSubscriberTest(unittest.TestCase):
         self.assertFalse(subscriber.can_consume(action_out_on_x))
         self.assertFalse(subscriber.can_consume(action_out_on_y))
         self.assertFalse(subscriber.can_consume(action_out_on_both))
-
-class All(unittest.TestSuite):
-    def __init__(self):
-        self.add(ActionTest)
-        self.add(SubscriberTest)
-        self.add(PublisherTest)
-        self.add(ActiveRectangleSubscriberTest)
 
 if __name__ == '__main__':
     unittest.main()
