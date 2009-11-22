@@ -1,6 +1,5 @@
 import unittest
 import env
-import sys
 from util import actions
 import mox
 from common import button
