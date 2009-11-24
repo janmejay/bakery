@@ -1,12 +1,15 @@
-LEFT_CLICK, RIGHT_CLICK = 'left_click', 'right_click'
+LEFT_CLICK, RIGHT_CLICK, KEY = 'left_click', 'right_click', 'key'
 
-class Action():
-    def __init__(self, macro, x, y):
+CLICK_ACTIONS = [LEFT_CLICK, RIGHT_CLICK]
+
+class Action:
+    def __init__(self, macro, x = 0, y = 0, obj = None):
         self.__macro = macro
         self.__x = x
         self.__y = y
         self.propagatable = True
         self.__consumers = []
+        self.__obj = obj
 
     def subscribed_by(self, subscriber):
         self.__consumers.append(subscriber)
@@ -17,7 +20,16 @@ class Action():
     def y(self):
         return self.__y
 
-class Subscriber():
+    def is_click(self):
+        return self.__macro in CLICK_ACTIONS
+
+    def is_key(self):
+        return not self.is_click()
+
+    def get_obj(self):
+        return self.__obj
+
+class Subscriber:
     def consume(self, action):
         if self.can_consume(action):
             action.subscribed_by(self)
@@ -37,9 +49,9 @@ class Subscriber():
         return 0
 
     def __eq__(self, other):
-        id(self) == id(other)
+        return id(self) == id(other)
 
-class Publisher():
+class Publisher:
     def __init__(self):
         self.__subscribers = []
 
@@ -63,7 +75,7 @@ class ActiveRectangleSubscriber(Subscriber):
         self.__x, self.__y, self.__dx, self.__dy = x, y, dx, dy
 
     def can_consume(self, action):
-        return (self.x() <= action.x() <= (self.x() + self.dx())) and \
+        return action.is_click() and (self.x() <= action.x() <= (self.x() + self.dx())) and \
             (self.y() <= action.y() <= (self.y() + self.dy()))
             
     def x(self):

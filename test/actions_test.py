@@ -15,6 +15,27 @@ class ActionTest(unittest.TestCase):
         self.assertEquals(self.action.propagatable, True)
         self.assertEquals(self.action._Action__consumers, [])
 
+    def test_defaults_x_y_to_0(self):
+        default_x_y_action = actions.Action(actions.LEFT_CLICK)
+        self.assertEquals(default_x_y_action.x(), 0)
+        self.assertEquals(default_x_y_action.y(), 0)
+
+    def test_click_and_key_actions_are_mutually_exclusive(self):
+        self.assertTrue(actions.Action(actions.LEFT_CLICK).is_click())
+        self.assertFalse(actions.Action(actions.LEFT_CLICK).is_key())
+        self.assertTrue(actions.Action(actions.KEY).is_key())
+        self.assertFalse(actions.Action(actions.KEY).is_click())
+
+    def test_left_and_right_click_are_clicks(self):
+        self.assertTrue(actions.Action(actions.LEFT_CLICK).is_click())
+        self.assertTrue(actions.Action(actions.RIGHT_CLICK).is_click())
+
+    def test_stores_an_optional_object_defaulted_to_none(self):
+        self.assertEqual(self.action.get_obj(), None)
+        action_obj = object()
+        action = actions.Action(actions.KEY, obj = action_obj)
+        self.assertEqual(action.get_obj(), action_obj)
+        
 class SampleSubscriber(actions.Subscriber):
     def __init__(self, zindex):
         self.__zindex = zindex
@@ -138,6 +159,15 @@ class ActiveRectangleSubscriberTest(unittest.TestCase):
         self.assertFalse(subscriber.can_consume(action_out_on_x))
         self.assertFalse(subscriber.can_consume(action_out_on_y))
         self.assertFalse(subscriber.can_consume(action_out_on_both))
+
+    def test_should_affect_identity_based_equality(self):
+        subscriber = actions.ActiveRectangleSubscriber(10, 30, 10, 10)
+        self.assertEqual(subscriber, subscriber)
+
+    def test_considers_key_events_non_consumable(self):
+        subscriber = actions.ActiveRectangleSubscriber(10, 30, 10, 10)
+        key_action = actions.Action(actions.KEY, 60, 60)
+        self.assertFalse(subscriber.can_consume(key_action))
 
 if __name__ == '__main__':
     unittest.main()
