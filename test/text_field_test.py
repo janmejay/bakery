@@ -61,5 +61,18 @@ class TextFieldTest(unittest.TestCase):
         self.field_instance.handle(key_a)
         self.assertEqual(self.field_instance.get_value(), "a")
 
+class BufferTest(unittest.TestCase):
+    def setUp(self):
+        self.buffer = text_field.Buffer()
+    
+    def test_starts_empty_with_cursor(self):
+        self.assertEqual(self.buffer.cursor_pos(), 0)
+        self.assertEqual(self.buffer.text(), "")
+
+    def test_is_dirty_sprite(self):
+        self.assertTrue(isinstance(self.buffer, pygame.sprite.DirtySprite))
+        self.assertEqual(self.buffer.layer, 0)
+        self.assertEqual(self.buffer.dirty, 1)
+
 if __name__ == '__main__':
     unittest.main()

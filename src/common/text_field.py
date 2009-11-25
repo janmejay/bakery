@@ -2,6 +2,18 @@ import pygame, pygame.font, pygame.event, pygame.draw, string
 from pygame.locals import *
 from util import actions
 
+class Buffer(pygame.sprite.DirtySprite):
+    def __init__(self, **options):
+        self.__cursor = 0
+        self.__text = ""
+        self.dirty, self.layer = 1, 0
+
+    def cursor_pos(self):
+        return self.__cursor
+
+    def text(self):
+        return self.__text
+
 class Manager:
     def __init__(self):
         self.__focused = None
