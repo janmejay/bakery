@@ -74,5 +74,108 @@ class BufferTest(unittest.TestCase):
         self.assertEqual(self.buffer.layer, 0)
         self.assertEqual(self.buffer.dirty, 1)
 
+    # def test_understands_left_and_right_arrow_keys(self):
+    #     key_a = actions.Action(actions.KEY, obj = pygame.event.Event(KEYDOWN, unicode = 'a'))
+    #     key_w = actions.Action(actions.KEY, obj = pygame.event.Event(KEYDOWN, unicode = 'w'))
+    #     key_s = actions.Action(actions.KEY, obj = pygame.event.Event(KEYDOWN, unicode = 's'))
+    #     key_e = actions.Action(actions.KEY, obj = pygame.event.Event(KEYDOWN, unicode = 'e'))
+    #     key_t = actions.Action(actions.KEY, obj = pygame.event.Event(KEYDOWN, unicode = 't'))
+    #     left = pygame.event.Event(KEYDOWN, key = 276)
+    #     right = pygame.event.Event(KEYDOWN, key = 275)
+    #     self.buffer.record(key_a)
+    #     self.buffer.record(actions.Action(actions.KEY, obj = left))
+    #     self.buffer.record(key_w)
+    #     self.buffer.record(actions.Action(actions.KEY, obj = left))
+    #     self.buffer.record(key_s)
+    #     self.buffer.record(actions.Action(actions.KEY, obj = right))
+    #     self.buffer.record(key_e)
+    #     self.buffer.record(key_t)
+    #     self.assertEqual(self.buffer.text(), "sweta")
+
+class CharElemTest(unittest.TestCase):
+    def setUp(self):
+        self.char_elem = text_field.CharElem('a')
+
+    def test_returns_value_its_initialized_with(self):
+        self.assertEqual(self.char_elem.value(), 'a')
+        self.assertEqual(text_field.CharElem('').value(), '')
+
+    def test_can_push_chars(self):
+        self.char_elem.push('b')
+        self.assertEqual(self.char_elem.value(), "ab")
+
+    def test_returns_next_elem_when_pushing(self):
+        self.char_elem.push('b').push('c').push('d')
+        self.assertEqual(self.char_elem.value(), "abcd")
+
+    def test_can_insert_elements_when_pushed(self):
+        self.char_elem.push('b').push('c')
+        self.char_elem.push('d').push('e')
+        self.assertEqual(self.char_elem.value(), "adebc")
+
+    def test_can_seek_backwards_positions_to_insert_elements(self):
+        b = self.char_elem.push('b')
+        b.push('c')
+        previous_elem = b.previous()
+        previous_elem.push('d').push('e')
+        self.assertEqual(self.char_elem.value(), "adebc")
+
+    def start_and_end_values_should_be_empty(self):
+        self.assertEqual(text_field.StartingCharElem().value(), '')
+        self.assertEqual(text_field.EndingCharElem().value(), '')
+
+    def test_can_seek_backwards_indifinitely_without_going_beyond_zeroth_char(self):
+        self.char_elem.push('b')
+        begining = self.char_elem.previous()
+        begining.push('c')
+        begining = begining.previous()
+        begining.push('d')
+        begining = begining.previous()
+        begining.push('e')
+        self.assertEqual(begining.value(), "edcab")
+
+    def test_can_seek_forward_indifinitely_without_going_beyond_zeroth_char(self):
+        self.char_elem.push('b')
+        end = self.char_elem.next()
+        end.push('c')
+        end = end.next().next().next().next()
+        end.push('d')
+        end = end.next()
+        end.push('e')
+        self.char_elem.next().next().push('Z')
+        self.assertEqual(self.char_elem.value(), "abcZde")
+
+    def test_can_seek_begining(self):
+        c = self.char_elem.push('b').push('c')
+        self.assertEqual(c.value(), 'c')
+        self.assertEqual(c.begining().value(), "abc")
+
+    def test_can_delete_current_element_and_return_next(self):
+        self.char_elem.push('b').push('c').push('d')
+        b = self.char_elem.delete_current()
+        self.assertEqual(b.value(), "bcd")
+
+    def test_can_delete_next_element_and_return_current(self):
+        self.char_elem.push('b').push('c').push('d')
+        b = self.char_elem.delete_next()
+        self.assertEqual(b.value(), "acd")
+    
+    def test_deletion_works_on_edges(self):
+        buffer = self.char_elem.delete_next().delete_next()
+        self.assertEqual(buffer.value(), "a")
+        buffer = self.char_elem.previous().delete_current().delete_current()
+        self.assertEqual(buffer.value(), "a")
+
+    def test_terminals_should_not_be_deletable(self):
+        self.assertEqual(text_field.StartingCharElem(None).is_deletable(), False)
+        self.assertEqual(text_field.EndingCharElem(None).is_deletable(), False)
+        self.assertEqual(self.char_elem.is_deletable(), True)
+
+    def test_empty_char_elem_populates_itself_on_first_push(self):
+        elem = text_field.CharElem('')
+        elem.push('a')
+        elem.delete_next()
+        self.assertEqual(elem.value(), "a")
+
 if __name__ == '__main__':
     unittest.main()

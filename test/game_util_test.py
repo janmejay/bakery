@@ -32,7 +32,12 @@ class GameUtilTest(unittest.TestCase):
     def test_media_finds_files_under_media_dir(self):
         self.assertEqual(game_util.media("foo.png"), 
                          os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "media", "foo.png")))
-        
+
+    def test_media_not_found_raises_system_exit(self):
+        self.assertRaises(SystemExit, game_util.load_image, 'unavailable.png')
+
+    def test_resources_are_fetched_relative_to_bakery_home(self):
+        self.assertEqual(game_util.resource('foo'), os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "foo")))
 
 if __name__ == '__main__':
     unittest.main()
