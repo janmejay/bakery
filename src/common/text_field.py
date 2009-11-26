@@ -90,28 +90,27 @@ class EndingCharElem(TerminalCharElem):
 
 class Buffer(pygame.sprite.DirtySprite):
     def __init__(self, **options):
-        self.__cursor = 0
-        self.__text = ""
+        self.__cursor = CharElem('')
         self.dirty, self.layer = 1, 0
 
     def cursor_pos(self):
-        return self.__cursor
+        return 0
 
     def text(self):
-        return self.__text
+        return self.__cursor.begining().value()
 
     def record(self, action):
         key_evt = action.get_obj()
         if len(key_evt.unicode) != 0:
-            self.__text += key_evt.unicode
+            self.__cursor = self.__cursor.push(key_evt.unicode)
         else:
             self.__handle_navigation(key_evt)
     
     def __handle_navigation(self, key_evt):
         if key_evt.key == 276:
-            self.__cursor -= 1
-        elif key_evt.key_evt == 275:
-            self.__cursor += 1
+            self.__cursor = self.__cursor.previous()
+        elif key_evt.key == 275:
+            self.__cursor = self.__cursor.next()
 
 class Manager:
     def __init__(self):
