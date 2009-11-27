@@ -1,6 +1,7 @@
 import pygame, pygame.font, pygame.event, pygame.draw, string
 from pygame.locals import *
 from util import actions
+import unicodedata
 
 class CharElem:
     def __set_or_default_next(self, optionals):
@@ -88,6 +89,8 @@ class EndingCharElem(TerminalCharElem):
     def logical_return(self):
         return self.previous_elem
 
+PRINTABLE_CATEGORIES = ('L', 'N', 'P', 'S')
+
 class Buffer(pygame.sprite.DirtySprite):
     def __init__(self, **options):
         self.__cursor = CharElem('')
@@ -101,16 +104,20 @@ class Buffer(pygame.sprite.DirtySprite):
 
     def record(self, action):
         key_evt = action.get_obj()
-        if len(key_evt.unicode) != 0:
+        if (len(key_evt.unicode) > 0) and (unicodedata.category(key_evt.unicode)[0] in PRINTABLE_CATEGORIES):
             self.__cursor = self.__cursor.push(key_evt.unicode)
         else:
-            self.__handle_navigation(key_evt)
+            self.handle_navigation(key_evt)
     
-    def __handle_navigation(self, key_evt):
+    def handle_navigation(self, key_evt):
         if key_evt.key == 276:
             self.__cursor = self.__cursor.previous()
         elif key_evt.key == 275:
             self.__cursor = self.__cursor.next()
+        elif key_evt.key == 8:
+            self.__cursor = self.__cursor.delete_current()
+        elif key_evt.key == 127:
+            self.__cursor = self.__cursor.delete_next()
 
 class Manager:
     def __init__(self):
