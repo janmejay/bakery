@@ -5,4 +5,6 @@ TEST_DIR = path.dirname(path.realpath(__file__))
 sys.path.append(path.join(TEST_DIR, "..", "src"))
 
 import init
+import pygame
+pygame.init()
 

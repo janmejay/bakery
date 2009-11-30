@@ -61,6 +61,81 @@ class TextFieldTest(unittest.TestCase):
         self.field_instance.handle(key_a)
         self.assertEqual(self.field_instance.get_value(), "a")
 
+    def test_is_dirty_sprite_and_starts_out_dirty(self):
+        self.assertTrue(isinstance(self.field_instance, pygame.sprite.DirtySprite))
+        self.assertTrue(self.field_instance.dirty, 1)
+
+    def test_uses_surface_of_same_size_as_ui(self):
+        field_instance = text_field.TextField(self.manager, dx = 200, dy = 100)
+        field_instance.update()
+        self.assertTrue(isinstance(field_instance.image, pygame.surface.Surface))
+        border_width = text_field.TextField.BORDER_WIDTH
+        self.assertEqual(field_instance.image.get_rect(), pygame.rect.Rect(0, 0, 200 + border_width, 100 + border_width))
+
+    def test_draws_border_and_fills_up_image_with_color(self):
+        field_instance = text_field.TextField(self.manager, dx = 200, dy = 100, border_color = (255, 0, 0, 0))
+        field_instance.update()
+        self.assertEqual(field_instance.image.get_at((100, 50)), (0, 0, 0, 255))
+        red = (255, 0, 0, 255) # if surface doesn't have per pixel alpha, then alpha value is 255
+        self.assertEqual(field_instance.image.get_at((1, 50)), red)
+        self.assertEqual(field_instance.image.get_at((100, 1)), red)
+        self.assertEqual(field_instance.image.get_at((199, 1)), red)
+        self.assertEqual(field_instance.image.get_at((199, 50)), red)
+        self.assertEqual(field_instance.image.get_at((199, 99)), red)
+        self.assertEqual(field_instance.image.get_at((100, 99)), red)
+        self.assertEqual(field_instance.image.get_at((1, 99)), red)
+        self.assertEqual(field_instance.image.get_at((1, 50)), red)
+
+    def test_marks_itself_dirty_only_after_handling_actions(self):
+        self.field_instance.handle(actions.Action(actions.LEFT_CLICK, 10, 10))
+        key_a = actions.Action(actions.KEY, obj = pygame.event.Event(KEYDOWN, unicode = u'a'))
+        self.field_instance.dirty = 0
+        self.field_instance.handle(key_a)
+        self.assertEqual(self.field_instance.dirty, 1)
+
+    def test_initializes_its_font_based_on_name_and_size_and_honors_passed_in_values_over_defaults(self):
+        self.assertEqual(self.field_instance.font.get_height(), 7)
+        field_instance = text_field.TextField(self.manager, font_file = "title.ttf")
+        self.assertEqual(field_instance.font.get_height(), 10)
+        field_instance = text_field.TextField(self.manager, font_size = 6)
+        self.assertEqual(field_instance.font.get_height(), 9)
+
+    def test_renders_font_onto_image_when_updated_with_dirty_flag_off(self):
+        self.field_instance.dirty = 0
+        mock_factory = mox.Mox()
+        self.field_instance.font = mock_factory.CreateMock(pygame.font.Font)
+        mock_factory.ReplayAll()
+        self.field_instance.update()
+        mock_factory.VerifyAll()
+
+    def test_renders_font_onto_image_when_updated_with_dirty_flag_on(self):
+        font_color = (0, 0, 0, 0)
+        key_a = actions.Action(actions.KEY, obj = pygame.event.Event(KEYDOWN, unicode = u'a'))
+        self.field_instance.handle(key_a)
+        mock_factory = mox.Mox()
+        self.field_instance.font = mock_factory.CreateMock(pygame.font.Font)
+        self.field_instance.base_image = mock_factory.CreateMock(pygame.surface.Surface)
+        image = mock_factory.CreateMock(pygame.surface.Surface)
+        font_surface = pygame.surface.Surface((20, 20))
+        self.field_instance.font.render("a", True, font_color).AndReturn(font_surface)
+        self.field_instance.base_image.copy().AndReturn(image)
+        image.blit(font_surface, (2, 2))
+        mock_factory.ReplayAll()
+        self.field_instance.update()
+        mock_factory.VerifyAll()
+        self.assertEqual(self.field_instance.image, image)
+
+    def test_renders_font_in_the_write_color(self):
+        font_color = (255, 100, 100, 0)
+        field_instance = text_field.TextField(self.manager, font_color = font_color)
+        mock_factory = mox.Mox()
+        field_instance.font = mock_factory.CreateMock(pygame.font.Font)
+        font_surface = pygame.surface.Surface((20, 20))
+        field_instance.font.render("", True, font_color).AndReturn(font_surface)
+        mock_factory.ReplayAll()
+        field_instance.update()
+        mock_factory.VerifyAll()
+        
 class BufferTest(unittest.TestCase):
     def setUp(self):
         self.buffer = text_field.Buffer()
@@ -68,11 +143,6 @@ class BufferTest(unittest.TestCase):
     def test_starts_empty_with_cursor(self):
         self.assertEqual(self.buffer.cursor_pos(), 0)
         self.assertEqual(self.buffer.text(), "")
-
-    def test_is_dirty_sprite(self):
-        self.assertTrue(isinstance(self.buffer, pygame.sprite.DirtySprite))
-        self.assertEqual(self.buffer.layer, 0)
-        self.assertEqual(self.buffer.dirty, 1)
 
     def test_understands_left_and_right_arrow_keys(self):
         key_a = actions.Action(actions.KEY, obj = pygame.event.Event(KEYDOWN, unicode = u'a'))

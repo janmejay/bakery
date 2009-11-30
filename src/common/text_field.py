@@ -2,6 +2,8 @@ import pygame, pygame.font, pygame.event, pygame.draw, string
 from pygame.locals import *
 from util import actions
 import unicodedata
+import sub_select_dict
+from util import game_util
 
 class CharElem:
     def __set_or_default_next(self, optionals):
@@ -91,10 +93,10 @@ class EndingCharElem(TerminalCharElem):
 
 PRINTABLE_CATEGORIES = ('L', 'N', 'P', 'S')
 
-class Buffer(pygame.sprite.DirtySprite):
-    def __init__(self, **options):
+class Buffer:
+    def __init__(self):
         self.__cursor = CharElem('')
-        self.dirty, self.layer = 1, 0
+        self.dirty = 1
 
     def cursor_pos(self):
         return 0
@@ -129,19 +131,43 @@ class Manager:
     def set_focused(self, field):
         self.__focused = field
 
-class TextField(actions.ActiveRectangleSubscriber):
+class TextField(actions.ActiveRectangleSubscriber, pygame.sprite.DirtySprite):
+    BORDER_WIDTH = 2
     def __init__(self, manager, **options_subset):
-        options = { 'x' : 0, 'y' : 0, 'dx' : 100, 'dy' : 30}
+        options = sub_select_dict.SubSelectDict({ 'x' : 0, 'y' : 0, 'dx' : 100, 'dy' : 30, 
+                                                  'border_color' : (150, 150, 150, 150),
+                                                  'font_size' : 5, 'font_file' : 'hand.ttf', 
+                                                  'font_color' : (0, 0, 0, 0)})
         options.update(options_subset)
-        actions.ActiveRectangleSubscriber.__init__(self, **options)
+        actions.ActiveRectangleSubscriber.__init__(self, **(options.subset('x', 'dx', 'y', 'dy')))
+        pygame.sprite.DirtySprite.__init__(self)
+        self.__initialize_image(**(options.subset('dx', 'dy', 'border_color')))
+        self.__initialize_font(**(options.subset('font_file', 'font_size')))
         self.__manager = manager
-        self.__value = ""
+        self.__font_color = options['font_color']
+        self.__buffer = Buffer()
+        self.dirty = 1
+
+    def __initialize_image(self, dx, dy, border_color):
+        self.base_image = pygame.surface.Surface((dx + TextField.BORDER_WIDTH, dy + TextField.BORDER_WIDTH))
+        border = pygame.rect.Rect(0, 0, dx, dy)
+        pygame.draw.rect(self.base_image, border_color, border, TextField.BORDER_WIDTH)
+
+    def __initialize_font(self, font_file, font_size):
+        self.font = pygame.font.Font(game_util.media(font_file), font_size)
+
+    def update(self):
+        if self.dirty > 0:
+            self.image = self.base_image.copy()
+            glyph = self.font.render(self.get_value(), True, self.__font_color)
+            self.image.blit(glyph, (2, 2))
 
     def handle(self, action):
+        self.dirty = 1
         if action.is_click():
             self.__manager.set_focused(self)
         else:
-            self.__value += action.get_obj().unicode
+            self.__buffer.record(action)
 
     def is_focused(self):
         return self.__manager.is_focused(self)
@@ -154,47 +180,5 @@ class TextField(actions.ActiveRectangleSubscriber):
             self.__listening_to_kb(action)
 
     def get_value(self):
-        return self.__value
+        return self.__buffer.text()
 
-
-# def get_key():
-#   while 1:
-#     event = pygame.event.poll()
-#     if event.type == KEYDOWN:
-#       return event.key
-#     else:
-#       pass
-
-# def display_box(screen, message):
-#   "Print a message in a box in the middle of the screen"
-#   fontobject = pygame.font.Font(None,18)
-#   pygame.draw.rect(screen, (0,0,0),
-#                    ((screen.get_width() / 2) - 100,
-#                     (screen.get_height() / 2) - 10,
-#                     200,20), 0)
-#   pygame.draw.rect(screen, (255,255,255),
-#                    ((screen.get_width() / 2) - 102,
-#                     (screen.get_height() / 2) - 12,
-#                     204,24), 1)
-#   if len(message) != 0:
-#     screen.blit(fontobject.render(message, 1, (255,255,255)),
-#                 ((screen.get_width() / 2) - 100, (screen.get_height() / 2) - 10))
-#   pygame.display.flip()
-
-# def ask(screen, question):
-#   "ask(screen, question) -> answer"
-#   pygame.font.init()
-#   current_string = []
-#   display_box(screen, question + ": " + string.join(current_string,""))
-#   while 1:
-#     inkey = get_key()
-#     if inkey == K_BACKSPACE:
-#       current_string = current_string[0:-1]
-#     elif inkey == K_RETURN:
-#       break
-#     elif inkey == K_MINUS:
-#       current_string.append("_")
-#     elif inkey <= 127:
-#       current_string.append(chr(inkey))
-#     display_box(screen, question + ": " + string.join(current_string,""))
-#   return string.join(current_string,"")
