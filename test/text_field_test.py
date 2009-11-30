@@ -22,7 +22,7 @@ class TextFieldTest(unittest.TestCase):
         self.assertEqual(field_instance.x(), 5)
         self.assertEqual(field_instance.y(), 3)
         self.assertEqual(field_instance.dx(), 4)
-        self.assertEqual(field_instance.dy(), 2)
+        self.assertEqual(field_instance.dy(), self.field_instance.font.get_height() + 4)
 
     def test_can_consume_click(self):
         click = actions.Action(actions.LEFT_CLICK, 10, 10)
@@ -66,25 +66,24 @@ class TextFieldTest(unittest.TestCase):
         self.assertTrue(self.field_instance.dirty, 1)
 
     def test_uses_surface_of_same_size_as_ui(self):
-        field_instance = text_field.TextField(self.manager, dx = 200, dy = 100)
+        field_instance = text_field.TextField(self.manager, dx = 200)
         field_instance.update()
         self.assertTrue(isinstance(field_instance.image, pygame.surface.Surface))
         border_width = text_field.TextField.BORDER_WIDTH
-        self.assertEqual(field_instance.image.get_rect(), pygame.rect.Rect(0, 0, 200 + border_width, 100 + border_width))
+        self.assertEqual(field_instance.image.get_rect(), pygame.rect.Rect(0, 0, 200 + border_width, 13))
 
     def test_draws_border_and_fills_up_image_with_color(self):
-        field_instance = text_field.TextField(self.manager, dx = 200, dy = 100, border_color = (255, 0, 0, 0))
+        field_instance = text_field.TextField(self.manager, dx = 200, border_color = (255, 0, 0, 0), font_size = 30)
         field_instance.update()
-        self.assertEqual(field_instance.image.get_at((100, 50)), (0, 0, 0, 255))
+        self.assertEqual(field_instance.image.get_at((100, 15)), (0, 0, 0, 255))
         red = (255, 0, 0, 255) # if surface doesn't have per pixel alpha, then alpha value is 255
-        self.assertEqual(field_instance.image.get_at((1, 50)), red)
+        self.assertEqual(field_instance.image.get_at((1, 22)), red)
         self.assertEqual(field_instance.image.get_at((100, 1)), red)
         self.assertEqual(field_instance.image.get_at((199, 1)), red)
-        self.assertEqual(field_instance.image.get_at((199, 50)), red)
-        self.assertEqual(field_instance.image.get_at((199, 99)), red)
-        self.assertEqual(field_instance.image.get_at((100, 99)), red)
-        self.assertEqual(field_instance.image.get_at((1, 99)), red)
-        self.assertEqual(field_instance.image.get_at((1, 50)), red)
+        self.assertEqual(field_instance.image.get_at((199, 22)), red)
+        self.assertEqual(field_instance.image.get_at((199, 45)), red)
+        self.assertEqual(field_instance.image.get_at((100, 45)), red)
+        self.assertEqual(field_instance.image.get_at((1, 45)), red)
 
     def test_marks_itself_dirty_only_after_handling_actions(self):
         self.field_instance.handle(actions.Action(actions.LEFT_CLICK, 10, 10))
@@ -138,7 +137,7 @@ class TextFieldTest(unittest.TestCase):
         field_instance_with_x_and_y.handle(key_b)
         field_instance_with_x_and_y.handle(key_c)
         field_instance_with_x_and_y.handle(key_left)
-        cursor_x = glyph.get_width()
+        cursor_x = glyph.get_width() + text_field.TextField.BORDER_WIDTH
         self.assertEqual(self.field_instance.cursor_x(), cursor_x)
         self.assertEqual(self.field_instance.cursor_top(), (cursor_x, 4))
         self.assertEqual(self.field_instance.cursor_bottom(), (cursor_x, glyph.get_height() - 4))

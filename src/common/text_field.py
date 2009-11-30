@@ -140,15 +140,14 @@ class TextField(actions.ActiveRectangleSubscriber, pygame.sprite.DirtySprite):
     DEFAULT_COLOR = (0, 0, 0, 0)
     CURSOR_WIDTH = 3
     def __init__(self, manager, **options_subset):
-        options = sub_select_dict.SubSelectDict({ 'x' : 0, 'y' : 0, 'dx' : 100, 'dy' : 30, 
-                                                  'border_color' : (150, 150, 150, 150),
-                                                  'font_size' : 5, 'font_file' : 'hand.ttf', 
-                                                  'font_color' : TextField.DEFAULT_COLOR})
+        options = sub_select_dict.SubSelectDict({ 'x' : 0, 'y' : 0, 'dx' : 100, 'border_color' : (150, 150, 150, 150),
+                                                  'font_size' : 5, 'font_file' : 'hand.ttf', 'font_color' : TextField.DEFAULT_COLOR})
         options.update(options_subset)
+        self.__initialize_font(**(options.subset('font_file', 'font_size')))
+        options.update({'dy' : self.font.get_height() + TextField.BORDER_WIDTH*2})
         actions.ActiveRectangleSubscriber.__init__(self, **(options.subset('x', 'dx', 'y', 'dy')))
         pygame.sprite.DirtySprite.__init__(self)
         self.__initialize_image(**(options.subset('dx', 'dy', 'border_color')))
-        self.__initialize_font(**(options.subset('font_file', 'font_size')))
         self.__manager = manager
         self.__font_color = options['font_color']
         self.__buffer = Buffer()
@@ -184,7 +183,7 @@ class TextField(actions.ActiveRectangleSubscriber, pygame.sprite.DirtySprite):
 
     def cursor_x(self):
         glyph = self.font.render(self.__buffer.text_before_cursor(), True, TextField.DEFAULT_COLOR)
-        return self.x() + glyph.get_width()
+        return self.x() + TextField.BORDER_WIDTH + glyph.get_width()
 
     def is_focused(self):
         return self.__manager.is_focused(self)
