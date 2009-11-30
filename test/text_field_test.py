@@ -108,7 +108,45 @@ class TextFieldTest(unittest.TestCase):
         self.field_instance.update()
         mock_factory.VerifyAll()
 
-    def test_renders_font_onto_image_when_updated_with_dirty_flag_on(self):
+    def test_renders_font_in_the_correct_color(self):
+        font_color = (255, 100, 100, 0)
+        field_instance = text_field.TextField(self.manager, font_color = font_color)
+        mock_factory = mox.Mox()
+        field_instance.font = mock_factory.CreateMock(pygame.font.Font)
+        font_surface = pygame.surface.Surface((20, 20))
+        field_instance.font.render("", True, font_color).AndReturn(font_surface)
+        field_instance.font.get_height().AndReturn(20)
+        mock_factory.StubOutWithMock(field_instance, 'cursor_x')
+        field_instance.cursor_x().AndReturn(10)
+        field_instance.cursor_x().AndReturn(10)
+        mock_factory.ReplayAll()
+        field_instance.update()
+        mock_factory.VerifyAll()
+
+    def test_understands_current_cursor_x_and_coordinates(self):
+        key_a = actions.Action(actions.KEY, obj = pygame.event.Event(KEYDOWN, unicode = u'a'))
+        key_b = actions.Action(actions.KEY, obj = pygame.event.Event(KEYDOWN, unicode = u'b'))
+        key_left = actions.Action(actions.KEY, obj = pygame.event.Event(KEYDOWN, unicode = u'', key = 276))
+        key_c = actions.Action(actions.KEY, obj = pygame.event.Event(KEYDOWN, unicode = u'c'))
+        field_instance_with_x_and_y = text_field.TextField(self.manager, x = 100, y = 200)
+        self.field_instance.handle(key_a)
+        self.field_instance.handle(key_b)
+        self.field_instance.handle(key_c)
+        self.field_instance.handle(key_left)
+        glyph = self.field_instance.font.render("ab", True, text_field.TextField.DEFAULT_COLOR)
+        field_instance_with_x_and_y.handle(key_a)
+        field_instance_with_x_and_y.handle(key_b)
+        field_instance_with_x_and_y.handle(key_c)
+        field_instance_with_x_and_y.handle(key_left)
+        cursor_x = glyph.get_width()
+        self.assertEqual(self.field_instance.cursor_x(), cursor_x)
+        self.assertEqual(self.field_instance.cursor_top(), (cursor_x, 4))
+        self.assertEqual(self.field_instance.cursor_bottom(), (cursor_x, glyph.get_height() - 4))
+        self.assertEqual(field_instance_with_x_and_y.cursor_x(), 100 + cursor_x)
+        self.assertEqual(field_instance_with_x_and_y.cursor_top(), (100 + cursor_x, 200 + 4))
+        self.assertEqual(field_instance_with_x_and_y.cursor_bottom(), (100 + cursor_x, 200 + glyph.get_height() - 4))
+
+    def test_renders_font_and_cursor_onto_image_when_updated_with_dirty_flag_on(self):
         font_color = (0, 0, 0, 0)
         key_a = actions.Action(actions.KEY, obj = pygame.event.Event(KEYDOWN, unicode = u'a'))
         self.field_instance.handle(key_a)
@@ -120,22 +158,17 @@ class TextFieldTest(unittest.TestCase):
         self.field_instance.font.render("a", True, font_color).AndReturn(font_surface)
         self.field_instance.base_image.copy().AndReturn(image)
         image.blit(font_surface, (2, 2))
+        mock_factory.StubOutWithMock(self.field_instance, 'cursor_top')
+        mock_factory.StubOutWithMock(self.field_instance, 'cursor_bottom')
+        self.field_instance.cursor_top().AndReturn((5, 10))
+        self.field_instance.cursor_bottom().AndReturn((5, 20))
+        mock_factory.StubOutWithMock(pygame.draw, 'line')
+        pygame.draw.line(image, (0, 0, 0, 0), (5, 10), (5, 20), 3)
         mock_factory.ReplayAll()
         self.field_instance.update()
         mock_factory.VerifyAll()
         self.assertEqual(self.field_instance.image, image)
 
-    def test_renders_font_in_the_write_color(self):
-        font_color = (255, 100, 100, 0)
-        field_instance = text_field.TextField(self.manager, font_color = font_color)
-        mock_factory = mox.Mox()
-        field_instance.font = mock_factory.CreateMock(pygame.font.Font)
-        font_surface = pygame.surface.Surface((20, 20))
-        field_instance.font.render("", True, font_color).AndReturn(font_surface)
-        mock_factory.ReplayAll()
-        field_instance.update()
-        mock_factory.VerifyAll()
-        
 class BufferTest(unittest.TestCase):
     def setUp(self):
         self.buffer = text_field.Buffer()
@@ -161,6 +194,20 @@ class BufferTest(unittest.TestCase):
         self.buffer.record(key_e)
         self.buffer.record(key_t)
         self.assertEqual(self.buffer.text(), "sweta")
+
+    def test_returns_values_before_cursor(self):
+        key_a = actions.Action(actions.KEY, obj = pygame.event.Event(KEYDOWN, unicode = u'a'))
+        key_w = actions.Action(actions.KEY, obj = pygame.event.Event(KEYDOWN, unicode = u'w'))
+        key_s = actions.Action(actions.KEY, obj = pygame.event.Event(KEYDOWN, unicode = u's'))
+        left = pygame.event.Event(KEYDOWN, key = 276, unicode = '')
+        right = pygame.event.Event(KEYDOWN, key = 275, unicode = '')
+        self.buffer.record(key_a)
+        self.buffer.record(actions.Action(actions.KEY, obj = left))
+        self.buffer.record(key_w)
+        self.buffer.record(actions.Action(actions.KEY, obj = left))
+        self.buffer.record(key_s)
+        self.buffer.record(actions.Action(actions.KEY, obj = right))
+        self.assertEqual(self.buffer.text_before_cursor(), "sw")
 
     def test_understands_left_and_right_arrow_keys_and_does_not_go_wrong_on_edges(self):
         key_a = actions.Action(actions.KEY, obj = pygame.event.Event(KEYDOWN, unicode = u'a'))
