@@ -166,7 +166,8 @@ class TextField(actions.ActiveRectangleSubscriber, pygame.sprite.DirtySprite):
             self.image = self.base_image.copy()
             glyph = self.font.render(self.get_value(), True, self.__font_color)
             self.image.blit(glyph, (TextField.BORDER_WIDTH, TextField.BORDER_WIDTH))
-            pygame.draw.line(self.image, TextField.DEFAULT_COLOR, self.cursor_top(), self.cursor_bottom(), TextField.CURSOR_WIDTH)
+            if self.is_focused():
+                pygame.draw.line(self.image, TextField.DEFAULT_COLOR, self.cursor_top(), self.cursor_bottom(), TextField.CURSOR_WIDTH)
 
     def cursor_top(self):
         return (self.cursor_x(), self.y() + TextField.BORDER_WIDTH*2)
@@ -178,7 +179,7 @@ class TextField(actions.ActiveRectangleSubscriber, pygame.sprite.DirtySprite):
         self.dirty = 1
         if action.is_click():
             self.__manager.set_focused(self)
-        else:
+        elif self.is_focused():
             self.__buffer.record(action)
 
     def cursor_x(self):
