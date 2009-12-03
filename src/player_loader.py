@@ -1,7 +1,7 @@
 from util import game_util
 import bakery_wizard
 import pygame
-from common import text_button
+from common import text_button, text_field
 
 class PlayerLoader(bakery_wizard.BaseWindow):
     
@@ -12,6 +12,7 @@ class PlayerLoader(bakery_wizard.BaseWindow):
         bakery_wizard.BaseWindow.load(self, screen)
         self.bg = game_util.load_image('loading-cake.png')
         self.sprites.add(text_button.TextButton(self, 'load_welcome', self, label = 'Get baking', x = 450, y = 450, dx = 100, dy = 100, image_path = 'get_baking_button.png'))
+        self.sprites.add(text_field.TextField(text_field.Manager(), x = 350, y = 300, dx = 100))
 
     def load_welcome(self):
         print "on to next"
