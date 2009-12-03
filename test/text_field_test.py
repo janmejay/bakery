@@ -18,7 +18,7 @@ class TextFieldTest(unittest.TestCase):
         self.assertTrue(isinstance(self.field_instance, actions.ActiveRectangleSubscriber))
 
     def test_should_honor_dimensions(self):
-        field_instance = text_field.TextField(self.manager, x = 5, y = 3, dx = 4, dy = 2)
+        field_instance = text_field.TextField(self.manager, x = 5, y = 3, dx = 4)
         self.assertEqual(field_instance.x(), 5)
         self.assertEqual(field_instance.y(), 3)
         self.assertEqual(field_instance.dx(), 4)
