@@ -1,6 +1,7 @@
 from util import game_util
 import bakery_wizard
 import pygame
+from common import text_button
 
 class PlayerLoader(bakery_wizard.BaseWindow):
     
@@ -9,11 +10,9 @@ class PlayerLoader(bakery_wizard.BaseWindow):
         
     def load(self, screen):
         bakery_wizard.BaseWindow.load(self, screen)
-        self.__bg_center = game_util.load_image('loading-cake.png')
-        self.__bg_center_coordinates = self.center_xy(self.__bg_center)
-        
-    def draw(self):
-        bakery_wizard.BaseWindow.draw(self)
-        self.screen.blit(self.__bg_center, self.__bg_center_coordinates)
-        
+        self.bg = game_util.load_image('loading-cake.png')
+        self.sprites.add(text_button.TextButton(self, 'load_welcome', self, label = 'Get baking', x = 450, y = 450, dx = 100, dy = 100, image_path = 'get_baking_button.png'))
+
+    def load_welcome(self):
+        print "on to next"
         

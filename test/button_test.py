@@ -22,6 +22,13 @@ class ButtonTest(unittest.TestCase):
         button_instance = button.Button(self.dummy_owner, 'on_click', self.publisher, **self.dimensions)
         self.assertTrue(button_instance.image != None)
         self.assertTrue(isinstance(button_instance.image, pygame.Surface))
+
+    def test_honors_image_path_given(self):
+        self.dimensions['image_path'] = 'test_rgb.png'
+        button_instance = button.Button(self.dummy_owner, 'on_click', self.publisher, **self.dimensions)
+        self.assertEqual(button_instance.image.get_at((0,0)), (255, 0, 0, 255))
+        self.assertEqual(button_instance.image.get_at((1,0)), (0, 255, 0, 255))
+        self.assertEqual(button_instance.image.get_at((2,0)), (0, 0, 255, 255))
     
     def test_has_rect(self):
         button_instance = button.Button(self.dummy_owner, 'on_click', self.publisher, **self.dimensions)
