@@ -3,12 +3,11 @@ from util import game_util, actions
 import zorder
 
 class Button(pygame.sprite.DirtySprite, actions.ActiveRectangleSubscriber):
-    def __init__(self, owner, callback, publisher, **options):
+    def __init__(self, owner, callback, publisher, x, y, dx, dy, image_path = 'default.png', layer = zorder.BUTTONS):
         pygame.sprite.DirtySprite.__init__(self)
-        self.layer = (options.has_key('layer') and options.pop('layer')) or zorder.BUTTONS
-        self.image = game_util.load_image(options.has_key('image_path') and options.pop('image_path') or 'default.png')
+        self.layer, self.image = layer, game_util.load_image(image_path)
         self.source_rect = self.image.get_rect()
-        actions.ActiveRectangleSubscriber.__init__(self, **options)
+        actions.ActiveRectangleSubscriber.__init__(self, x, y, dx, dy)
         self.__callback = getattr(owner, callback)
         self.__publisher = publisher
         
