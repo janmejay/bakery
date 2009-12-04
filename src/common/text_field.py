@@ -94,8 +94,10 @@ class EndingCharElem(TerminalCharElem):
 PRINTABLE_CATEGORIES = ('L', 'N', 'P', 'S')
 
 class Buffer:
-    def __init__(self):
+    def __init__(self, value = ''):
         self.__cursor = CharElem('')
+        for ch in value:
+            self.__cursor = self.__cursor.push(ch)
         self.dirty = 1
 
     def cursor_pos(self):
@@ -140,7 +142,7 @@ class TextField(actions.ActiveRectangleSubscriber, pygame.sprite.DirtySprite):
     DEFAULT_COLOR = (0, 0, 0, 0)
     CURSOR_WIDTH = 3
     def __init__(self, manager, x = 0, y = 0, dx = 100, border_color = (150, 150, 150, 150),
-                 font_size = 5, font_file = 'hand.ttf', font_color = DEFAULT_COLOR):
+                 font_size = 5, font_file = 'hand.ttf', font_color = DEFAULT_COLOR, value = ''):
         self.__initialize_font(font_file, font_size)
         dy = self.font.get_height() + TextField.BORDER_WIDTH*2
         actions.ActiveRectangleSubscriber.__init__(self, x, y, dx, dy)
@@ -148,7 +150,7 @@ class TextField(actions.ActiveRectangleSubscriber, pygame.sprite.DirtySprite):
         self.__initialize_image(dx, dy, border_color)
         self.__manager = manager
         self.__font_color = font_color
-        self.__buffer = Buffer()
+        self.__buffer = Buffer(value)
         self.dirty = 1
 
     def __initialize_image(self, dx, dy, border_color):

@@ -55,6 +55,28 @@ class PlayerLoaderTest(unittest.TestCase):
                 return
         self.fail("didn't find text field")
 
+    def test_text_field_is_initialized_with_last_player_name(self):
+        mock_factory = mox.Mox()
+        mock_factory.StubOutWithMock(game_util.LastPlayer, 'get_name')
+        game_util.LastPlayer.get_name().AndReturn("foo_bar")
+        mock_factory.ReplayAll()
+        self.window.load(self.screen)
+        mock_factory.VerifyAll()
+        for sprite in self.window.sprites:
+            if isinstance(sprite, text_field.TextField):
+                self.assertEqual(sprite.get_value(), "foo_bar")
+
+    def test_writes_player_name_to_last_player_file_on_load_welcome(self):
+        self.window.load(self.screen)
+        mock_factory = mox.Mox()
+        mock_factory.StubOutWithMock(game_util.LastPlayer, 'set_name')
+        mock_factory.StubOutWithMock(self.window.text_field, 'get_value')
+        self.window.text_field.get_value().AndReturn("foo_bar")
+        game_util.LastPlayer.set_name("foo_bar")
+        mock_factory.ReplayAll()
+        self.window.load_welcome()
+        mock_factory.VerifyAll()
+
 if __name__ == '__main__':
     unittest.main()
         

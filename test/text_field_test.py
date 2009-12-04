@@ -149,6 +149,20 @@ class TextFieldTest(unittest.TestCase):
         self.assertEqual(field_instance_with_x_and_y.cursor_top(), (100 + cursor_x, 200 + 4))
         self.assertEqual(field_instance_with_x_and_y.cursor_bottom(), (100 + cursor_x, 200 + glyph.get_height() - 4))
 
+    def test_understands_initial_field_value(self):
+        click = actions.Action(actions.LEFT_CLICK, 50, 3)
+        field_instance = text_field.TextField(self.manager, value = "foo")
+        key_a = actions.Action(actions.KEY, obj = pygame.event.Event(KEYDOWN, unicode = u'a'))
+        key_b = actions.Action(actions.KEY, obj = pygame.event.Event(KEYDOWN, unicode = u'b'))
+        key_left = actions.Action(actions.KEY, obj = pygame.event.Event(KEYDOWN, unicode = u'', key = 276))
+        key_c = actions.Action(actions.KEY, obj = pygame.event.Event(KEYDOWN, unicode = u'c'))
+        field_instance.handle(click)
+        field_instance.handle(key_a)
+        field_instance.handle(key_b)
+        field_instance.handle(key_left)
+        field_instance.handle(key_c)
+        self.assertEqual(field_instance.get_value(), "fooacb")
+
     def test_renders_font_and_cursor_onto_image_when_updated_with_dirty_flag_on(self):
         font_color = (0, 0, 0, 0)
         self.field_instance.handle(actions.Action(actions.LEFT_CLICK, 50, 3))
@@ -212,6 +226,12 @@ class BufferTest(unittest.TestCase):
     def test_starts_empty_with_cursor(self):
         self.assertEqual(self.buffer.cursor_pos(), 0)
         self.assertEqual(self.buffer.text(), "")
+
+    def test_can_start_with_initial_value_string(self):
+        buffer = text_field.Buffer(value = "foo")
+        key_a = actions.Action(actions.KEY, obj = pygame.event.Event(KEYDOWN, unicode = u'a'))
+        buffer.record(key_a)
+        self.assertEqual(buffer.text(), "fooa")
 
     def test_understands_left_and_right_arrow_keys(self):
         key_a = actions.Action(actions.KEY, obj = pygame.event.Event(KEYDOWN, unicode = u'a'))
