@@ -77,6 +77,17 @@ class PlayerLoaderTest(unittest.TestCase):
         self.window.load_welcome()
         mock_factory.VerifyAll()
 
+    def test_update_should_call_update_on_text_field_before_draw(self):
+        self.window.load(self.screen)
+        self.window.text_field.image = pygame.surface.Surface((10,10))
+        self.window.text_field.rect = self.window.text_field.image.get_rect()
+        mock_factory = mox.Mox()
+        self.window.text_field = mock_factory.CreateMock(text_field.TextField)
+        self.window.text_field.update()
+        mock_factory.ReplayAll()
+        self.window.draw()
+        mock_factory.VerifyAll()
+
 if __name__ == '__main__':
     unittest.main()
         

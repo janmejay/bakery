@@ -15,6 +15,10 @@ class PlayerLoader(bakery_wizard.BaseWindow):
         self.text_field = text_field.TextField(text_field.Manager(), x = 350, y = 300, dx = 100, value = game_util.LastPlayer.get_name())
         self.sprites.add(self.text_field)
 
+    def draw(self):
+        self.text_field.update()
+        bakery_wizard.BaseWindow.draw(self)
+
     def load_welcome(self):
         game_util.LastPlayer.set_name(self.text_field.get_value())
         

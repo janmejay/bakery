@@ -157,6 +157,7 @@ class TextField(actions.ActiveRectangleSubscriber, pygame.sprite.DirtySprite):
         self.base_image = pygame.surface.Surface((dx + TextField.BORDER_WIDTH, dy + TextField.BORDER_WIDTH))
         border = pygame.rect.Rect(0, 0, dx, dy)
         pygame.draw.rect(self.base_image, border_color, border, TextField.BORDER_WIDTH)
+        self.rect = self.base_image.get_rect()
 
     def __initialize_font(self, font_file, font_size):
         self.font = pygame.font.Font(game_util.media(font_file), font_size)
