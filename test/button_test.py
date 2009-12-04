@@ -32,8 +32,11 @@ class ButtonTest(unittest.TestCase):
     
     def test_has_rect(self):
         button_instance = button.Button(self.dummy_owner, 'on_click', self.publisher, **self.dimensions)
-        self.assertTrue(button_instance.rect != None)
         self.assertTrue(isinstance(button_instance.rect, pygame.Rect))
+        self.assertEqual(button_instance.rect.left, self.dimensions['x'])
+        self.assertEqual(button_instance.rect.top, self.dimensions['y'])
+        self.assertEqual(button_instance.rect.width, button_instance.image.get_rect().width)
+        self.assertEqual(button_instance.rect.height, button_instance.image.get_rect().height)
 
     def test_is_sprite(self):
         button_instance = button.Button(self.dummy_owner, 'on_click', self.publisher, **self.dimensions)

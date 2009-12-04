@@ -147,17 +147,18 @@ class TextField(actions.ActiveRectangleSubscriber, pygame.sprite.DirtySprite):
         dy = self.font.get_height() + TextField.BORDER_WIDTH*2
         actions.ActiveRectangleSubscriber.__init__(self, x, y, dx, dy)
         pygame.sprite.DirtySprite.__init__(self)
-        self.__initialize_image(dx, dy, border_color)
+        self.__initialize_image(x, y, dx, dy, border_color)
         self.__manager = manager
         self.__font_color = font_color
         self.__buffer = Buffer(value)
         self.dirty = 1
 
-    def __initialize_image(self, dx, dy, border_color):
+    def __initialize_image(self, x, y, dx, dy, border_color):
         self.base_image = pygame.surface.Surface((dx + TextField.BORDER_WIDTH, dy + TextField.BORDER_WIDTH))
         border = pygame.rect.Rect(0, 0, dx, dy)
         pygame.draw.rect(self.base_image, border_color, border, TextField.BORDER_WIDTH)
         self.rect = self.base_image.get_rect()
+        self.rect.move_ip(x, y)
 
     def __initialize_font(self, font_file, font_size):
         self.font = pygame.font.Font(game_util.media(font_file), font_size)

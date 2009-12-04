@@ -72,8 +72,12 @@ class TextFieldTest(unittest.TestCase):
         border_width = text_field.TextField.BORDER_WIDTH
         self.assertEqual(field_instance.image.get_rect(), pygame.rect.Rect(0, 0, 200 + border_width, 13))
 
-    def test_has_rect_set_as_image_rectangle(self):
-        self.assertEqual(self.field_instance.rect, self.field_instance.base_image.get_rect())
+    def test_has_rect_set_and_positioned_as_image_rectangle(self):
+        field_instance = text_field.TextField(self.manager, x = 120, y = 240)
+        self.assertEqual(field_instance.rect.width, field_instance.base_image.get_rect().width)
+        self.assertEqual(field_instance.rect.height, field_instance.base_image.get_rect().height)
+        self.assertEqual(field_instance.rect.left, 120)
+        self.assertEqual(field_instance.rect.top, 240)
 
     def test_draws_border_and_fills_up_image_with_color(self):
         field_instance = text_field.TextField(self.manager, dx = 200, border_color = (255, 0, 0, 0), font_size = 30)
