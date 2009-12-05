@@ -5,10 +5,19 @@ class BaseWindow(actions.Publisher):
     def __init__(self):
         actions.Publisher.__init__(self)
 
+    def has_bg(self):
+        return hasattr(self, 'bg')
+
     def load(self, screen):
         self.screen = screen
         self.sprites = pygame.sprite.LayeredDirty()
-        self.screen.fill((255, 255, 255))
+        bg_expanded = self.screen.copy()
+        bg_expanded.fill((255, 255, 255))
+        if self.has_bg(): 
+            rect = self.bg.get_rect()
+            rect.center = bg_expanded.get_rect().center
+            bg_expanded.blit(self.bg, (rect.left, rect.top))
+        self.bg = bg_expanded
 
     def center_xy(self, surface):
         width, height = self.screen.get_size()
@@ -16,9 +25,7 @@ class BaseWindow(actions.Publisher):
         return (width - surface_width)/2, (height - surface_height)/2
 
     def draw(self):
-        args = [self.screen]
-        hasattr(self, 'bg') and args.append(self.bg)
-        self.sprites.draw(*args)
+        self.sprites.draw(self.screen, self.bg)
         
 
 # class BakeryWizard():

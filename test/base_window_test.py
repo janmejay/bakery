@@ -8,17 +8,22 @@ from util import actions
 class BaseWindowTest(unittest.TestCase):
     def setUp(self):
         self.base_window = bakery_wizard.BaseWindow()
-        self.mock_surface = pygame.surface.Surface((1024,768))
+        self.mock_surface = pygame.surface.Surface((20,10))
 
     def test_sprites_is_layered_dirty_group(self):
         self.base_window.load(self.mock_surface)
         self.assertNotEqual(self.base_window.sprites, None)
         self.assertTrue(isinstance(self.base_window.sprites, pygame.sprite.LayeredDirty))
 
-    def test_fills_up_screen_with_white_background(self):
+    def test_fills_up_screen_with_white_background_and_blits_actual_bg(self):
         mock_factory = mox.Mox()
         mock_surface = mock_factory.CreateMock(pygame.surface.Surface)
-        mock_surface.fill((255, 255, 255))
+        mock_surface_copy = mock_factory.CreateMock(pygame.surface.Surface)
+        mock_surface.copy().AndReturn(mock_surface_copy)
+        mock_surface_copy.fill((255, 255, 255))
+        mock_surface_copy.get_rect().AndReturn(pygame.rect.Rect(0, 0, 30, 40))
+        self.base_window.bg = pygame.surface.Surface((30, 40))
+        mock_surface_copy.blit(self.base_window.bg, (0, 0))
         mock_factory.ReplayAll()
         self.base_window.load(mock_surface)
         mock_factory.VerifyAll()
@@ -32,9 +37,11 @@ class BaseWindowTest(unittest.TestCase):
         mock_factory = mox.Mox()
         mock_surface = mock_factory.CreateMock(pygame.surface.Surface)
         mock_sprites = mock_factory.CreateMock(pygame.sprite.LayeredDirty)
-        self.base_window.screen = mock_surface
+        self.base_window.load(self.mock_surface)
+        self.base_window.bg = pygame.surface.Surface((10, 10))
         self.base_window.sprites = mock_sprites
-        mock_sprites.draw(mock_surface)
+        self.base_window.screen = mock_surface
+        mock_sprites.draw(mock_surface, self.base_window.bg)
         mock_factory.ReplayAll()
         self.base_window.draw()
         mock_factory.VerifyAll()
@@ -53,6 +60,22 @@ class BaseWindowTest(unittest.TestCase):
 
     def test_is_publisher(self):
         self.assertTrue(isinstance(self.base_window, actions.Publisher))
+
+    def test_expands_bg_to_center_it_wrt_surface(self):
+        self.base_window.bg = pygame.surface.Surface((2, 2))
+        self.base_window.bg.fill((100, 100, 100))
+        self.base_window.load(self.mock_surface)
+        self.assertEqual(self.base_window.bg.get_rect(), pygame.rect.Rect(0, 0, 20, 10))
+        self.assertEqual(self.base_window.bg.get_at((10, 5)), (100, 100, 100))
+        self.assertEqual(self.base_window.bg.get_at((8, 5)), (255, 255, 255))
+        self.assertEqual(self.base_window.bg.get_at((10, 3)), (255, 255, 255))
+        self.assertEqual(self.base_window.bg.get_at((12, 5)), (255, 255, 255))
+        self.assertEqual(self.base_window.bg.get_at((10, 7)), (255, 255, 255))
+
+    def test_understands_if_has_bg_set(self):
+        self.assertFalse(self.base_window.has_bg())
+        self.base_window.bg = pygame.surface.Surface((10, 10))
+        self.assertTrue(self.base_window.has_bg())
 
 if __name__ == '__main__':
     unittest.main()
