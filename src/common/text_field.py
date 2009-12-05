@@ -155,6 +155,8 @@ class TextField(actions.ActiveRectangleSubscriber, pygame.sprite.DirtySprite):
 
     def __initialize_image(self, x, y, dx, dy, border_color):
         self.base_image = pygame.surface.Surface((dx + TextField.BORDER_WIDTH, dy + TextField.BORDER_WIDTH))
+        self.base_image.fill((255, 255, 255))
+        self.base_image.set_colorkey((255, 255, 255))
         border = pygame.rect.Rect(0, 0, dx, dy)
         pygame.draw.rect(self.base_image, border_color, border, TextField.BORDER_WIDTH)
         self.rect = self.base_image.get_rect()

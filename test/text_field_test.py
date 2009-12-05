@@ -79,10 +79,11 @@ class TextFieldTest(unittest.TestCase):
         self.assertEqual(field_instance.rect.left, 120)
         self.assertEqual(field_instance.rect.top, 240)
 
-    def test_draws_border_and_fills_up_image_with_color(self):
+    def test_draws_border_and_fills_up_image_with_white_color_and_sets_it_up_as_color_key(self):
         field_instance = text_field.TextField(self.manager, dx = 200, border_color = (255, 0, 0, 0), font_size = 30)
         field_instance.update()
-        self.assertEqual(field_instance.image.get_at((100, 15)), (0, 0, 0, 255))
+        self.assertEqual(field_instance.image.get_at((100, 15)), (255, 255, 255, 255))
+        self.assertEqual(field_instance.image.get_colorkey(), (255, 255, 255, 255))
         red = (255, 0, 0, 255) # if surface doesn't have per pixel alpha, then alpha value is 255
         self.assertEqual(field_instance.image.get_at((1, 22)), red)
         self.assertEqual(field_instance.image.get_at((100, 1)), red)

@@ -38,8 +38,8 @@ class PlayerLoaderTest(unittest.TestCase):
         self.window.load(self.screen)
         for sprite in self.window.sprites:
             if isinstance(sprite, text_button.TextButton):
-                self.assertEqual(sprite.x(), 450)
-                self.assertEqual(sprite.y(), 450)
+                self.assertEqual(sprite.x(), 700)
+                self.assertEqual(sprite.y(), 550)
                 mock_factory.ReplayAll()
                 sprite.handle(object())
                 mock_factory.VerifyAll()
@@ -52,7 +52,7 @@ class PlayerLoaderTest(unittest.TestCase):
             if isinstance(sprite, text_field.TextField):
                 self.assertEqual(sprite.x(), 350)
                 self.assertEqual(sprite.y(), 300)
-                self.assertEqual(sprite.dx(), 100)
+                self.assertEqual(sprite.dx(), 250)
                 return
         self.fail("didn't find text field")
 
