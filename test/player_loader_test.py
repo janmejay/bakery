@@ -37,8 +37,6 @@ class PlayerLoaderTest(unittest.TestCase):
             if isinstance(sprite, text_button.TextButton):
                 self.assertEqual(sprite.x(), 450)
                 self.assertEqual(sprite.y(), 450)
-                self.assertEqual(sprite.dx(), 100)
-                self.assertEqual(sprite.dy(), 100)
                 mock_factory.ReplayAll()
                 sprite.handle(object())
                 mock_factory.VerifyAll()

@@ -17,7 +17,7 @@ class TextButtonTest(unittest.TestCase):
         pygame.font.init()
         self.dummy_owner = self.DummyOwner()
         self.publisher = actions.Publisher()
-        self.options = {'x' : 5, 'y' : 6, 'dx' : 7, 'dy' : 8, 'label' : "hi there"}
+        self.options = {'x' : 5, 'y' : 6, 'label' : "hi there"}
 
     def test_is_a_button(self):
         button_instance = text_button.TextButton(self.dummy_owner, 'on_click', self.publisher, **self.options)
@@ -32,7 +32,7 @@ class TextButtonTest(unittest.TestCase):
         font.render(self.options['label'], True, (255, 255, 255)).AndReturn(font_surface)
         mock_factory.StubOutWithMock(game_util, 'load_image')
         image_surface = mock_factory.CreateMock(pygame.surface.Surface)
-        image_surface.get_rect()
+        image_surface.get_rect().AndReturn(pygame.rect.Rect(10, 10, 10, 10))
         game_util.load_image('default.png').AndReturn(image_surface)
         image_surface.blit(font_surface, (0, 0))
         mock_factory.ReplayAll()

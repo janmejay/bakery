@@ -16,7 +16,7 @@ class ButtonTest(unittest.TestCase):
         pygame.display.set_mode((10, 10))
         self.dummy_owner = self.DummyOwner()
         self.publisher = actions.Publisher()
-        self.dimensions = {'x' : 5, 'y' : 6, 'dx' : 7, 'dy' : 8}
+        self.dimensions = {'x' : 5, 'y' : 6}
 
     def test_has_image(self):
         button_instance = button.Button(self.dummy_owner, 'on_click', self.publisher, **self.dimensions)
@@ -59,12 +59,12 @@ class ButtonTest(unittest.TestCase):
         self.dimensions['layer'] = 5
         self.assertEqual(button.Button(self.dummy_owner, 'on_click', self.publisher, **self.dimensions).layer, 5)
 
-    def test_sets_dimensions_and_position(self):
-        button_instance = button.Button(self.dummy_owner, 'on_click', self.publisher, x = 5, y = 6, dx = 3, dy = 2)
+    def test_sets_dimensions_and_position_based_on_image_rect(self):
+        button_instance = button.Button(self.dummy_owner, 'on_click', self.publisher, x = 5, y = 6)
         self.assertEqual(button_instance.x(), 5)
         self.assertEqual(button_instance.y(), 6)
-        self.assertEqual(button_instance.dx(), 3)
-        self.assertEqual(button_instance.dy(), 2)
+        self.assertEqual(button_instance.dx(), button_instance.image.get_rect().width)
+        self.assertEqual(button_instance.dy(), button_instance.image.get_rect().height)
 
     def test_does_not_start_activated(self):
         button_instance = button.Button(self.dummy_owner, 'on_click', self.publisher, **self.dimensions)
