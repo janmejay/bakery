@@ -5,7 +5,7 @@ import bakery_wizard
 from util import game_util
 import pygame
 import mox
-from common import text_button, text_field
+from common import text_button, text_field, label
 
 class PlayerLoaderTest(unittest.TestCase):
     def setUp(self):
@@ -43,6 +43,18 @@ class PlayerLoaderTest(unittest.TestCase):
                 mock_factory.ReplayAll()
                 sprite.handle(object())
                 mock_factory.VerifyAll()
+                return
+        self.fail("didn't find text button")
+
+    def test_adds_up_label_as_sprite(self):
+        mock_factory = mox.Mox()
+        mock_factory.StubOutWithMock(self.window, 'load_welcome')
+        self.window.load_welcome()
+        self.window.load(self.screen)
+        for sprite in self.window.sprites:
+            if isinstance(sprite, label.Label):
+                self.assertEqual(sprite.rect.left, 150)
+                self.assertEqual(sprite.rect.top, 570)
                 return
         self.fail("didn't find text button")
 

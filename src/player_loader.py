@@ -1,7 +1,7 @@
 from util import game_util
 import bakery_wizard
 import pygame
-from common import text_button, text_field
+from common import text_button, text_field, label
 
 class PlayerLoader(bakery_wizard.BaseWindow):
     
@@ -11,9 +11,10 @@ class PlayerLoader(bakery_wizard.BaseWindow):
     def load(self, screen):
         self.bg = game_util.load_image('loading-cake.png')
         bakery_wizard.BaseWindow.load(self, screen)
-        self.sprites.add(text_button.TextButton(self, 'load_welcome', self, label = 'Get baking', x = 700, y = 550, image_path = 'get_baking_button.png', size = 30))
+        self.sprites.add(text_button.TextButton(self, 'load_welcome', self, label = 'Get baking', x = 700, y = 550, image_path = 'get_baking_button.png', size = 40))
         self.text_field = text_field.TextField(text_field.Manager(), x = 350, y = 300, dx = 250, value = game_util.LastPlayer.get_name(), font_size = 30)
         self.sprites.add(self.text_field)
+        self.sprites.add(label.Label(text = "Who is the baker ???", size = 40, x = 150, y = 570))
 
     def draw(self):
         self.text_field.update()

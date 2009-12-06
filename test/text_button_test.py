@@ -35,7 +35,7 @@ class TextButtonTest(unittest.TestCase):
         image_surface = mock_factory.CreateMock(pygame.surface.Surface)
         rect = pygame.rect.Rect(0, 0, 100, 60)
         image_surface.get_rect().AndReturn(rect)
-        image_surface.blit(font_surface, (50, 26))# 45 + x and 20 + y
+        image_surface.blit(font_surface, (45, 20)) # and not 50, 26 because thats absolute(not relative to image
         game_util.load_image('default.png').AndReturn(image_surface)
         mock_factory.ReplayAll()
         button_instance = text_button.TextButton(self.dummy_owner, 'on_click', self.publisher, **self.options)
