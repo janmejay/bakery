@@ -8,6 +8,8 @@ class TextButton(button.Button):
         font = pygame.font.Font(game_util.media(font), size)
         font = font.render(label, True, color)
         button.Button.__init__(self, owner, callback, publisher, x = x, y = y, image_path = image_path, layer = layer)
-        self.image.blit(font, (0, 0))
+        glyph_rect = font.get_rect()
+        glyph_rect.center = self.rect.center
+        self.image.blit(font, (glyph_rect.left, glyph_rect.top))
         
         
