@@ -38,7 +38,7 @@ class ButtonTest(unittest.TestCase):
         self.assertEqual(button_instance.rect.width, button_instance.image.get_rect().width)
         self.assertEqual(button_instance.rect.height, button_instance.image.get_rect().height)
 
-    def test_is_sprite(self):
+    def test_is_dirty_sprite(self):
         button_instance = button.Button(self.dummy_owner, 'on_click', self.publisher, **self.dimensions)
         self.assertTrue(isinstance(button_instance, pygame.sprite.DirtySprite))
 

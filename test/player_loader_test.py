@@ -38,8 +38,8 @@ class PlayerLoaderTest(unittest.TestCase):
         self.window.load(self.screen)
         for sprite in self.window.sprites:
             if isinstance(sprite, text_button.TextButton):
-                self.assertEqual(sprite.x(), 700)
-                self.assertEqual(sprite.y(), 550)
+                self.assertEqual(sprite.x(), 670)
+                self.assertEqual(sprite.y(), 545)
                 mock_factory.ReplayAll()
                 sprite.handle(object())
                 mock_factory.VerifyAll()
@@ -53,8 +53,8 @@ class PlayerLoaderTest(unittest.TestCase):
         self.window.load(self.screen)
         for sprite in self.window.sprites:
             if isinstance(sprite, label.Label):
-                self.assertEqual(sprite.rect.left, 150)
-                self.assertEqual(sprite.rect.top, 570)
+                self.assertEqual(sprite.rect.left, 220)
+                self.assertEqual(sprite.rect.top, 582)
                 return
         self.fail("didn't find text button")
 
@@ -62,8 +62,8 @@ class PlayerLoaderTest(unittest.TestCase):
         self.window.load(self.screen)
         for sprite in self.window.sprites:
             if isinstance(sprite, text_field.TextField):
-                self.assertEqual(sprite.x(), 350)
-                self.assertEqual(sprite.y(), 300)
+                self.assertEqual(sprite.x(), 450)
+                self.assertEqual(sprite.y(), 582)
                 self.assertEqual(sprite.dx(), 250)
                 return
         self.fail("didn't find text field")

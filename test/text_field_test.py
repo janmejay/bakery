@@ -64,6 +64,7 @@ class TextFieldTest(unittest.TestCase):
     def test_is_dirty_sprite_and_starts_out_dirty(self):
         self.assertTrue(isinstance(self.field_instance, pygame.sprite.DirtySprite))
         self.assertTrue(self.field_instance.dirty, 1)
+        self.assertTrue(self.field_instance.layer, zorder.TEXT_FIELD)
 
     def test_uses_surface_of_same_size_as_ui(self):
         field_instance = text_field.TextField(self.manager, dx = 200)

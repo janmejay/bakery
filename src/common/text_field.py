@@ -3,6 +3,7 @@ from pygame.locals import *
 from util import actions
 import unicodedata
 import sub_select_dict
+import zorder
 from util import game_util
 
 class CharElem:
@@ -151,7 +152,7 @@ class TextField(actions.ActiveRectangleSubscriber, pygame.sprite.DirtySprite):
         self.__manager = manager
         self.__font_color = font_color
         self.__buffer = Buffer(value)
-        self.dirty = 1
+        self.dirty, self.layer = 1, zorder.TEXT_FIELD
 
     def __initialize_image(self, x, y, dx, dy, border_color):
         self.base_image = pygame.surface.Surface((dx + TextField.BORDER_WIDTH, dy + TextField.BORDER_WIDTH))
