@@ -170,7 +170,7 @@ class TextField(actions.ActiveRectangleSubscriber, pygame.sprite.DirtySprite):
         if self.dirty > 0:
             self.image = self.base_image.copy()
             glyph = self.font.render(self.get_value(), True, self.__font_color)
-            self.image.blit(glyph, (TextField.BORDER_WIDTH, TextField.BORDER_WIDTH))
+            self.image.blit(glyph, (TextField.BORDER_WIDTH*3, TextField.BORDER_WIDTH))
             if self.is_focused():
                 pygame.draw.line(self.image, TextField.DEFAULT_COLOR, self.cursor_top(), self.cursor_bottom(), TextField.CURSOR_WIDTH)
 
