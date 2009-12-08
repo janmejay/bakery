@@ -6,6 +6,7 @@ import pygame
 
 from src import init
 from player_loader import PlayerLoader
+from util import actions
 
 pygame.init()
 

@@ -2,14 +2,16 @@ import unittest
 import env
 import sys
 from util import actions
+from pygame import constants
 import mox
+import pygame
 
 class ActionTest(unittest.TestCase):
     def setUp(self):
         self.action = actions.Action(actions.LEFT_CLICK, 10, 20)
     
     def test_starts_with_correct_state(self):
-        self.assertEquals(self.action._Action__macro, actions.LEFT_CLICK)
+        self.assertEquals(self.action.macro, actions.LEFT_CLICK)
         self.assertEquals(self.action._Action__x, 10)
         self.assertEquals(self.action._Action__y, 20)
         self.assertEquals(self.action.propagatable, True)
@@ -168,6 +170,37 @@ class ActiveRectangleSubscriberTest(unittest.TestCase):
         subscriber = actions.ActiveRectangleSubscriber(10, 30, 10, 10)
         key_action = actions.Action(actions.KEY, 60, 60)
         self.assertFalse(subscriber.can_consume(key_action))
+
+class ActionFactoryTest(unittest.TestCase):
+    def test_creates_action_for_key_down_events(self):
+        event = pygame.event.Event(constants.KEYDOWN, scancode = 56, key = 98, unicode = u'b', mod =  4096)
+        action_list = actions.actionsFor([event])
+        self.assertEqual(len(action_list), 1)
+        b_key = action_list[0]
+        self.assertTrue(b_key.is_key())
+        self.assertEqual(b_key.get_obj(), event)
+
+    def test_creates_action_for_right_mouse_button_down_event(self):
+        event = pygame.event.Event(constants.MOUSEBUTTONDOWN, button = 3, pos = (10, 15))
+        action_list = actions.actionsFor([event])
+        self.assertEqual(len(action_list), 1)
+        click = action_list[0]
+        self.assertTrue(click.is_click())
+        self.assertEqual(click.get_obj(), event)
+        self.assertEqual(click.macro, actions.RIGHT_CLICK)
+        self.assertEqual(click.x(), 10)
+        self.assertEqual(click.y(), 15)
+
+    def test_creates_action_for_left_mouse_button_down_event(self):
+        event = pygame.event.Event(constants.MOUSEBUTTONDOWN, button = 1, pos = (10, 15))
+        action_list = actions.actionsFor([event])
+        self.assertEqual(len(action_list), 1)
+        click = action_list[0]
+        self.assertTrue(click.is_click())
+        self.assertEqual(click.get_obj(), event)
+        self.assertEqual(click.macro, actions.LEFT_CLICK)
+        self.assertEqual(click.x(), 10)
+        self.assertEqual(click.y(), 15)
 
 if __name__ == '__main__':
     unittest.main()

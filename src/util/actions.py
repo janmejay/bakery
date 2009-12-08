@@ -2,9 +2,11 @@ LEFT_CLICK, RIGHT_CLICK, KEY = 'left_click', 'right_click', 'key'
 
 CLICK_ACTIONS = [LEFT_CLICK, RIGHT_CLICK]
 
+import pygame
+
 class Action:
     def __init__(self, macro, x = 0, y = 0, obj = None):
-        self.__macro = macro
+        self.macro = macro
         self.__x = x
         self.__y = y
         self.propagatable = True
@@ -21,13 +23,23 @@ class Action:
         return self.__y
 
     def is_click(self):
-        return self.__macro in CLICK_ACTIONS
+        return self.macro in CLICK_ACTIONS
 
     def is_key(self):
         return not self.is_click()
 
     def get_obj(self):
         return self.__obj
+
+def actionsFor(events):
+    actions = []
+    for event in events:
+        if event.type == pygame.constants.KEYDOWN:
+            actions.append(Action(KEY, obj = event))
+        if event.type == pygame.constants.MOUSEBUTTONDOWN:
+            macro = (event.button == 1) and LEFT_CLICK or RIGHT_CLICK
+            actions.append(Action(macro, obj = event, x = event.pos[0], y = event.pos[1]))
+    return actions
 
 class Subscriber:
     def consume(self, action):
