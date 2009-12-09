@@ -79,6 +79,23 @@ class PlayerLoaderTest(unittest.TestCase):
             if isinstance(sprite, text_field.TextField):
                 self.assertEqual(sprite.get_value(), "foo_bar")
 
+    def test_field_is_registered_with_player_loader_as_a_subscriber_on_load(self):
+        self.window.load(self.screen)
+        field = None
+        for sprite in self.window.sprites:
+            if isinstance(sprite, text_field.TextField):
+                field = sprite
+        self.assertTrue(self.window.has_subscriber(field))
+
+    def test_get_baking_button_is_registered_with_player_loader_as_a_subscriber_on_load(self):
+        self.window.load(self.screen)
+        button = None
+        for sprite in self.window.sprites:
+            if isinstance(sprite, text_button.TextButton):
+                button = sprite
+        self.assertTrue(self.window.has_subscriber(button))
+
+
     def test_writes_player_name_to_last_player_file_on_load_welcome(self):
         self.window.load(self.screen)
         mock_factory = mox.Mox()

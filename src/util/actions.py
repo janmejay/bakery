@@ -81,7 +81,10 @@ class Publisher:
     def publish(self, action): 
         for subscriber in self.__subscribers:
             subscriber.consume(action)
-
+    
+    def has_subscriber(self, subscriber):
+        return subscriber in self.__subscribers 
+    
 class ActiveRectangleSubscriber(Subscriber):
     def __init__(self, x, y, dx, dy):
         self.__x, self.__y, self.__dx, self.__dy = x, y, dx, dy

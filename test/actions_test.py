@@ -111,6 +111,10 @@ class PublisherTest(unittest.TestCase):
         self.publisher.publish(self.action)
         self.mock_factory.VerifyAll()
 
+    def test_understands_if_a_subscriber_is_refgistered(self):
+        self.assertFalse(self.publisher.has_subscriber(self.subscriber))
+        self.publisher.register(self.subscriber)
+        self.assertTrue(self.publisher.has_subscriber(self.subscriber))
 
 class SubscriberTest(unittest.TestCase):
     def setUp(self):
