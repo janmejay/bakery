@@ -123,7 +123,6 @@ class TextFieldTest(unittest.TestCase):
         field_instance.font = mock_factory.CreateMock(pygame.font.Font)
         font_surface = pygame.surface.Surface((20, 20))
         field_instance.font.render("", True, font_color).AndReturn(font_surface)
-        field_instance.font.get_height().AndReturn(20)
         mock_factory.StubOutWithMock(field_instance, 'cursor_x')
         field_instance.cursor_x().AndReturn(10)
         field_instance.cursor_x().AndReturn(10)
@@ -152,11 +151,11 @@ class TextFieldTest(unittest.TestCase):
         field_instance_with_x_and_y.handle(key_left)
         cursor_x = glyph.get_width() + text_field.TextField.BORDER_WIDTH
         self.assertEqual(self.field_instance.cursor_x(), cursor_x)
-        self.assertEqual(self.field_instance.cursor_top(), (cursor_x, 4))
-        self.assertEqual(self.field_instance.cursor_bottom(), (cursor_x, glyph.get_height() - 4))
-        self.assertEqual(field_instance_with_x_and_y.cursor_x(), 100 + cursor_x)
-        self.assertEqual(field_instance_with_x_and_y.cursor_top(), (100 + cursor_x, 200 + 4))
-        self.assertEqual(field_instance_with_x_and_y.cursor_bottom(), (100 + cursor_x, 200 + glyph.get_height() - 4))
+        self.assertEqual(self.field_instance.cursor_top(), (cursor_x, text_field.TextField.V_MARGIN))
+        self.assertEqual(self.field_instance.cursor_bottom(), (cursor_x, self.field_instance.dy() - text_field.TextField.V_MARGIN))
+        self.assertEqual(field_instance_with_x_and_y.cursor_x(), cursor_x)
+        self.assertEqual(field_instance_with_x_and_y.cursor_top(), (cursor_x, text_field.TextField.V_MARGIN))
+        self.assertEqual(field_instance_with_x_and_y.cursor_bottom(), (cursor_x, self.field_instance.dy() - text_field.TextField.V_MARGIN))
 
     def test_understands_initial_field_value(self):
         click = actions.Action(actions.LEFT_CLICK, 50, 3)
