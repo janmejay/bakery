@@ -149,7 +149,7 @@ class TextFieldTest(unittest.TestCase):
         field_instance_with_x_and_y.handle(key_b)
         field_instance_with_x_and_y.handle(key_c)
         field_instance_with_x_and_y.handle(key_left)
-        cursor_x = glyph.get_width() + text_field.TextField.BORDER_WIDTH
+        cursor_x = glyph.get_width() + text_field.TextField.BORDER_WIDTH + text_field.TextField.H_MARGIN
         self.assertEqual(self.field_instance.cursor_x(), cursor_x)
         self.assertEqual(self.field_instance.cursor_top(), (cursor_x, text_field.TextField.V_MARGIN))
         self.assertEqual(self.field_instance.cursor_bottom(), (cursor_x, self.field_instance.dy() - text_field.TextField.V_MARGIN))
@@ -189,7 +189,7 @@ class TextFieldTest(unittest.TestCase):
         self.field_instance.cursor_top().AndReturn((5, 10))
         self.field_instance.cursor_bottom().AndReturn((5, 20))
         mock_factory.StubOutWithMock(pygame.draw, 'line')
-        pygame.draw.line(image, (0, 0, 0, 0), (5, 10), (5, 20), 3)
+        pygame.draw.line(image, (0, 0, 0, 0), (5, 10), (5, 20), text_field.TextField.CURSOR_WIDTH)
         self.field_instance.handle(actions.Action(actions.LEFT_CLICK, 50, 3))
         mock_factory.ReplayAll()
         self.field_instance.update()

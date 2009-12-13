@@ -136,8 +136,9 @@ class Manager:
 class TextField(actions.ActiveRectangleSubscriber, pygame.sprite.DirtySprite):
     BORDER_WIDTH = 2
     DEFAULT_COLOR = (0, 0, 0, 0)
-    CURSOR_WIDTH = 3
-    V_MARGIN = BORDER_WIDTH*3
+    CURSOR_WIDTH = 1
+    V_MARGIN = BORDER_WIDTH*4
+    H_MARGIN = BORDER_WIDTH*3
     def __init__(self, manager, x = 0, y = 0, dx = 100, border_color = (150, 150, 150, 150),
                  font_size = 5, font_file = 'hand.ttf', font_color = DEFAULT_COLOR, value = ''):
         self.__initialize_font(font_file, font_size)
@@ -166,7 +167,7 @@ class TextField(actions.ActiveRectangleSubscriber, pygame.sprite.DirtySprite):
         if self.dirty > 0:
             self.image = self.base_image.copy()
             glyph = self.font.render(self.get_value(), True, self.__font_color)
-            self.image.blit(glyph, (TextField.BORDER_WIDTH*3, TextField.BORDER_WIDTH))
+            self.image.blit(glyph, (TextField.H_MARGIN, TextField.BORDER_WIDTH))
             if self.is_focused():
                 pygame.draw.line(self.image, TextField.DEFAULT_COLOR, self.cursor_top(), self.cursor_bottom(), TextField.CURSOR_WIDTH)
 
@@ -185,7 +186,7 @@ class TextField(actions.ActiveRectangleSubscriber, pygame.sprite.DirtySprite):
 
     def cursor_x(self):
         glyph = self.font.render(self.__buffer.text_before_cursor(), True, TextField.DEFAULT_COLOR)
-        return TextField.BORDER_WIDTH + glyph.get_width()
+        return TextField.BORDER_WIDTH + glyph.get_width() + TextField.H_MARGIN
 
     def is_focused(self):
         return self.__manager.is_focused(self)
