@@ -8,6 +8,7 @@ from sub_select_dict_test import *
 from base_window_test import *
 from player_loader_test import *
 from label_test import *
+from welcome_menu_test import *
 
 if __name__ == '__main__':
     unittest.main()
