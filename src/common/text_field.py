@@ -18,6 +18,7 @@ class CharElem:
         self.next_elem = CharElem(char)
         self.next_elem.previous_elem = self
         self.next_elem.next_elem = inital_next
+        inital_next.previous_elem = self.next_elem
         return self.next_elem.logical_return()
 
     def logical_return(self):
@@ -101,8 +102,9 @@ class Buffer:
         return self.cursor.begining().value()
 
     def text_before_cursor(self):
-        after_cursor_length = len(self.cursor.next().value())
-        return self.text()[:-after_cursor_length]
+        after_cursor_length = len(self.cursor.next_elem.value())
+        text = self.text()
+        return text[:len(text)-after_cursor_length]
 
     def record(self, action):
         key_evt = action.get_obj()

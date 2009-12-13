@@ -274,8 +274,8 @@ class BufferTest(unittest.TestCase):
         self.assertEqual(self.buffer.text_before_cursor(), "sw")
 
     def test_returns_values_before_cursor_for_initial_value(self):
-        buffer = text_field.Buffer("foo")
-        self.assertEqual(buffer.text_before_cursor(), "foo")
+        buffer = text_field.Buffer("abc")
+        self.assertEqual(buffer.text_before_cursor(), "abc")
 
     def test_understands_left_and_right_arrow_keys_and_does_not_go_wrong_on_edges(self):
         key_a = actions.Action(actions.KEY, obj = pygame.event.Event(KEYDOWN, unicode = u'a'))
