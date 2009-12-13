@@ -96,37 +96,37 @@ PRINTABLE_CATEGORIES = ('L', 'N', 'P', 'S')
 
 class Buffer:
     def __init__(self, value = ''):
-        self.__cursor = CharElem('')
+        self.cursor = CharElem('')
         for ch in value:
-            self.__cursor = self.__cursor.push(ch)
+            self.cursor = self.cursor.push(ch)
         self.dirty = 1
 
     def cursor_pos(self):
         return 0
 
     def text(self):
-        return self.__cursor.begining().value()
+        return self.cursor.begining().value()
 
     def text_before_cursor(self):
-        after_cursor_length = len(self.__cursor.next().value())
+        after_cursor_length = len(self.cursor.next().value())
         return self.text()[:-after_cursor_length]
 
     def record(self, action):
         key_evt = action.get_obj()
         if (len(key_evt.unicode) > 0) and (unicodedata.category(key_evt.unicode)[0] in PRINTABLE_CATEGORIES):
-            self.__cursor = self.__cursor.push(key_evt.unicode)
+            self.cursor = self.cursor.push(key_evt.unicode)
         else:
             self.handle_navigation(key_evt)
     
     def handle_navigation(self, key_evt):
         if key_evt.key == 276:
-            self.__cursor = self.__cursor.previous()
+            self.cursor = self.cursor.previous()
         elif key_evt.key == 275:
-            self.__cursor = self.__cursor.next()
+            self.cursor = self.cursor.next()
         elif key_evt.key == 8:
-            self.__cursor = self.__cursor.delete_current()
+            self.cursor = self.cursor.delete_current()
         elif key_evt.key == 127:
-            self.__cursor = self.__cursor.delete_next()
+            self.cursor = self.cursor.delete_next()
 
 class Manager:
     def __init__(self):
