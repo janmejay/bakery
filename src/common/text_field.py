@@ -7,74 +7,61 @@ import zorder
 from util import game_util
 
 class CharElem:
-    def __set_or_default_next(self, optionals):
-        if optionals.has_key('next_elem'):
-            self.next_elem = optionals['next_elem']
-        else:
-            self.next_elem = EndingCharElem(self)
-        if self.next_elem:
-            self.next_elem.previous_elem = self
-
-    def __set_or_default_previous(self, optionals):
-        if optionals.has_key('previous_elem'):
-            self.previous_elem = optionals['previous_elem']
-        else:
-            self.previous_elem = StartingCharElem(self)
-        
-    def __init__(self, char, **optionals):
+    def __init__(self, char):
         self.__char = char
-        self.__set_or_default_next(optionals)
-        self.__set_or_default_previous(optionals)
 
     def value(self):
         return self.__char + self.next_elem.value()
 
     def push(self, char):
-        if self.__char == '' and self.is_deletable():
-            self.__char = char
-            return self
-        self.next_elem = CharElem(char, next_elem = self.next_elem, previous_elem = self)
+        inital_next = self.next_elem
+        self.next_elem = CharElem(char)
+        self.next_elem.previous_elem = self
+        self.next_elem.next_elem = inital_next
         return self.next_elem.logical_return()
 
     def logical_return(self):
         return self
 
     def previous(self):
-        return (self.previous_elem or self).logical_return()
+        return self.previous_elem.logical_return()
 
     def next(self):
-        return (self.next_elem or self).logical_return()
+        return self.next_elem.logical_return()
 
     def begining(self):
         return self.previous().begining()
 
     def delete_current(self):
-        if not self.is_deletable(): return self.logical_return()
         self.next_elem.previous_elem = self.previous_elem
         self.previous_elem.next_elem = self.next_elem
         return self.next()
 
     def delete_next(self):
         deletable = self.next_elem
-        returnable = self.logical_return()
-        if not deletable.is_deletable(): return returnable
+        if deletable.not_deleteable(): return self.logical_return()
         self.next_elem = deletable.next_elem
         self.next_elem.previous_elem = self
-        return returnable
+        return self.logical_return()
 
-    def is_deletable(self):
-        return True
-
-class TerminalCharElem(CharElem):
-    def __init__(self, previous_elem, next_elem):
-        CharElem.__init__(self, '', previous_elem = previous_elem, next_elem = next_elem)
-    
-    def is_deletable(self):
+    def not_deleteable(self):
         return False
 
+class TerminalCharElem(CharElem):
+    def __init__(self):
+        CharElem.__init__(self, '')
+
+    def not_deleteable(self):
+        return True
+    
 class StartingCharElem(TerminalCharElem):
-    def __init__(self, next_elem):
-        TerminalCharElem.__init__(self, None, next_elem)
+    def __init__(self):
+        TerminalCharElem.__init__(self)
+        self.next_elem = EndingCharElem()
+        self.next_elem.previous_elem = self
+        
+    def delete_current(self):
+        return self
     
     def logical_return(self):
         return self
@@ -82,12 +69,18 @@ class StartingCharElem(TerminalCharElem):
     def begining(self):
         return self
 
+    def previous(self):
+        return self
+
 class EndingCharElem(TerminalCharElem):
-    def __init__(self, previous_elem):
-        TerminalCharElem.__init__(self, previous_elem, None)
+    def __init__(self):
+        TerminalCharElem.__init__(self)
     
     def value(self):
         return ''
+
+    def delete_next(self):
+        pass
 
     def logical_return(self):
         return self.previous_elem
@@ -96,7 +89,7 @@ PRINTABLE_CATEGORIES = ('L', 'N', 'P', 'S')
 
 class Buffer:
     def __init__(self, value = ''):
-        self.cursor = CharElem('')
+        self.cursor = StartingCharElem()
         for ch in value:
             self.cursor = self.cursor.push(ch)
         self.dirty = 1

@@ -382,11 +382,12 @@ class BufferTest(unittest.TestCase):
 
 class CharElemTest(unittest.TestCase):
     def setUp(self):
-        self.char_elem = text_field.CharElem('a')
+        self.starter = text_field.StartingCharElem()
+        self.char_elem = self.starter.push('a')
 
     def test_returns_value_its_initialized_with(self):
         self.assertEqual(self.char_elem.value(), 'a')
-        self.assertEqual(text_field.CharElem('').value(), '')
+        self.assertEqual(text_field.StartingCharElem().value(), '')
 
     def test_can_push_chars(self):
         self.char_elem.push('b')
@@ -455,15 +456,13 @@ class CharElemTest(unittest.TestCase):
         self.assertEqual(buffer.value(), "a")
 
     def test_terminals_should_not_be_deletable(self):
-        self.assertEqual(text_field.StartingCharElem(None).is_deletable(), False)
-        self.assertEqual(text_field.EndingCharElem(None).is_deletable(), False)
-        self.assertEqual(self.char_elem.is_deletable(), True)
+        self.assertEqual(text_field.StartingCharElem().not_deleteable(), True)
+        self.assertEqual(text_field.EndingCharElem().not_deleteable(), True)
+        self.assertEqual(self.char_elem.not_deleteable(), False)
 
     def test_empty_char_elem_populates_itself_on_first_push(self):
-        elem = text_field.CharElem('')
-        elem.push('a')
-        elem.delete_next()
-        self.assertEqual(elem.value(), "a")
+        self.char_elem.delete_next()
+        self.assertEqual(self.char_elem.value(), "a")
 
 if __name__ == '__main__':
     unittest.main()
