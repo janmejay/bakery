@@ -19,6 +19,10 @@ class TextButtonTest(unittest.TestCase):
         self.publisher = actions.Publisher()
         self.options = {'x' : 5, 'y' : 6, 'label' : "hi there"}
 
+    def test_holds_label_as_instance_attribute(self):
+        button_instance = text_button.TextButton(self.dummy_owner, 'on_click', self.publisher, **self.options)
+        self.assertEqual(button_instance.label, "hi there")
+
     def test_is_a_button(self):
         button_instance = text_button.TextButton(self.dummy_owner, 'on_click', self.publisher, **self.options)
         self.assertTrue(isinstance(button_instance, button.Button))

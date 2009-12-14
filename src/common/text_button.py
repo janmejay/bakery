@@ -5,6 +5,7 @@ import zorder
 
 class TextButton(button.Button):
     def __init__(self, owner, callback, publisher, x, y, label, font = 'hand.ttf', size = 10, color = (255, 255, 255), image_path = "default.png", layer = zorder.BUTTONS):
+        self.label = label
         font = pygame.font.Font(game_util.media(font), size)
         font = font.render(label, True, color)
         button.Button.__init__(self, owner, callback, publisher, x = x, y = y, image_path = image_path, layer = layer)
