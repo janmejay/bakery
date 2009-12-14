@@ -31,6 +31,9 @@ class WelcomeMenu(bakery_wizard.BaseWindow):
     def new_game_action(self):
         pass
 
+    def load_save_action(self):
+        pass
+
     def credits_action(self):
         pass
 

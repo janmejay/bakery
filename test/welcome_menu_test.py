@@ -50,10 +50,11 @@ class WelcomeMenuTest(unittest.TestCase):
     def test_initializes_all_buttons(self):
         mock_factory = mox.Mox()
         mock_factory.StubOutWithMock(self.window, 'initialize_button')
-        self.window.initialize_button('resume_game_action', 'Resume Game', 400, 200)
         self.assertTrue(callable(self.window.resume_game_action))
-        self.window.initialize_button('new_game_action', 'New Game', 400, 300)
+        self.window.initialize_button('resume_game_action', 'Resume Game', 400, 200)
         self.assertTrue(callable(self.window.new_game_action))
+        self.window.initialize_button('new_game_action', 'New Game', 400, 300)
+        self.assertTrue(callable(self.window.load_save_action))
         self.window.initialize_button('load_save_action', 'Load or Save Game', 400, 400)
         self.assertTrue(callable(self.window.credits_action))
         self.window.initialize_button('credits_action', 'Credits', 400, 500)
