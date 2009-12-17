@@ -9,9 +9,13 @@ from common import text_button
 
 class WelcomeMenuTest(unittest.TestCase):
     def setUp(self):
-        self.window = welcome_menu.WelcomeMenu()
+        self.bakery_wizard = object()
+        self.window = welcome_menu.WelcomeMenu(self.bakery_wizard)
         self.screen = pygame.surface.Surface((10, 10))
         pygame.display.set_mode((10, 10))
+
+    def test_knows_wizard(self):
+        self.assertEqual(self.window.bakery_wizard, self.bakery_wizard)
         
     def test_is_base_window(self):
         self.assertTrue(isinstance(self.window, bakery_wizard.BaseWindow))

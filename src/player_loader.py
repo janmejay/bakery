@@ -5,9 +5,6 @@ from common import text_button, text_field, label
 
 class PlayerLoader(bakery_wizard.BaseWindow):
     
-    def __init__(self):
-        bakery_wizard.BaseWindow.__init__(self)
-        
     def load(self, screen):
         self.bg = game_util.load_image('loading-cake.png')
         bakery_wizard.BaseWindow.load(self, screen)
@@ -25,4 +22,3 @@ class PlayerLoader(bakery_wizard.BaseWindow):
 
     def load_welcome(self):
         game_util.LastPlayer.set_name(self.text_field.get_value())
-        

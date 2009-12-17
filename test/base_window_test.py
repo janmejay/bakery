@@ -7,13 +7,17 @@ from util import actions
 
 class BaseWindowTest(unittest.TestCase):
     def setUp(self):
-        self.base_window = bakery_wizard.BaseWindow()
+        self.bakery_wizard = object()
+        self.base_window = bakery_wizard.BaseWindow(self.bakery_wizard)
         self.mock_surface = pygame.surface.Surface((20,10))
 
     def test_sprites_is_layered_dirty_group(self):
         self.base_window.load(self.mock_surface)
         self.assertNotEqual(self.base_window.sprites, None)
         self.assertTrue(isinstance(self.base_window.sprites, pygame.sprite.LayeredDirty))
+
+    def test_knows_wizard(self):
+        self.assertEqual(self.base_window.bakery_wizard, self.bakery_wizard)
 
     def test_fills_up_screen_with_white_background_and_blits_actual_bg(self):
         mock_factory = mox.Mox()

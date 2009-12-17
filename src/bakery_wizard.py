@@ -2,8 +2,9 @@ import pygame
 from util import actions
 
 class BaseWindow(actions.Publisher):
-    def __init__(self):
+    def __init__(self, bakery_wizard):
         actions.Publisher.__init__(self)
+        self.bakery_wizard = bakery_wizard
 
     def has_bg(self):
         return hasattr(self, 'bg')
