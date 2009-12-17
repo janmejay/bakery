@@ -1,6 +1,6 @@
 import unittest
 import env
-import player_loader
+import player_loader, welcome_menu
 import bakery_wizard
 from util import game_util
 import pygame
@@ -99,18 +99,6 @@ class PlayerLoaderTest(unittest.TestCase):
                 button = sprite
         self.assertTrue(self.window.has_subscriber(button))
 
-
-    def test_writes_player_name_to_last_player_file_on_load_welcome(self):
-        self.window.load(self.screen)
-        mock_factory = mox.Mox()
-        mock_factory.StubOutWithMock(game_util.LastPlayer, 'set_name')
-        mock_factory.StubOutWithMock(self.window.text_field, 'get_value')
-        self.window.text_field.get_value().AndReturn("foo_bar")
-        game_util.LastPlayer.set_name("foo_bar")
-        mock_factory.ReplayAll()
-        self.window.load_welcome()
-        mock_factory.VerifyAll()
-
     def test_update_should_call_update_on_text_field_before_draw(self):
         self.window.load(self.screen)
         self.window.text_field.image = pygame.surface.Surface((10,10))
@@ -120,6 +108,20 @@ class PlayerLoaderTest(unittest.TestCase):
         self.window.text_field.update()
         mock_factory.ReplayAll()
         self.window.draw()
+        mock_factory.VerifyAll()
+
+    def test_load_welcome_loads_WelcomeMenu_window_after_setting_player_name(self):
+        self.window.load(self.screen)
+        mock_factory = mox.Mox()
+        wizard = mock_factory.CreateMock(bakery_wizard.BakeryWizard)
+        self.window.bakery_wizard = wizard
+        mock_factory.StubOutWithMock(game_util.LastPlayer, 'set_name')
+        mock_factory.StubOutWithMock(self.window.text_field, 'get_value')
+        self.window.text_field.get_value().AndReturn("foo_bar")
+        game_util.LastPlayer.set_name("foo_bar")
+        wizard.show(mox.IsA(welcome_menu.WelcomeMenu))
+        mock_factory.ReplayAll()
+        self.window.load_welcome()
         mock_factory.VerifyAll()
 
 if __name__ == '__main__':

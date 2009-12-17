@@ -1,5 +1,5 @@
 from util import game_util
-import bakery_wizard
+import bakery_wizard, welcome_menu
 import pygame
 from common import text_button, text_field, label
 
@@ -22,3 +22,4 @@ class PlayerLoader(bakery_wizard.BaseWindow):
 
     def load_welcome(self):
         game_util.LastPlayer.set_name(self.text_field.get_value())
+        self.bakery_wizard.show(welcome_menu.WelcomeMenu(self.bakery_wizard))

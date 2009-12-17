@@ -10,7 +10,7 @@ import bakery_wizard
 from util import actions
 
 wizard = bakery_wizard.BakeryWizard()
-player_loader = player_loader.PlayerLoader()
+player_loader = player_loader.PlayerLoader(wizard)
 
 wizard.show(player_loader)
 wizard.start()
