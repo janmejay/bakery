@@ -5,18 +5,14 @@
 import pygame
 
 from src import init
-from player_loader import PlayerLoader
+import player_loader
+import bakery_wizard 
 from util import actions
 
-pygame.init()
+wizard = bakery_wizard.BakeryWizard()
+player_loader = player_loader.PlayerLoader()
 
-screen = pygame.display.set_mode((1024, 768))
+wizard.show(player_loader)
+wizard.start()
 
-player_loader = PlayerLoader()
-player_loader.load(screen)
-while True:
-    player_loader.draw()
-    for action in actions.actionsFor(pygame.event.get()):
-        player_loader.publish(action)
-    pygame.display.flip()
 

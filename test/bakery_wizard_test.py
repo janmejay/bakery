@@ -12,7 +12,9 @@ class BakeryWizardTest(unittest.TestCase):
     def test_initializes_pygame_display_while_creating_bakery_wizard(self):
         mock_factory = mox.Mox()
         mock_factory.StubOutWithMock(pygame.display, 'set_mode')
+        mock_factory.StubOutWithMock(pygame, 'init')
         screen = object()
+        pygame.init()
         pygame.display.set_mode((1024, 768)).AndReturn(screen)
         mock_factory.ReplayAll()
         new_bakery_wizard = bakery_wizard.BakeryWizard()
