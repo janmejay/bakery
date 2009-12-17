@@ -27,6 +27,31 @@ class BaseWindow(actions.Publisher):
     def draw(self):
         self.sprites.draw(self.screen, self.bg)
         
+class BakeryWizard:
+    def __init__(self):
+        self.window_changed = False
+        self.continue_game_loop = False
+        self.screen = pygame.display.set_mode((1024, 768))
+
+    def show(self, window):
+        self.current_window = window
+        self.current_window.load(self.screen)
+        self.continue_game_loop = True
+        self.window_changed = True
+
+    def continue_looping(self):
+        return self.continue_game_loop
+
+    def stop(self):
+        self.continue_game_loop = False
+
+    def start(self):
+        while self.continue_looping():
+            self.current_window.draw()
+            for action in actions.actionsFor(pygame.event.get()):
+                self.current_window.publish(action)
+            pygame.display.flip()
+
 
 # class BakeryWizard():
 
