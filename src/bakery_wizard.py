@@ -1,7 +1,7 @@
-import pygame
+import pygame, sys
 from util import actions
 
-class BaseWindow(actions.Publisher):
+class BaseWindow(actions.Publisher, actions.Subscriber):
     def __init__(self, bakery_wizard):
         actions.Publisher.__init__(self)
         self.bakery_wizard = bakery_wizard
@@ -27,6 +27,12 @@ class BaseWindow(actions.Publisher):
 
     def draw(self):
         self.sprites.draw(self.screen, self.bg)
+
+    def can_consume(self, action):
+        return action.is_game_action()
+
+    def handle(self, action):
+        sys.exit(0)
         
 class BakeryWizard:
     def __init__(self):

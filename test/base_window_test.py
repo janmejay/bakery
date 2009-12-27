@@ -4,6 +4,8 @@ import env
 import bakery_wizard
 import mox
 from util import actions
+from pygame import constants
+import sys
 
 class BaseWindowTest(unittest.TestCase):
     def setUp(self):
@@ -80,6 +82,24 @@ class BaseWindowTest(unittest.TestCase):
         self.assertFalse(self.base_window.has_bg())
         self.base_window.bg = pygame.surface.Surface((10, 10))
         self.assertTrue(self.base_window.has_bg())
+
+    def test_handles_quit(self):
+        self.assertTrue(isinstance(self.base_window, actions.Subscriber))
+        evt = pygame.event.Event(constants.KEYDOWN, scancode = 56, key = 98, unicode = u'b', mod =  4096)
+        key_action = actions.Action(actions.KEY, evt)
+        self.assertFalse(self.base_window.can_consume(key_action))
+
+        evt = pygame.event.Event(constants.MOUSEBUTTONDOWN, button = 1, pos = (10, 15))
+        click_action = actions.Action(actions.LEFT_CLICK, evt)
+        self.assertFalse(self.base_window.can_consume(key_action))
+
+    def test_quits_vm_on_window_handle(self):
+        mock_factory = mox.Mox()
+        mock_factory.StubOutWithMock(sys, 'exit')
+        sys.exit(0)
+        mock_factory.ReplayAll()
+        self.base_window.handle(object())
+        mock_factory.VerifyAll()
 
 if __name__ == '__main__':
     unittest.main()

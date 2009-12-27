@@ -206,5 +206,16 @@ class ActionFactoryTest(unittest.TestCase):
         self.assertEqual(click.x(), 10)
         self.assertEqual(click.y(), 15)
 
+    def test_creates_action_for_quit(self):
+        event = pygame.event.Event(constants.QUIT)
+        action_list = actions.actionsFor([event])
+        self.assertEqual(len(action_list), 1)
+        click = action_list[0]
+        self.assertFalse(click.is_click())
+        self.assertFalse(click.is_key())
+        self.assertTrue(click.is_game_action())
+        self.assertEqual(click.get_obj(), event)
+        self.assertEqual(click.macro, actions.GAME_ACTION)
+
 if __name__ == '__main__':
     unittest.main()

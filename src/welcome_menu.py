@@ -23,7 +23,7 @@ class WelcomeMenu(bakery_wizard.BaseWindow):
         self.initialize_button('exit_action', 'Exit', self.button_xy(image, 3))
 
     def initialize_button(self, action_method, label, point):
-        button = text_button.TextButton(self, action_method, self, label = label, x = point[0], y = point[1], image_path = WelcomeMenu.BUTTON_IMAGE_PATH, size = 30)
+        button = text_button.TextButton(self, action_method, self, label = label, x = point[0], y = point[1], image_path = WelcomeMenu.BUTTON_IMAGE_PATH, size = 36)
         self.sprites.add(button)
         self.register(button)
 
