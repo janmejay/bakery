@@ -19,6 +19,8 @@ class BaseWindow(actions.Publisher, actions.Subscriber):
             rect.center = bg_expanded.get_rect().center
             bg_expanded.blit(self.bg, (rect.left, rect.top))
         self.bg = bg_expanded
+        self.register(self)
+
 
     def center_xy(self, surface):
         width, height = self.screen.get_size()

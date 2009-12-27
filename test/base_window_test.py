@@ -101,5 +101,9 @@ class BaseWindowTest(unittest.TestCase):
         self.base_window.handle(object())
         mock_factory.VerifyAll()
 
+    def test_registers_itself_as_a_subscriber(self):
+        self.base_window.load(self.mock_surface)
+        self.assertTrue(self.base_window.has_subscriber(self.base_window))
+
 if __name__ == '__main__':
     unittest.main()
