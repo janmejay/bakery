@@ -6,6 +6,7 @@ import mox
 from util import game_util
 import pygame
 from common import text_button
+import sys
 
 class WelcomeMenuTest(unittest.TestCase):
     def setUp(self):
@@ -80,6 +81,14 @@ class WelcomeMenuTest(unittest.TestCase):
         self.assertEqual(self.window.button_xy(button_image, 0), (4, 4))
         self.assertEqual(self.window.button_xy(button_image, 1), (4, 84))
         self.assertEqual(self.window.button_xy(button_image, 2), (4, 164))
+
+    def test_quit_button_quits(self):
+        mock_factory = mox.Mox()
+        mock_factory.StubOutWithMock(sys, 'exit')
+        sys.exit(0)
+        mock_factory.ReplayAll()
+        self.window.exit_action()
+        mock_factory.VerifyAll()
 
 if __name__ == '__main__':
     unittest.main()

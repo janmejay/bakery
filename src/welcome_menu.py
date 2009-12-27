@@ -1,6 +1,7 @@
 import bakery_wizard
 from util import game_util
 from common import text_button
+import sys
 
 class WelcomeMenu(bakery_wizard.BaseWindow):
 
@@ -50,6 +51,6 @@ class WelcomeMenu(bakery_wizard.BaseWindow):
         pass
 
     def exit_action(self):
-        pass
+        sys.exit(0)
 
 
