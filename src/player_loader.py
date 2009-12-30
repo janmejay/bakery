@@ -21,5 +21,7 @@ class PlayerLoader(bakery_wizard.BaseWindow):
         bakery_wizard.BaseWindow.draw(self)
 
     def load_welcome(self):
-        game_util.LastPlayer.set_name(self.text_field.get_value())
+        name = self.text_field.get_value()
+        game_util.LastPlayer.set_name(name)
+        self.bakery_wizard.context['player_name'] = name
         self.bakery_wizard.show(welcome_menu.WelcomeMenu(self.bakery_wizard))

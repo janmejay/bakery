@@ -110,10 +110,11 @@ class PlayerLoaderTest(unittest.TestCase):
         self.window.draw()
         mock_factory.VerifyAll()
 
-    def test_load_welcome_loads_WelcomeMenu_window_after_setting_player_name(self):
+    def test_load_welcome_loads_WelcomeMenu_window_after_setting_player_name_in_context(self):
         self.window.load(self.screen)
         mock_factory = mox.Mox()
         wizard = mock_factory.CreateMock(bakery_wizard.BakeryWizard)
+        wizard.context = {}
         self.window.bakery_wizard = wizard
         mock_factory.StubOutWithMock(game_util.LastPlayer, 'set_name')
         mock_factory.StubOutWithMock(self.window.text_field, 'get_value')
@@ -123,6 +124,7 @@ class PlayerLoaderTest(unittest.TestCase):
         mock_factory.ReplayAll()
         self.window.load_welcome()
         mock_factory.VerifyAll()
+        self.assertEqual(wizard.context, {'player_name' : 'foo_bar'})
 
 if __name__ == '__main__':
     unittest.main()

@@ -42,6 +42,7 @@ class BakeryWizard:
         self.continue_game_loop = False
         pygame.init()
         self.screen = pygame.display.set_mode((1024, 768))
+        self.context = {}
 
     def show(self, window):
         self.current_window = window

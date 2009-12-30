@@ -21,6 +21,9 @@ class BakeryWizardTest(unittest.TestCase):
         mock_factory.VerifyAll()
         self.assertEqual(new_bakery_wizard.screen, screen)
 
+    def test_initializes_context_as_a_new_map(self):
+        self.assertEqual(self.bakery_wizard.context, {})
+
     def test_sets_up_current_window_as_given_window_and_marks_window_as_changed(self):
         mock_factory = mox.Mox()
         window = mock_factory.CreateMock(bakery_wizard.BaseWindow)
@@ -73,4 +76,3 @@ class BakeryWizardTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-
