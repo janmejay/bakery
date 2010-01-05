@@ -1,7 +1,6 @@
 import unittest
 import env
-import welcome_menu
-import bakery_wizard
+import welcome_menu, story_player, bakery_wizard
 import mox
 from util import game_util
 import pygame
@@ -88,6 +87,17 @@ class WelcomeMenuTest(unittest.TestCase):
         sys.exit(0)
         mock_factory.ReplayAll()
         self.window.exit_action()
+        mock_factory.VerifyAll()
+
+    def test_new_button_launches_story_player_with_level_set(self):
+        mock_factory = mox.Mox()
+        wizard = mock_factory.CreateMock(bakery_wizard.BakeryWizard)
+        window = welcome_menu.WelcomeMenu(wizard)
+        wizard.show(mox.IsA(story_player.StoryPlayer))
+        wizard.context = {}
+        mock_factory.ReplayAll()
+        window.new_game_action()
+        self.assertEqual(wizard.context['level'], 1)
         mock_factory.VerifyAll()
 
 if __name__ == '__main__':

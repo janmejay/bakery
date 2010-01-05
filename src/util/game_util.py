@@ -17,16 +17,17 @@ def media(file_name):
 
 class LastPlayer:
     LAST_PLAYER_FILE = path.join(config.BAKERY_TMP, "player_name")
+    
+    @staticmethod
     def get_name():
         with open(LastPlayer.LAST_PLAYER_FILE, 'r') as h:
             player = h.readline()
         return player
-    
+
+    @staticmethod
     def set_name(player):
         with open(LastPlayer.LAST_PLAYER_FILE, 'w') as h:
             h.write(player)
-    get_name = callable.Callable(get_name)
-    set_name = callable.Callable(set_name)
 
 def load_image(name, colorkey=None):
     fullname = media(name)

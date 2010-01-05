@@ -5,3 +5,4 @@ TAGS
 **/*.pyc
 */**/*.pyc
 .emacs_project
+.ropeproject

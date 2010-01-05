@@ -1,4 +1,4 @@
-import bakery_wizard
+import bakery_wizard, story_player
 from util import game_util
 from common import text_button
 import sys
@@ -36,7 +36,9 @@ class WelcomeMenu(bakery_wizard.BaseWindow):
         pass
 
     def new_game_action(self):
-        pass
+        player = story_player.StoryPlayer(self.bakery_wizard)
+        self.bakery_wizard.context['level'] = 1
+        self.bakery_wizard.show(player)
 
     def load_save_action(self):
         pass
