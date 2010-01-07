@@ -5,13 +5,13 @@ class BaseWindow(actions.Publisher, actions.Subscriber):
     def __init__(self, bakery_wizard):
         actions.Publisher.__init__(self)
         self.bakery_wizard = bakery_wizard
+        self.sprites = pygame.sprite.LayeredDirty()
 
     def has_bg(self):
         return hasattr(self, 'bg')
 
     def load(self, screen):
         self.screen = screen
-        self.sprites = pygame.sprite.LayeredDirty()
         bg_expanded = self.screen.copy()
         bg_expanded.fill((255, 255, 255))
         if self.has_bg(): 
@@ -20,7 +20,6 @@ class BaseWindow(actions.Publisher, actions.Subscriber):
             bg_expanded.blit(self.bg, (rect.left, rect.top))
         self.bg = bg_expanded
         self.register(self)
-
 
     def center_xy(self, surface):
         width, height = self.screen.get_size()
