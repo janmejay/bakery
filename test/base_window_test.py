@@ -105,5 +105,16 @@ class BaseWindowTest(unittest.TestCase):
         self.base_window.load(self.mock_surface)
         self.assertTrue(self.base_window.has_subscriber(self.base_window))
 
+    def test_adds_sprites_to_corresponding_layers(self):
+        self.base_window.load(self.mock_surface)
+        tenth = pygame.sprite.DirtySprite()
+        tenth.layer = 10
+        fifth = pygame.sprite.DirtySprite()
+        fifth.layer = 5
+        self.base_window.add_sprite(tenth)
+        self.base_window.add_sprite(fifth)
+        self.assertEqual(5, self.base_window.sprites.get_layer_of_sprite(fifth))
+        self.assertEqual(10, self.base_window.sprites.get_layer_of_sprite(tenth))
+
 if __name__ == '__main__':
     unittest.main()

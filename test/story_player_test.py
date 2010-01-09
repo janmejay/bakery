@@ -1,9 +1,10 @@
 import unittest
 import env
 import story_player
-import bakery_wizard, shop
+import bakery_wizard, shop, zorder
 import pygame
 from util import game_util
+from common import text_button
 import mox
 import os
 
@@ -35,17 +36,23 @@ class StoryPlayer(unittest.TestCase):
         self.window.load(self.screen);
         mock_factory.VerifyAll()
         self.assertEqual([image_3, image_2], self.window.story_screens)
-        self.assertEqual(image_1, self.window.bg)
+        self.assertEqual(image_1, self.window.bg_sprite.image)
         
     def test_hooks_up_go_button_as_sprite_and_listener(self):
         self.window.load(self.screen)
-        button = self.window.sprites.sprites()[0]
-        button_rect = button.rect
+        go_button = self.find_button_sprite()
+        self.assertTrue(self.window.has_subscriber(go_button))
+        button_rect = go_button.rect
         self.assertEqual(930, button_rect.x)
         self.assertEqual(680, button_rect.y)
         arrow_rectangle = game_util.load_image('arrow_button.png').get_rect()
         self.assertEqual(arrow_rectangle.h, button_rect.h)
         self.assertEqual(arrow_rectangle.h, button_rect.h)
+
+    def find_button_sprite(self):
+        for button_sprite in self.window.sprites.sprites():
+            if isinstance(button_sprite, text_button.TextButton):
+                return button_sprite
 
     def test_has_story_images_for_levels_from_1_to_12(self):
         expected_story_dir_names = [os.path.join('stories', name) for name in story_player.StoryPlayer.MONTHS]
@@ -56,14 +63,17 @@ class StoryPlayer(unittest.TestCase):
 
     def test_bg_transitions_to_next_screen_when_go_is_clicked(self):
         self.window.load(self.screen)
-        self.window.story_screens = ['b', 'a']
+        img_1 = pygame.surface.Surface((1, 1))
+        img_2 = pygame.surface.Surface((2, 2))
+        self.window.story_screens = [img_1, img_2]
         self.assertEqual(len(self.window.story_screens), 2)
         self.window.go()
-        self.assertEqual('a', self.window.bg)
+        self.assertEqual(img_2, self.window.bg_sprite.image)
         self.assertEqual(1, len(self.window.story_screens))
         self.window.go()
-        self.assertEqual('b', self.window.bg)
+        self.assertEqual(img_1, self.window.bg_sprite.image)
         self.assertEqual(0, len(self.window.story_screens))
+        self.assertFalse(hasattr(self.wizard, 'current_window'))
 
     def test_loads_shop_after_exausting_story_images(self):
         self.window.load(self.screen)
@@ -75,5 +85,10 @@ class StoryPlayer(unittest.TestCase):
         self.window.go()
         mock_factory.VerifyAll()
 
+    def test_adds_story_image_to_bg_layer(self):
+        self.window.load(self.screen)
+        self.assertEqual(zorder.BACKGROUND, self.window.sprites.get_layer_of_sprite(self.window.bg_sprite))
+        self.assertEqual(zorder.BUTTONS, self.find_button_sprite().layer)
+        
 if __name__ == '__main__':
     unittest.main()

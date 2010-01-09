@@ -34,6 +34,10 @@ class BaseWindow(actions.Publisher, actions.Subscriber):
 
     def handle(self, action):
         sys.exit(0)
+
+    def add_sprite(self, sprite):
+        self.sprites.add(sprite)
+        self.sprites.change_layer(sprite, sprite.layer)
         
 class BakeryWizard:
     def __init__(self):
