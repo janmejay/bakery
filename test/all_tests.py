@@ -12,6 +12,7 @@ from welcome_menu_test import *
 from bakery_wizard_test import *
 from shop_test import *
 from story_player_test import *
+from level_test import *
 
 if __name__ == '__main__':
     unittest.main()
