@@ -1,13 +1,11 @@
 import pygame
 from util import game_util, actions
 import zorder
+import surface_sprite
 
-class Button(pygame.sprite.DirtySprite, actions.ActiveRectangleSubscriber):
+class Button(surface_sprite.SurfaceSprite, actions.ActiveRectangleSubscriber):
     def __init__(self, owner, callback, publisher, x, y, image_path = 'default.png', layer = zorder.BUTTONS):
-        pygame.sprite.DirtySprite.__init__(self)
-        self.layer, self.image = layer, game_util.load_image(image_path)
-        self.rect = self.image.get_rect()
-        self.rect.move_ip(x, y)
+        surface_sprite.SurfaceSprite.__init__(self, x, y, image_path, layer)
         actions.ActiveRectangleSubscriber.__init__(self, x, y, self.rect.width, self.rect.height)
         self.__callback = getattr(owner, callback)
         self.__publisher = publisher

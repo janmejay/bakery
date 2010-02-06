@@ -2,7 +2,7 @@ import unittest
 import env
 from util import actions
 import mox
-from common import button
+from common import button, surface_sprite
 from util import actions
 import zorder
 import pygame
@@ -18,29 +18,10 @@ class ButtonTest(unittest.TestCase):
         self.publisher = actions.Publisher()
         self.dimensions = {'x' : 5, 'y' : 6}
 
-    def test_has_image(self):
+    def test_is_surface_sprite(self):
         button_instance = button.Button(self.dummy_owner, 'on_click', self.publisher, **self.dimensions)
-        self.assertTrue(button_instance.image != None)
-        self.assertTrue(isinstance(button_instance.image, pygame.Surface))
+        self.assertTrue(isinstance(button_instance, surface_sprite.SurfaceSprite))
 
-    def test_honors_image_path_given(self):
-        self.dimensions['image_path'] = 'test_rgb.png'
-        button_instance = button.Button(self.dummy_owner, 'on_click', self.publisher, **self.dimensions)
-        self.assertEqual(button_instance.image.get_at((0,0)), (255, 0, 0, 255))
-        self.assertEqual(button_instance.image.get_at((1,0)), (0, 255, 0, 255))
-        self.assertEqual(button_instance.image.get_at((2,0)), (0, 0, 255, 255))
-    
-    def test_has_rect(self):
-        button_instance = button.Button(self.dummy_owner, 'on_click', self.publisher, **self.dimensions)
-        self.assertTrue(isinstance(button_instance.rect, pygame.Rect))
-        self.assertEqual(button_instance.rect.left, self.dimensions['x'])
-        self.assertEqual(button_instance.rect.top, self.dimensions['y'])
-        self.assertEqual(button_instance.rect.width, button_instance.image.get_rect().width)
-        self.assertEqual(button_instance.rect.height, button_instance.image.get_rect().height)
-
-    def test_is_dirty_sprite(self):
-        button_instance = button.Button(self.dummy_owner, 'on_click', self.publisher, **self.dimensions)
-        self.assertTrue(isinstance(button_instance, pygame.sprite.DirtySprite))
 
     def test_is_active_rect(self):
         button_instance = button.Button(self.dummy_owner, 'on_click', self.publisher, **self.dimensions)

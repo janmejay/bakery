@@ -28,7 +28,7 @@ class StoryPlayer(bakery_wizard.BaseWindow):
         if len(self.story_screens) > 0:
             self.__assign_next_background()
         else:
-            shop_window = shop.Shop(self.bakery_wizard.screen)
+            shop_window = shop.Shop(self.bakery_wizard)
             self.bakery_wizard.show(shop_window)
 
     def __assign_next_background(self):
